@@ -1,6 +1,6 @@
 package com.example.provaH2.UI;
 
-import com.example.provaH2.UI.Layout.ParolaLayout;
+import com.example.provaH2.UI.Layout.ParoleSuggeriteLayout;
 import com.example.provaH2.gestioneGioco.Broadcaster;
 import com.example.provaH2.gestioneGioco.BroadcasterList;
 import com.example.provaH2.gestioneGioco.GameController;
@@ -10,8 +10,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
-
-import java.util.HashMap;
+import org.vaadin.addthis.AddThis;
 
 @Push
 @SpringUI(path = "gioco")
@@ -22,14 +21,19 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
     private Broadcaster broadcaster;
     private Label numeroUtenti;
     private VerticalLayout layout;
-    private Button start;
-    private VerticalLayout layoutParole;
+    private ParoleSuggeriteLayout layoutParole;
     private HorizontalLayout mainLayout=new HorizontalLayout();
-    private HashMap<String, ParolaLayout> parole=new HashMap<>();
+    //private HashMap<String, ParolaLayout> parole=new HashMap<>();
 
-/*    @Autowired //@Lazy
-    private ItemRepository repositoryI;
-*/
+    //variabili solo di chi crea
+    //TODO: qua si potrebe fare con un solo bottone aggiustando il codice del gamecontroller
+    private Button start;
+    private Button restart;
+    private GameController controller;
+
+    //variabili solo di chi joina
+    private Button unjoin;
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
 
@@ -89,7 +93,7 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
 
         //TODO: ma il controllo broadcaster diverso da null qua mi serve?
         //broadcaster= BroadcasterList.getBroadcaster(indice);
-        GameController controller= (GameController) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("controller");
+        controller= (GameController) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("controller");
         broadcaster = BroadcasterList.getBroadcaster(indice);
         if(broadcaster.isCanJoin()){
             if(controller!= null){
@@ -116,7 +120,8 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
             mainLayout.addComponent(new Label("sorry you can't join this match"));
         }
 
-        layoutParole= new VerticalLayout();
+        layoutParole= new ParoleSuggeriteLayout(broadcaster);
+        /*layoutParole= new VerticalLayout();
         TextField parolaField= new TextField();
         Button suggerisci= new Button("Suggerisci");
         suggerisci.addClickListener(clickEvent -> {
@@ -126,6 +131,7 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
             }
         });
         layoutParole.addComponents(parolaField,suggerisci);
+        */
         //layout.addComponent(new ParolaLayout(new ParolaSuggerita("Sara")));
 
         layout.addComponent(numeroUtenti);
@@ -159,6 +165,12 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
             if(start!=null){
                 layout.removeComponent(start);
             }
+            if(restart!=null){
+                layout.removeComponent(restart);
+            }
+            if(unjoin!=null){
+                layout.removeComponent(unjoin);
+            }
             mainLayout.addComponent(layoutParole);
             Notification.show("gioco iniziato");
         });
@@ -167,25 +179,60 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
     @Override
     public void parolaSuggerita(String parola) {
         access(() -> {
+            layoutParole.aggiornaParole(parola);
             //layoutParole.addComponent(new Label(parola));
-            if(parole.containsKey(parola)) {
+            /*if(parole.containsKey(parola)) {
                 parole.get(parola).aggionaNumero();
             } else {
                 ParolaLayout parolaLayout= new ParolaLayout(parola, broadcaster);
                 layoutParole.addComponent(parolaLayout);
                 parole.put(parola, parolaLayout);
-            }
+            }*/
         });
     }
 
     //TODO: abbiamo un problema quando io chiudo il browser nn mi chiama questo metodo quindi nn mi deregistra il broadcaster
-
     @Override
     public void detach() {
         if(broadcaster!=null){
             broadcaster.unregister(this);
         }
         super.detach();
+    }
+
+    @Override
+    public void fineDellaPartita(boolean haiVinto, String parola){
+        access(() -> {
+            if(haiVinto){
+                Notification.show("YOU WIN: "+ parola);
+            }else{
+                Notification.show("YOU LOOSE: "+ parola);
+            }
+            //parole=new HashMap<>();
+            layoutParole.ripulisci();
+            //TODO: questa potrebbe essere un po' sporca
+            mainLayout.removeComponent(layout);
+            layout=new VerticalLayout();
+            mainLayout.addComponent(layout);
+            if(controller!= null){
+                restart= new Button("restart");
+                restart.addClickListener(clickEvent -> {
+                   controller.giocaAncora();
+                   controller.startGame();
+                });
+                layout.addComponent(restart);
+            }else{
+                unjoin= new Button("UNJOIN");
+                unjoin.addClickListener(clickEvent -> {
+                    if(broadcaster!=null){
+                        broadcaster.unregister(this);
+                        layout.removeComponent(unjoin);
+                        Page.getCurrent().setLocation("./");
+                    }
+                });
+                layout.addComponent(unjoin);
+            }
+        });
     }
 
    /* private void registraa(int i){

@@ -27,6 +27,7 @@ public class Broadcaster implements Serializable{
         void countUser(int i);
         void gameStarted();
         void parolaSuggerita(String parola);
+        void fineDellaPartita(boolean haiVinto, String parola);
     }
 
     public interface Controller{
@@ -49,6 +50,7 @@ public class Broadcaster implements Serializable{
     }
 
 
+    //TODO: devo fare che non mi posso registrare due volte
     public /*static*/ synchronized void register( BroadcastListener listener) {
         //System.out.println("sono il boradcaster ed è stato chiamato register "+ listeners.size());
         if(canJoin){
@@ -85,6 +87,8 @@ public class Broadcaster implements Serializable{
     }
 
     public synchronized void suggerisciParola(String parola){
+        //TODO: Cinzia vedi che qua io nn faccio che tu nn puoi mandare la parola tu la mandi e il broadcaster nn ti caca
+        //secondo te è meglio così o è meglio se facciamo che tu fai il controllo se la puoi mandare o no direttamente in gamUI
        if(canSend) {
            gameController.aggiungiParola(parola);
            for (final BroadcastListener listener : listeners) {
@@ -118,11 +122,20 @@ public class Broadcaster implements Serializable{
         */
     }
 
+    public void comunicaEsito(boolean haiVinto, String parola){
+        for (final BroadcastListener listener: listeners) {
+            executorService.execute(() ->{
+                listener.fineDellaPartita(haiVinto,parola);
+            });
+        }
+        allowJoin();
+    }
+
     public boolean isCanJoin(){
         return canJoin;
     }
 
-    public void stopGame(){
+    public void stopSend(){
         canSend=false;
     }
 

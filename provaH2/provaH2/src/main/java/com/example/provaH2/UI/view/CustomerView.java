@@ -1,7 +1,5 @@
 package com.example.provaH2.UI.view;
 
-import com.example.provaH2.gestioneGioco.Broadcaster;
-import com.example.provaH2.gestioneGioco.BroadcasterList;
 import com.example.provaH2.gestioneGioco.GameController;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewBeforeLeaveEvent;

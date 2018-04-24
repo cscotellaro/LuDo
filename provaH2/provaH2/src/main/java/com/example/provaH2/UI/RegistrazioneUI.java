@@ -113,9 +113,8 @@ public class RegistrazioneUI extends UI {
             VaadinService.getCurrentRequest().getWrappedSession().setAttribute("loggato", true);
 
             //TODO:questo un giorno avrà un path decente alla home privata
+            //vedi che ce l ho pure da qualche altra parte sta riga di codice
             Page.getCurrent().setLocation("./");
-
-            //TODO aggiusta st eccezione qua
         }catch (Exception e){
             Notification notification= new Notification("Impossibile effettuare la registrazione");
         }

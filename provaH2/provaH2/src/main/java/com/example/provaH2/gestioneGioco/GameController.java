@@ -20,10 +20,11 @@ public class GameController implements Broadcaster.Controller{
     private Item item;
     private HashMap <String, ParolaSuggerita> parole= new HashMap<>();
     private int max;
+    private Random random;
 
     public int creaPartita(){
         int tot= repositoryI.numeroRighe();
-        Random random= new Random();
+        random= new Random();
         int rand=random.nextInt(tot)+1;
         System.out.println("su " + tot + " è stato scelto "+ rand);
         item =repositoryI.findOneById(rand);
@@ -36,7 +37,7 @@ public class GameController implements Broadcaster.Controller{
     //in tal caso la scelta casuale posso farla in un metodo e usarlo pure in creaPartita
     public void giocaAncora(){
         int tot= repositoryI.numeroRighe();
-        Random random= new Random();
+        //Random random= new Random();
         int rand=random.nextInt(tot)+1;
         System.out.println("su " + tot + " è stato scelto "+ rand);
         item =repositoryI.findOneById(rand);
@@ -58,11 +59,11 @@ public class GameController implements Broadcaster.Controller{
                 }
             }
             try {
-                Thread.sleep(10000);
+                Thread.sleep(5000);
             }catch (InterruptedException e){
                 //TODO: che ci metto qua??
             }
-            broadcaster.stopGame();
+            broadcaster.stopSend();
 
             //TODO::tutto questo codice per vedere i massimi va controllato
             parole.forEach((s, parolaSuggerita) -> {
@@ -78,17 +79,18 @@ public class GameController implements Broadcaster.Controller{
             });
             for (ParolaSuggerita parola: massimi){
                 if(parola.getParola().equals(item.getParola())){
-                    //TODO:hai vinto
                     System.out.println("win");
-                    broadcaster.allowJoin();
+                    //broadcaster.allowJoin();
+                    broadcaster.comunicaEsito(true, item.getParola());
                     return;
                 }
             }
 
-            //TODO: hai perso
             System.out.println("lose");
-            //TODO: in realtà sia qua che sopra l allow jion lo devo mettere a vero quando il tizio decide fi dare una nuova partita
-            broadcaster.allowJoin();
+            //TODO: in realtà sia qua che sopra l allow jion lo devo mettere a vero quando il tizio decide di fare una nuova partita
+            //alla fine l ho messo dentro al broadcaster dopo aver comunicato gli esiti ti fa fare il join di nuovo
+            //broadcaster.allowJoin();
+            broadcaster.comunicaEsito(false, item.getParola());
         }).start();
     }
 
