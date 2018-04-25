@@ -2,9 +2,11 @@ package com.example.provaH2.UI;
 
 import com.example.provaH2.entity.Account;
 import com.example.provaH2.repository.AccountRepository;
+import com.vaadin.annotations.Theme;
 import com.vaadin.data.Binder;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.server.Page;
+import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
@@ -12,10 +14,9 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringUI(path = "/Login")
+@Theme("darktheme")
 public class LoginUI extends UI {
-    //public final static String prova="/Login";
     //TODO: manca spring security
-
 
     @Autowired
     private AccountRepository repositoryA;
@@ -23,12 +24,14 @@ public class LoginUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         FormLayout layout =new FormLayout();
-        layout.setCaption("Login form");
+        //layout.setCaption("Login form");
 
         TextField emailField = new TextField("Email");
         PasswordField passwordField = new PasswordField("Password");
         Button submit= new Button("Login");
         submit.setEnabled(false);
+        submit.setWidth(9, Unit.EM);
+        //submit.addStyleName(ValoTheme.BUTTON_FRIENDLY);
 
         Label error=new Label("email o password non corretta");
         layout.addComponent(error);
@@ -77,6 +80,37 @@ public class LoginUI extends UI {
 
 
         layout.addComponents(emailField, passwordField, submit);
-        setContent(layout);
+        layout.setSizeUndefined();
+        layout.setMargin(false);
+
+        VerticalLayout verticalLayout= new VerticalLayout();
+        //verticalLayout.setSizeFull();
+
+        //int h=Page.getCurrent().getBrowserWindowHeight();
+        //int w= Page.getCurrent().getBrowserWindowWidth();
+        //System.out.println("height: "+ h+ " width: "+w );
+        int w=Page.getCurrent().getWebBrowser().getScreenWidth();
+        int h= Page.getCurrent().getWebBrowser().getScreenHeight();
+        System.out.println("height: "+ h+ " width: "+w );
+        //verticalLayout.setHeight("100%");
+        //verticalLayout.setWidth("100%");
+        //verticalLayout.setHeight(h, Unit.PIXELS);
+        //verticalLayout.setWidth(w,Unit.PIXELS);
+        //Responsive.makeResponsive(verticalLayout);
+        verticalLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+        verticalLayout.setResponsive(true);
+        VerticalLayout layoutDentro= new VerticalLayout();
+        layoutDentro.setWidth(w, Unit.PIXELS);
+        layoutDentro.setSpacing(false);
+        layoutDentro.addStyleName("provaVertical");
+        layoutDentro.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+        Label titoloLabel =new Label("My label");
+        titoloLabel.setHeight(4, Unit.EM);
+        layoutDentro.addComponent(titoloLabel);
+        layoutDentro.addComponent(layout);
+
+        verticalLayout.addComponent(layoutDentro);
+        setContent(verticalLayout);
+
     }
 }

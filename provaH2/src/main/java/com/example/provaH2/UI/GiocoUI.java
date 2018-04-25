@@ -10,7 +10,6 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
-import org.vaadin.addthis.AddThis;
 
 @Push
 @SpringUI(path = "gioco")
@@ -38,7 +37,7 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
     protected void init(VaadinRequest vaadinRequest) {
 
         /******QUESTO  va tolto  quando capiamo spring security************/
-                Boolean logged=(Boolean) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("loggato");
+        Boolean logged=(Boolean) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("loggato");
         if(logged== null || logged== false){
             new Notification("Non sei loggato").show(Page.getCurrent());
             Page.getCurrent().setLocation("./Login");
@@ -191,7 +190,7 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         });
     }
 
-    //TODO: abbiamo un problema quando io chiudo il browser nn mi chiama questo metodo quindi nn mi deregistra il broadcaster
+    //TODO: abbiamo un problema quando io chiudo il browser lo chiama dopo un sacco di tempo
     @Override
     public void detach() {
         if(broadcaster!=null){
