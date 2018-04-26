@@ -12,7 +12,7 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 
 @Push
-@SpringUI(path = "gioco")
+@SpringUI(path = "private/gioco")
 public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
 
     //TODO: alla fine della partita ricordati che devi levare il creatore=true da dentro la sessione (o devo levarlo subito?)
@@ -36,15 +36,16 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
     @Override
     protected void init(VaadinRequest vaadinRequest) {
 
-        /******QUESTO  va tolto  quando capiamo spring security************/
-        Boolean logged=(Boolean) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("loggato");
+        //******QUESTO  va tolto  quando capiamo spring security************/
+        /*Boolean logged=(Boolean) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("loggato");
         if(logged== null || logged== false){
             new Notification("Non sei loggato").show(Page.getCurrent());
-            Page.getCurrent().setLocation("./Login");
+            Page.getCurrent().setLocation("/Login");
         }
-
+*/
         Boolean creatore= (Boolean) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("creatore");
-
+        System.out.println("interval "+ VaadinService.getCurrentRequest().getWrappedSession().getMaxInactiveInterval());
+        //pVaadinService.getCurrentRequest().getWrappedSession().setMaxInactiveInterval(10);
         //TODO: Cinzia che ne dici se magari estendiamo un vertical layout apposta per fare sta cosa così semplifichiamo il codice
         layout= new VerticalLayout();
         numeroUtenti= new Label("");

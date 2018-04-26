@@ -12,9 +12,11 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.leif.headertags.Viewport;
 
 @SpringUI(path = "/Login")
-@Theme("darktheme")
+//@Theme("darktheme")
+@Viewport("width=device-width, initial-scale=1")
 public class LoginUI extends UI {
     //TODO: manca spring security
 
@@ -25,6 +27,8 @@ public class LoginUI extends UI {
     protected void init(VaadinRequest vaadinRequest) {
         FormLayout layout =new FormLayout();
         //layout.setCaption("Login form");
+
+        System.out.println("login  ");
 
         TextField emailField = new TextField("Email");
         PasswordField passwordField = new PasswordField("Password");
@@ -70,7 +74,7 @@ public class LoginUI extends UI {
             if(a!=null && a.getPassword().equals(passwordField.getValue())){
                 VaadinService.getCurrentRequest().getWrappedSession().setAttribute("loggato", true);
                 //TODO:questo un giorno avrà un path decente alla home privata
-                Page.getCurrent().setLocation("./");
+                Page.getCurrent().setLocation("/private/home");
             }else {
                 passwordField.clear();
                 error.setVisible(true);
@@ -84,24 +88,26 @@ public class LoginUI extends UI {
         layout.setMargin(false);
 
         VerticalLayout verticalLayout= new VerticalLayout();
-        //verticalLayout.setSizeFull();
+        verticalLayout.setSizeFull();
 
         //int h=Page.getCurrent().getBrowserWindowHeight();
         //int w= Page.getCurrent().getBrowserWindowWidth();
         //System.out.println("height: "+ h+ " width: "+w );
-        int w=Page.getCurrent().getWebBrowser().getScreenWidth();
-        int h= Page.getCurrent().getWebBrowser().getScreenHeight();
-        System.out.println("height: "+ h+ " width: "+w );
+        //int w=Page.getCurrent().getWebBrowser().getScreenWidth();
+        //int h= Page.getCurrent().getWebBrowser().getScreenHeight();
+        //System.out.println("height: "+ h+ " width: "+w );
         //verticalLayout.setHeight("100%");
         //verticalLayout.setWidth("100%");
         //verticalLayout.setHeight(h, Unit.PIXELS);
         //verticalLayout.setWidth(w,Unit.PIXELS);
         //Responsive.makeResponsive(verticalLayout);
         verticalLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-        verticalLayout.setResponsive(true);
+        //verticalLayout.setResponsive(true);
         VerticalLayout layoutDentro= new VerticalLayout();
-        layoutDentro.setWidth(w, Unit.PIXELS);
+        //layoutDentro.setWidth(w, Unit.PIXELS);
         layoutDentro.setSpacing(false);
+        layoutDentro.setMargin(false);
+        verticalLayout.setMargin(false);
         layoutDentro.addStyleName("provaVertical");
         layoutDentro.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         Label titoloLabel =new Label("My label");

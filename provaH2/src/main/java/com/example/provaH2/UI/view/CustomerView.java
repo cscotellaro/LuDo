@@ -61,7 +61,7 @@ public class CustomerView extends VerticalLayout implements View {
             VaadinService.getCurrentRequest().getWrappedSession().setAttribute("controller", gameController);
             //**************************************questo nn so se ci vuole
             VaadinService.getCurrentRequest().getWrappedSession().setAttribute("creatore",true);
-            Page.getCurrent().setLocation("/gioco?cod="+i);
+            Page.getCurrent().setLocation("/private/gioco?cod="+i);
         });
         addComponent(new Label("Customers"));
         addComponent(crea);

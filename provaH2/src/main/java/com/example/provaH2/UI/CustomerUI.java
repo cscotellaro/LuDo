@@ -13,7 +13,7 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Push
-@SpringUI
+@SpringUI(path = "/private/home")
 public class CustomerUI extends UI/* implements Broadcaster.BroadcastListener*/{
 
     private Navigator navigator;
@@ -21,16 +21,19 @@ public class CustomerUI extends UI/* implements Broadcaster.BroadcastListener*/{
     @Autowired
     private SpringViewProvider viewProvider;
 
+  /*  @Autowired
+    private CustomerView errorView;
+*/
     @Override
     protected void init(VaadinRequest vaadinRequest) {
 
         VerticalLayout layout=new VerticalLayout();
-        Boolean logged=(Boolean)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("loggato");
+        /*Boolean logged=(Boolean)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("loggato");
         if(logged== null || logged== false){
             //new Notification("Non sei loggato").show(Page.getCurrent());
-            Page.getCurrent().setLocation("./Login");
+            Page.getCurrent().setLocation("/Login");
         }
-
+*/
         MenuBar menu= new MenuBar();
         Panel viewContent= new Panel();
 
@@ -39,9 +42,10 @@ public class CustomerUI extends UI/* implements Broadcaster.BroadcastListener*/{
         viewContent.setSizeFull();
         layout.setExpandRatio(viewContent,1);
 
+
         navigator= new Navigator(this, viewContent);
         navigator.addProvider(viewProvider);
-
+  //      navigator.setErrorView(errorView);
         menu.addItem("Dashboard", e->onDashboardClicked());
         menu.addItem("Customers", e->onCustomersClicked());
         setContent(layout);

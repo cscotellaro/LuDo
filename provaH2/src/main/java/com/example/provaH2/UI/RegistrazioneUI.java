@@ -114,7 +114,7 @@ public class RegistrazioneUI extends UI {
 
             //TODO:questo un giorno avrà un path decente alla home privata
             //vedi che ce l ho pure da qualche altra parte sta riga di codice
-            Page.getCurrent().setLocation("./");
+            Page.getCurrent().setLocation("./private/home");
         }catch (Exception e){
             Notification notification= new Notification("Impossibile effettuare la registrazione");
         }

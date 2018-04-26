@@ -124,9 +124,26 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.vaadin.leif</groupId>
+			<artifactId>headertags</artifactId>
+			<version>2.0</version>
+		</dependency>
+
+
+		<dependency>
 			<groupId>de.codecamp.vaadin</groupId>
 			<artifactId>web-notifications</artifactId>
 			<version>0.9.5</version>
+		</dependency>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>provaH2</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+		<dependency>
+			<groupId>com.example</groupId>
+			<artifactId>provaH2</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
