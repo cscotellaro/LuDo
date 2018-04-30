@@ -7,10 +7,8 @@ import com.vaadin.server.Page;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import de.codecamp.vaadin.webnotifications.WebNotifications;
 
 import javax.annotation.PostConstruct;
@@ -25,10 +23,10 @@ public class DashboardView extends VerticalLayout implements View {
         Button b= new Button("Logout");
         b.addClickListener(clickEvent -> {
             VaadinService.getCurrentRequest().getWrappedSession().setAttribute("loggato", false);
+            VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountId", null);
             Page.getCurrent().setLocation("/Login");
         });
         addComponent(b);
-
         /*
         * RELEASE NOTES
         *    Ensure that notification is shown with UI access.
@@ -49,8 +47,13 @@ public class DashboardView extends VerticalLayout implements View {
         });
         addComponent(b1);
 
-
-
+        Button link=new Button("prova link");
+        link.addClickListener(clickEvent -> {
+           getUI().getNavigator().navigateTo("customers");
+        });
+        link.addStyleName(ValoTheme.BUTTON_LINK);
+        link.addStyleName("linkProva");
+        addComponent(link);
     }
 
     @Override

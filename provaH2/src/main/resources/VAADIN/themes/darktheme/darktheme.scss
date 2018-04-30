@@ -29,6 +29,8 @@ $v-shadow-opacity: 50%;
 // For more information, see: https://vaadin.com/book/-/page/themes.valo.html
 // Example variants can be copy/pasted from https://vaadin.com/wiki/-/wiki/Main/Valo+Examples
 
+$v-focus-style: none;
+
 @import "../valo/valo.scss";
 
 $v-included-components: remove($v-included-components, button);
@@ -38,6 +40,7 @@ $v-included-components: remove($v-included-components, button);
 
   //$v-shadow:  0 10px 10px v-shade;
   $v-background-color: #f442e5;
+  //$v-background-color: grey;
   $v-font-size:2em;
   @include valo-button();
 
@@ -45,5 +48,7 @@ $v-included-components: remove($v-included-components, button);
     background: grey;
     border-radius: 5px;
   }
+
+
   // Insert your own theme rules here
 }

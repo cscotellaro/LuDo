@@ -5,8 +5,8 @@ import com.example.provaH2.repository.AccountRepository;
 import com.vaadin.annotations.Theme;
 import com.vaadin.data.Binder;
 import com.vaadin.data.validator.EmailValidator;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.Page;
-import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
@@ -14,30 +14,40 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.leif.headertags.Viewport;
 
+@Theme("darktheme")
 @SpringUI(path = "/Login")
-//@Theme("darktheme")
 @Viewport("width=device-width, initial-scale=1")
 public class LoginUI extends UI {
-    //TODO: manca spring security
 
     @Autowired
     private AccountRepository repositoryA;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        FormLayout layout =new FormLayout();
-        //layout.setCaption("Login form");
+        //Questo serve perchè quando sei già loggaato ti porta già direttamente alla home
+        Boolean logged=(Boolean)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("loggato");
+        if(logged!= null && logged== true){
+            //TODO:questo un giorno avrà un path decente
+            String cod = vaadinRequest.getParameter("cod");
+            if (cod != null) {
+                Page.getCurrent().setLocation("/private/gioco?cod=" + cod);
+            } else {
+                Page.getCurrent().setLocation("/private/home");
+            }
+        }
 
-        System.out.println("login  ");
+        FormLayout layout = new FormLayout();
+        //layout.setCaption("Login form");
 
         TextField emailField = new TextField("Email");
         PasswordField passwordField = new PasswordField("Password");
-        Button submit= new Button("Login");
+        Button submit = new Button("Login");
         submit.setEnabled(false);
         submit.setWidth(9, Unit.EM);
+        submit.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         //submit.addStyleName(ValoTheme.BUTTON_FRIENDLY);
 
-        Label error=new Label("email o password non corretta");
+        Label error = new Label("email o password non corretta");
         layout.addComponent(error);
         error.setVisible(false);
 
@@ -52,7 +62,7 @@ public class LoginUI extends UI {
            }
         });
 */
-        Binder<Account> binder= new Binder<>();
+        Binder<Account> binder = new Binder<>();
         binder.forField(emailField)
                 .asRequired("Email may not be empty")
                 .withValidator(new EmailValidator("Not a valid email address"))
@@ -61,7 +71,7 @@ public class LoginUI extends UI {
         binder.forField(passwordField)
                 .asRequired("Password may not be empty")
 //                .withValidator(new StringLengthValidator(
-  //                      "Password must be at least 7 characters long", 7, null))
+                //                      "Password must be at least 7 characters long", 7, null))
                 .bind(Account::getPassword, Account::setPassword);
 
         binder.addStatusChangeListener(
@@ -69,13 +79,21 @@ public class LoginUI extends UI {
 
         submit.addClickListener(clickEvent -> {
             //DONE: fare il controllo su se esiste un account con quell email e passowrd
-            Account a= repositoryA.findOneByEmail(emailField.getValue());
-            System.out.println("ho trovato "+a );
-            if(a!=null && a.getPassword().equals(passwordField.getValue())){
+            Account a = repositoryA.findOneByEmail(emailField.getValue());
+            System.out.println("ho trovato " + a);
+            if (a != null && a.getPassword().equals(passwordField.getValue())) {
                 VaadinService.getCurrentRequest().getWrappedSession().setAttribute("loggato", true);
-                //TODO:questo un giorno avrà un path decente alla home privata
-                Page.getCurrent().setLocation("/private/home");
-            }else {
+                VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountId", a.getFullName());
+
+                //TODO:questo un giorno avrà un path decente
+                String cod = vaadinRequest.getParameter("cod");
+                System.out.println("il codice dalla request è " + cod);
+                if (cod != null) {
+                    Page.getCurrent().setLocation("/private/gioco?cod=" + cod);
+                } else {
+                    Page.getCurrent().setLocation("/private/home");
+                }
+            } else {
                 passwordField.clear();
                 error.setVisible(true);
             }
@@ -87,7 +105,7 @@ public class LoginUI extends UI {
         layout.setSizeUndefined();
         layout.setMargin(false);
 
-        VerticalLayout verticalLayout= new VerticalLayout();
+        VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.setSizeFull();
 
         //int h=Page.getCurrent().getBrowserWindowHeight();
@@ -103,14 +121,14 @@ public class LoginUI extends UI {
         //Responsive.makeResponsive(verticalLayout);
         verticalLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
         //verticalLayout.setResponsive(true);
-        VerticalLayout layoutDentro= new VerticalLayout();
+        VerticalLayout layoutDentro = new VerticalLayout();
         //layoutDentro.setWidth(w, Unit.PIXELS);
         layoutDentro.setSpacing(false);
         layoutDentro.setMargin(false);
         verticalLayout.setMargin(false);
         layoutDentro.addStyleName("provaVertical");
         layoutDentro.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-        Label titoloLabel =new Label("My label");
+        Label titoloLabel = new Label("My label");
         titoloLabel.setHeight(4, Unit.EM);
         layoutDentro.addComponent(titoloLabel);
         layoutDentro.addComponent(layout);

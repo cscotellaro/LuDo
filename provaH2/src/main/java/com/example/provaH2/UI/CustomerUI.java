@@ -3,6 +3,7 @@ package com.example.provaH2.UI;
 import com.example.provaH2.UI.view.CustomerView;
 import com.example.provaH2.gestioneGioco.Broadcaster;
 import com.vaadin.annotations.Push;
+import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
@@ -11,8 +12,11 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.leif.headertags.Viewport;
 
 @Push
+@Theme("darktheme")
+@Viewport("width=device-width, initial-scale=1")
 @SpringUI(path = "/private/home")
 public class CustomerUI extends UI/* implements Broadcaster.BroadcastListener*/{
 

@@ -22,6 +22,7 @@ public class Broadcaster implements Serializable{
 
     }*/
 
+    //TODO: tesoro ma queste due interfacce le dovremmo levare da qua dentro?
     public interface BroadcastListener {
         void receiveBroadcast(String message);
         void countUser(int i);
@@ -39,10 +40,12 @@ public class Broadcaster implements Serializable{
     private boolean canJoin;
     private boolean canSend;
     private Controller gameController;
+    private String id;
     //private Item itemDellaUi;
 
-    public Broadcaster(Controller controller){
+    public Broadcaster(Controller controller , String id){
         this.gameController=controller;
+        this.id= id;
         canJoin=true;
         canSend=false;
         listeners= new LinkedList<BroadcastListener>();
@@ -52,7 +55,7 @@ public class Broadcaster implements Serializable{
 
     //TODO: devo fare che non mi posso registrare due volte
     public /*static*/ synchronized void register( BroadcastListener listener) {
-        //System.out.println("sono il boradcaster ed è stato chiamato register "+ listeners.size());
+        System.out.println("sono il boradcaster ed è stato chiamato register "+ listeners.size());
         if(canJoin){
             listeners.add(listener);
             for (final BroadcastListener listen: listeners) {
@@ -64,6 +67,7 @@ public class Broadcaster implements Serializable{
     }
 
     public /*static*/ synchronized void unregister( BroadcastListener listener) {
+        System.out.println("sono il boradcaster ed è stato chiamato UNregister "+ listeners.size());
         listeners.remove(listener);
         for (final BroadcastListener listen: listeners) {
             executorService.execute(()-> {
@@ -73,6 +77,7 @@ public class Broadcaster implements Serializable{
         if(listeners.size()==0){
             //TODO: qua dovrei chiamare BroadcasterList.remove(i) ma nn ho i. E poi non posso perchè mi smerda gli indici
             //ma il controllo su cajoin
+            BroadcasterList.rimuovi(id);
         }
     }
 
@@ -141,5 +146,9 @@ public class Broadcaster implements Serializable{
 
     public void allowJoin(){
         canJoin=true;
+    }
+
+    public String getId(){
+        return id;
     }
 }

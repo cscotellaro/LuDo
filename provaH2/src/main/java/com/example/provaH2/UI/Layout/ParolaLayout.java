@@ -23,7 +23,10 @@ public class ParolaLayout extends HorizontalLayout {
         numeroLabel= new Label(""+parolaSuggerita.getVoti());
         plus.addClickListener(clickEvent -> {
             //TODO:
-            broadcaster.suggerisciParola(parola);
+            if(!parolaSuggerita.isAlreadyVoted()){
+                broadcaster.suggerisciParola(parola);
+                plus.setEnabled(false);
+            }
         });
         addComponents(parolaLabel, numeroLabel, plus);
     }

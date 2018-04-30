@@ -10,12 +10,13 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
+import org.vaadin.leif.headertags.Viewport;
 
 @Push
+@Viewport("width=device-width, initial-scale=1")
 @SpringUI(path = "private/gioco")
 public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
 
-    //TODO: alla fine della partita ricordati che devi levare il creatore=true da dentro la sessione (o devo levarlo subito?)
     //TODO: ci sta il problema di che succede quando ricarichi la pagina
     private Broadcaster broadcaster;
     private Label numeroUtenti;
@@ -27,7 +28,6 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
     //variabili solo di chi crea
     //TODO: qua si potrebe fare con un solo bottone aggiustando il codice del gamecontroller
     private Button start;
-    private Button restart;
     private GameController controller;
 
     //variabili solo di chi joina
@@ -42,25 +42,25 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
             new Notification("Non sei loggato").show(Page.getCurrent());
             Page.getCurrent().setLocation("/Login");
         }
-*/
-        Boolean creatore= (Boolean) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("creatore");
+*/      //Boolean creatore= (Boolean) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("creatore");
+
         System.out.println("interval "+ VaadinService.getCurrentRequest().getWrappedSession().getMaxInactiveInterval());
-        //pVaadinService.getCurrentRequest().getWrappedSession().setMaxInactiveInterval(10);
+        VaadinService.getCurrentRequest().getWrappedSession().setMaxInactiveInterval(10);
         //TODO: Cinzia che ne dici se magari estendiamo un vertical layout apposta per fare sta cosa così semplifichiamo il codice
         layout= new VerticalLayout();
         numeroUtenti= new Label("");
 
-        /***********************controlli sul codice***********************/
-        //TODO: manca il controllo sul fatto che ce ne sia effettivamente una con quel cod
+        /***********************controlli sul parametro codice***********************/
+        //DONE: manca il controllo sul fatto che ce ne sia effettivamente una con quel cod
         String cod=vaadinRequest.getParameter("cod");
-        System.out.println("aaaaaaaaaa"+cod);
+        //System.out.println("aaaaaaaaaa"+cod);
         if(cod== null) {
-            layout.addComponent(new Label("nessuna partita in corso"));
+            layout.addComponent(new Label("nessuna partita "));
             setContent(layout);
             return;
         }
 
-        int indice;
+        /*int indice;
         try{
             indice= Integer.parseInt(cod);
         }catch (NumberFormatException e){
@@ -68,9 +68,10 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
             setContent(layout);
             return;
         }
+*/
+        layout.addComponent(new Label("codice ="+cod));
 
         /***************************aggiunta dei bottoni*************************/
-        layout.addComponent(new Label("codice ="+indice));
         /*if(broadcaster==null){
             if(creatore!=null && creatore) {
                 registra(indice);
@@ -91,10 +92,14 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         }
         */
 
-        //TODO: ma il controllo broadcaster diverso da null qua mi serve?
         //broadcaster= BroadcasterList.getBroadcaster(indice);
         controller= (GameController) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("controller");
-        broadcaster = BroadcasterList.getBroadcaster(indice);
+        broadcaster = BroadcasterList.getBroadcaster(cod);
+        if(broadcaster==null){
+            layout.addComponent(new Label("Mmmmmmm nessuna partita con questo codice"));
+            setContent(layout);
+            return;
+        }
         if(broadcaster.isCanJoin()){
             if(controller!= null){
                 //*********************************************qua si può fare il can join
@@ -102,9 +107,9 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
                 broadcaster.register(this);
                 start= new Button("START");
                 start.addClickListener(clickEvent -> {
+                    controller.giocaAncora();
                     controller.startGame();
-                    //**********************************************questo nn lo so se ci vuole
-                    VaadinService.getCurrentRequest().getWrappedSession().setAttribute("creatore", false);
+                    //VaadinService.getCurrentRequest().getWrappedSession().setAttribute("creatore", false);
                 });
                 layout.addComponent(start);
             } else {
@@ -117,7 +122,7 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
                 layout.addComponent(join);
             }
         }else{
-            mainLayout.addComponent(new Label("sorry you can't join this match"));
+            layout.addComponent(new Label("sorry you can't join this match"));
         }
 
         layoutParole= new ParoleSuggeriteLayout(broadcaster);
@@ -151,22 +156,22 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         //System.out.println("è stato chiamato il metodo count user");
         access(()-> {
             System.out.println("è stato chiamato il run dentro count user");
-            //layout.removeComponent(numeroUtenti);
             numeroUtenti.setEnabled(false);
             numeroUtenti.setValue("Cinzia "+ i);
             numeroUtenti.setEnabled(true);
-            //layout.addComponent(numeroUtenti);
         });
     }
 
     @Override
     public void gameStarted(){
         access(()-> {
+            layoutParole.ripulisci();
+            //TODO: questa potrebbe essere un po' sporca
+            mainLayout.removeComponent(layout);
+            layout=new VerticalLayout();
+            mainLayout.addComponent(layout);
             if(start!=null){
                 layout.removeComponent(start);
-            }
-            if(restart!=null){
-                layout.removeComponent(restart);
             }
             if(unjoin!=null){
                 layout.removeComponent(unjoin);
@@ -209,18 +214,13 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
                 Notification.show("YOU LOOSE: "+ parola);
             }
             //parole=new HashMap<>();
-            layoutParole.ripulisci();
+         /*   layoutParole.ripulisci();
             //TODO: questa potrebbe essere un po' sporca
             mainLayout.removeComponent(layout);
             layout=new VerticalLayout();
             mainLayout.addComponent(layout);
-            if(controller!= null){
-                restart= new Button("restart");
-                restart.addClickListener(clickEvent -> {
-                   controller.giocaAncora();
-                   controller.startGame();
-                });
-                layout.addComponent(restart);
+           */ if(controller!= null){
+                layout.addComponent(start);
             }else{
                 unjoin= new Button("UNJOIN");
                 unjoin.addClickListener(clickEvent -> {

@@ -57,11 +57,10 @@ public class CustomerView extends VerticalLayout implements View {
 */
         crea.addClickListener(clickEvent -> {
             //int i=BroadcasterList.creaBroadcaster();
-            int i= gameController.creaPartita();
+            String broadcasterId= gameController.creaPartita();
             VaadinService.getCurrentRequest().getWrappedSession().setAttribute("controller", gameController);
-            //**************************************questo nn so se ci vuole
-            VaadinService.getCurrentRequest().getWrappedSession().setAttribute("creatore",true);
-            Page.getCurrent().setLocation("/private/gioco?cod="+i);
+            //VaadinService.getCurrentRequest().getWrappedSession().setAttribute("creatore",true);
+            Page.getCurrent().setLocation("/private/gioco?cod="+broadcasterId);
         });
         addComponent(new Label("Customers"));
         addComponent(crea);
@@ -74,7 +73,6 @@ public class CustomerView extends VerticalLayout implements View {
     public void enter(ViewChangeListener.ViewChangeEvent event) {
 
     }
-
 
 /*
     @Override

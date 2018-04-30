@@ -1,4 +1,4 @@
-package com.example.provaH2;
+package com.example.provaH2.prova;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

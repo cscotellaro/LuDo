@@ -1,6 +1,7 @@
 package com.example.provaH2.UI.Layout;
 
 import com.example.provaH2.gestioneGioco.Broadcaster;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -26,6 +27,7 @@ public class ParoleSuggeriteLayout extends VerticalLayout {
                 parolaField.clear();
             }
         });
+        suggerisci.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         this.addComponents(parolaField,suggerisci);
     }
 

@@ -3,21 +3,18 @@ package com.example.provaH2;
 import com.example.provaH2.entity.Account;
 import com.example.provaH2.entity.Item;
 import com.example.provaH2.filter.LoginFilter;
-import com.example.provaH2.prova.CustomSpringEvent;
+import com.example.provaH2.prova.ProvaEntitaRepository;
+import com.example.provaH2.prova.provaEntita;
 import com.example.provaH2.repository.AccountRepository;
 import com.example.provaH2.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpStatus;
 
 import javax.servlet.Filter;
-import java.util.List;
 
 @SpringBootApplication
 public class ProvaH2Application {
