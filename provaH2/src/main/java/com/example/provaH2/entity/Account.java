@@ -1,15 +1,13 @@
 package com.example.provaH2.entity;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 @Entity
 public class Account {
-    @Id
-   // private String id;
+    @Id @GeneratedValue
+    private Long id;
+    @Column(unique = true)
     private String fullName;
     @Column(unique = true)
     private String email;
@@ -22,15 +20,15 @@ public class Account {
         this.email = email;
         this.password = password;
     }
-/*
-    public String getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
-*/
+
     public String getFullName() {
         return fullName;
     }

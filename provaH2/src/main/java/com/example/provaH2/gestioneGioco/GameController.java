@@ -37,7 +37,7 @@ public class GameController implements Broadcaster.Controller{
         //TODO: Cinzia ma qua non mi serve il cotrollo su null, vero? E per l'id?
         /*nel senso qua per arrivarci devo essere loggata e poi l'id v a bene così oppure magari mettiamo la colonna
         * id in account e mettiamo unique sul fullName. Ah e poi la granularità del timestamp va bene??*/
-        String accountId= (String)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountId");
+        Long accountId= (Long)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountId");
         String timeStamp = new SimpleDateFormat("dd.HH.mm.ss").format(new Date());
         broadcasterId= accountId+"_"+ timeStamp;
         broadcaster= new Broadcaster(this, broadcasterId);

@@ -83,7 +83,7 @@ public class LoginUI extends UI {
             System.out.println("ho trovato " + a);
             if (a != null && a.getPassword().equals(passwordField.getValue())) {
                 VaadinService.getCurrentRequest().getWrappedSession().setAttribute("loggato", true);
-                VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountId", a.getFullName());
+                VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountId", a.getId());
 
                 //TODO:questo un giorno avrà un path decente
                 String cod = vaadinRequest.getParameter("cod");

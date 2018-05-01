@@ -3,6 +3,7 @@ package com.example.provaH2.gestioneGioco;
 import com.example.provaH2.entity.Item;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -29,6 +30,7 @@ public class Broadcaster implements Serializable{
         void gameStarted();
         void parolaSuggerita(String parola);
         void fineDellaPartita(boolean haiVinto, String parola);
+        void registratoDiNuovo();
     }
 
     public interface Controller{
@@ -36,7 +38,8 @@ public class Broadcaster implements Serializable{
     }
 
     /*static*/ ExecutorService executorService;
-    private /*static*/ LinkedList<BroadcastListener> listeners;
+    //private /*static*/ LinkedList<BroadcastListener> listeners;
+    private HashMap<Long, BroadcastListener> listeners;
     private boolean canJoin;
     private boolean canSend;
     private Controller gameController;
@@ -48,34 +51,47 @@ public class Broadcaster implements Serializable{
         this.id= id;
         canJoin=true;
         canSend=false;
-        listeners= new LinkedList<BroadcastListener>();
+        listeners= new HashMap<>();
         executorService = Executors.newSingleThreadExecutor();
     }
 
 
     //TODO: devo fare che non mi posso registrare due volte
-    public /*static*/ synchronized void register( BroadcastListener listener) {
+    public /*static*/ synchronized void register( Long id, BroadcastListener listener) {
         System.out.println("sono il boradcaster ed è stato chiamato register "+ listeners.size());
         if(canJoin){
-            listeners.add(listener);
-            for (final BroadcastListener listen: listeners) {
+            if(listeners.containsKey(id) && (BroadcastListener)listeners.get(id)!=listener){
+                listeners.get(id).registratoDiNuovo();
+            }
+            listeners.put(id, listener);
+            listeners.forEach((aLong, broadcastListener) -> {
+                executorService.execute(()-> {
+                    broadcastListener.countUser(listeners.size());
+                });
+            });
+            /*for (final BroadcastListener listen: listeners) {
                 executorService.execute(()-> {
                     listen.countUser(listeners.size());
                 });
             }
+            */
         }
     }
 
     public /*static*/ synchronized void unregister( BroadcastListener listener) {
         System.out.println("sono il boradcaster ed è stato chiamato UNregister "+ listeners.size());
         listeners.remove(listener);
-        for (final BroadcastListener listen: listeners) {
+        listeners.forEach((aLong, broadcastListener) -> {
+            executorService.execute(()-> {
+                broadcastListener.countUser(listeners.size());
+            });
+        });
+        /*for (final BroadcastListener listen: listeners) {
             executorService.execute(()-> {
                 listen.countUser(listeners.size());
             });
-        }
+        }*/
         if(listeners.size()==0){
-            //TODO: qua dovrei chiamare BroadcasterList.remove(i) ma nn ho i. E poi non posso perchè mi smerda gli indici
             //ma il controllo su cajoin
             BroadcasterList.rimuovi(id);
         }
@@ -83,11 +99,16 @@ public class Broadcaster implements Serializable{
 
     public /*static*/ synchronized void broadcast( final String message) {
         if(canSend) {
-            for (final BroadcastListener listener : listeners) {
+            listeners.forEach((aLong, broadcastListener) -> {
+                executorService.execute(()-> {
+                    broadcastListener.receiveBroadcast(message);
+                });
+            });
+            /*for (final BroadcastListener listener : listeners) {
                 executorService.execute(() -> {
                     listener.receiveBroadcast(message);
                 });
-            }
+            }*/
         }
     }
 
@@ -96,11 +117,17 @@ public class Broadcaster implements Serializable{
         //secondo te è meglio così o è meglio se facciamo che tu fai il controllo se la puoi mandare o no direttamente in gamUI
        if(canSend) {
            gameController.aggiungiParola(parola);
-           for (final BroadcastListener listener : listeners) {
+           listeners.forEach((aLong, broadcastListener) -> {
+               executorService.execute(()-> {
+                   broadcastListener.parolaSuggerita(parola);
+               });
+           });
+
+           /*for (final BroadcastListener listener : listeners) {
                executorService.execute(() -> {
                    listener.parolaSuggerita(parola);
                });
-           }
+           }*/
        }
     }
 
@@ -108,31 +135,30 @@ public class Broadcaster implements Serializable{
         //itemDellaUi=myItem;
         canJoin= false;
         canSend=true;
-        for (final BroadcastListener listener: listeners) {
+        listeners.forEach((aLong, broadcastListener) -> {
+            executorService.execute(()-> {
+                broadcastListener.gameStarted();
+            });
+        });
+        /*for (final BroadcastListener listener: listeners) {
             executorService.execute(() ->{
                 listener.gameStarted();
             });
-        }
-        /*new Thread(() -> {
-            for(int i=0;i<4;i++){
-                String indizio= itemDellaUi.getIndizio(i);
-                broadcast(indizio);
-                try {
-                    Thread.sleep(3000);
-                }catch (InterruptedException e){
-                    //TODO: che ci metto qua??
-                }
-            }
-        }).start();
-        */
+        }*/
+
     }
 
     public void comunicaEsito(boolean haiVinto, String parola){
-        for (final BroadcastListener listener: listeners) {
+        listeners.forEach((aLong, broadcastListener) -> {
+            executorService.execute(()-> {
+                broadcastListener.fineDellaPartita(haiVinto, parola);
+            });
+        });
+        /*for (final BroadcastListener listener: listeners) {
             executorService.execute(() ->{
                 listener.fineDellaPartita(haiVinto,parola);
             });
-        }
+        }*/
         allowJoin();
     }
 

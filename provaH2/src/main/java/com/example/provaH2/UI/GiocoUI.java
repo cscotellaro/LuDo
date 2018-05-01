@@ -44,8 +44,10 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         }
 */      //Boolean creatore= (Boolean) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("creatore");
 
-        System.out.println("interval "+ VaadinService.getCurrentRequest().getWrappedSession().getMaxInactiveInterval());
-        VaadinService.getCurrentRequest().getWrappedSession().setMaxInactiveInterval(10);
+
+        //VaadinService.getCurrentRequest().getWrappedSession().setMaxInactiveInterval(10);
+        //System.out.println("interval "+ VaadinService.getCurrentRequest().getWrappedSession().getMaxInactiveInterval());
+
         //TODO: Cinzia che ne dici se magari estendiamo un vertical layout apposta per fare sta cosa così semplifichiamo il codice
         layout= new VerticalLayout();
         numeroUtenti= new Label("");
@@ -53,13 +55,18 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         /***********************controlli sul parametro codice***********************/
         //DONE: manca il controllo sul fatto che ce ne sia effettivamente una con quel cod
         String cod=vaadinRequest.getParameter("cod");
-        //System.out.println("aaaaaaaaaa"+cod);
         if(cod== null) {
             layout.addComponent(new Label("nessuna partita "));
             setContent(layout);
             return;
         }
 
+        Long id=(Long) getSession().getSession().getAttribute("accountId");
+        if(id==null){
+            layout.addComponent(new Label("qualcosa non va....chi sei??"));
+            setContent(layout);
+            return;
+        }
         /*int indice;
         try{
             indice= Integer.parseInt(cod);
@@ -104,7 +111,7 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
             if(controller!= null){
                 //*********************************************qua si può fare il can join
                 //registra(indice);
-                broadcaster.register(this);
+                broadcaster.register(id,this);
                 start= new Button("START");
                 start.addClickListener(clickEvent -> {
                     controller.giocaAncora();
@@ -115,7 +122,7 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
             } else {
                 Button join = new Button("JOIN");
                 join.addClickListener(clickEvent -> {
-                    broadcaster.register(this);
+                    broadcaster.register(id,this);
                     //registra(indice);
                     layout.removeComponent(join);
                 });
@@ -142,6 +149,7 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         layout.addComponent(numeroUtenti);
         mainLayout.addComponent(layout);
         setContent(mainLayout);
+        //setPollInterval(3000);
     }
 
     @Override
@@ -164,6 +172,15 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
 
     @Override
     public void gameStarted(){
+        try{
+            getSession().getSession().setMaxInactiveInterval(10);
+            //VaadinService.getCurrentRequest().getWrappedSession().setMaxInactiveInterval(10);
+            System.out.println(getSession().getSession().getMaxInactiveInterval());
+        }catch (Exception e){
+            System.out.println("eccezione nel cambiare l'interval della session");
+            e.printStackTrace();
+        }
+
         access(()-> {
             layoutParole.ripulisci();
             //TODO: questa potrebbe essere un po' sporca
@@ -202,11 +219,15 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         if(broadcaster!=null){
             broadcaster.unregister(this);
         }
+        //TODO: questo non so se ci vuole
+        getSession().getSession().setMaxInactiveInterval(1800);
         super.detach();
     }
 
     @Override
     public void fineDellaPartita(boolean haiVinto, String parola){
+        //TODO: e se tengo più partite?
+        getSession().getSession().setMaxInactiveInterval(1800);
         access(() -> {
             if(haiVinto){
                 Notification.show("YOU WIN: "+ parola);
@@ -215,7 +236,7 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
             }
             //parole=new HashMap<>();
          /*   layoutParole.ripulisci();
-            //TODO: questa potrebbe essere un po' sporca
+            //______________: questa potrebbe essere un po' sporca
             mainLayout.removeComponent(layout);
             layout=new VerticalLayout();
             mainLayout.addComponent(layout);
@@ -235,19 +256,14 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         });
     }
 
-   /* private void registraa(int i){
-        broadcaster = BroadcasterList.getBroadcaster(i);
-        broadcaster.register(this);
+    @Override
+    public void registratoDiNuovo() {
+        access(() -> {
+            if(layoutParole!=null){
+                layoutParole.removeAllComponents();
+            }
+            layout.removeAllComponents();
+            layout.addComponent(new Label("you are registred in another page"));
+        });
     }
-    */
-/*
-    private Item scegli(){
-        int tot= repositoryI.numeroRighe();
-        Random random= new Random();
-        int rand=random.nextInt(tot)+1;
-        System.out.println("su " + tot + " è stato scelto "+ rand);
-        Item itemScelto =repositoryI.findOneById(rand);
-        return itemScelto;
-    }
-    */
 }

@@ -22,7 +22,7 @@ public class RegistrazioneUI extends UI {
 
     @Autowired
     private AccountRepository repositoryA;
-
+    private Binder<Account> binder;
     @Override
     protected void init(VaadinRequest vaadinRequest) {
 
@@ -36,7 +36,7 @@ public class RegistrazioneUI extends UI {
         PasswordField passwordField = new PasswordField("Password");
         PasswordField confirmPasswordField = new PasswordField("Confirm Password");
 
-        Binder<Account> binder = new Binder<>();
+        binder = new Binder<>();
 
         binder.forField(fullNameField)
                 .asRequired("Name may not be empty")
@@ -85,7 +85,7 @@ public class RegistrazioneUI extends UI {
             if(fullNameField.isEmpty()){
                 return true;
             }else{
-                return !repositoryA.existsById(fullNameField.getValue());
+                return !repositoryA.existsByFullName(fullNameField.getValue());
             }
 
         },"Nome non valido"));
@@ -111,7 +111,7 @@ public class RegistrazioneUI extends UI {
             repositoryA.save(account);
             //DONE: settare un flag in sessione
             VaadinService.getCurrentRequest().getWrappedSession().setAttribute("loggato", true);
-
+            VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountId", binder.getBean().getId());
             //TODO:questo un giorno avrà un path decente alla home privata
             //vedi che ce l ho pure da qualche altra parte sta riga di codice
             Page.getCurrent().setLocation("./private/home");
