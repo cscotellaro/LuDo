@@ -1,4 +1,4 @@
-package com.example.provaH2.UI;
+package com.example.provaH2.prova;
 
 import com.example.provaH2.entity.Account;
 import com.example.provaH2.repository.AccountRepository;
@@ -24,6 +24,14 @@ public class LoginUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+
+         /*Boolean logged=(Boolean)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("loggato");
+        if(logged== null || logged== false){
+            //new Notification("Non sei loggato").show(Page.getCurrent());
+            Page.getCurrent().setLocation("/Login");
+        }*/
+
+
         //Questo serve perchè quando sei già loggaato ti porta già direttamente alla home
         Boolean logged=(Boolean)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("loggato");
         if(logged!= null && logged== true){

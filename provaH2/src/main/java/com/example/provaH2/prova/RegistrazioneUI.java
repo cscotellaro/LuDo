@@ -1,4 +1,4 @@
-package com.example.provaH2.UI;
+package com.example.provaH2.prova;
 
 import com.example.provaH2.entity.Account;
 import com.example.provaH2.repository.AccountRepository;

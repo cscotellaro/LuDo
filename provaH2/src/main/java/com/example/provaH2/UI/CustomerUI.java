@@ -11,37 +11,33 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.leif.headertags.Viewport;
 
-@Push
-@Theme("darktheme")
+//@Push
+//@Theme("darktheme")
 @Viewport("width=device-width, initial-scale=1")
 @SpringUI(path = "/private/home")
-public class CustomerUI extends UI/* implements Broadcaster.BroadcastListener*/{
+public class CustomerUI extends UI{
 
-    private Navigator navigator;
-    private Broadcaster broadcaster;
     @Autowired
     private SpringViewProvider viewProvider;
+    private Navigator navigator;
 
-  /*  @Autowired
-    private CustomerView errorView;
-*/
-    @Override
+     @Override
     protected void init(VaadinRequest vaadinRequest) {
 
         VerticalLayout layout=new VerticalLayout();
-        /*Boolean logged=(Boolean)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("loggato");
-        if(logged== null || logged== false){
-            //new Notification("Non sei loggato").show(Page.getCurrent());
-            Page.getCurrent().setLocation("/Login");
-        }
-*/
+
+
         MenuBar menu= new MenuBar();
+        menu.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         Panel viewContent= new Panel();
+        viewContent.addStyleName(ValoTheme.PANEL_BORDERLESS);
 
         layout.addComponents(menu, viewContent);
+        layout.setComponentAlignment(menu,Alignment.TOP_RIGHT);
         layout.setSizeFull();
         viewContent.setSizeFull();
         layout.setExpandRatio(viewContent,1);
@@ -50,11 +46,13 @@ public class CustomerUI extends UI/* implements Broadcaster.BroadcastListener*/{
         navigator= new Navigator(this, viewContent);
         navigator.addProvider(viewProvider);
   //      navigator.setErrorView(errorView);
-        menu.addItem("Dashboard", e->onDashboardClicked());
-        menu.addItem("Customers", e->onCustomersClicked());
+        menu.addItem("Home", e->onHomeClicked());
+        menu.addItem("Statistiche", e->onCustomersClicked());
+        menu.addItem("Settings", e->onSettingsClicked());
+        menu.addItem("Logout", e-> onLogoutClicked());
         setContent(layout);
 
-        navigator.navigateTo("dashboard");
+        navigator.navigateTo("home");
 
         if(vaadinRequest.getParameter("cod")!=null){
 
@@ -62,14 +60,31 @@ public class CustomerUI extends UI/* implements Broadcaster.BroadcastListener*/{
         }
     }
 
-    private void onDashboardClicked(){
-        navigator.navigateTo("dashboard");
-    }
-
     private void onCustomersClicked(){
         navigator.navigateTo("customers");
     }
 
+    private void onLogoutClicked(){
+        VaadinService.getCurrentRequest().getWrappedSession().setAttribute("loggato", false);
+        VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountId", null);
+        VaadinService.getCurrentRequest().getWrappedSession().setAttribute("account", null);
+        Page.getCurrent().setLocation("/");
+    }
+
+    private void onSettingsClicked(){
+        navigator.navigateTo("settings");
+    }
+
+    private void onHomeClicked(){
+        navigator.navigateTo("home");
+    }
+/*
+
+
+    private void onDashboardClicked(){
+        navigator.navigateTo("dashboard");
+    }
+*/
 /*
     @Override
     public void receiveBroadcast(String message) {

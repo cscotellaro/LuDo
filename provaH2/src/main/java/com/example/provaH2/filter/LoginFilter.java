@@ -26,10 +26,11 @@ public class LoginFilter implements Filter {
             //Page.getCurrent().setLocation("/Login");
             //System.out.println(((HttpServletRequest) request).getPathInfo() + "_-_ " +((HttpServletRequest) request).getRequestURI() + "_-_ "+ ((HttpServletRequest) request).getServletPath());
             //RequestDispatcher dispatcher=filterConfig.getServletContext().getRequestDispatcher("/Login");
+            //TODO:questo è da aggiustare
             if(cod!=null){
-                ((HttpServletResponse)response).sendRedirect("http://localhost:8080/Login?cod="+cod);
+                ((HttpServletResponse)response).sendRedirect("http://localhost:8080/?login=true&cod="+cod);
             }else{
-                ((HttpServletResponse)response).sendRedirect("http://localhost:8080/Login");
+                ((HttpServletResponse)response).sendRedirect("http://localhost:8080/?login=true");
 
             }
             //dispatcher.forward(request, response);
