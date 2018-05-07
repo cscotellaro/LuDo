@@ -161,8 +161,9 @@ public class SettingsView extends VerticalLayout implements View {
         changeEmail.setEnabled(false);
 
         Binder<String> binder = new Binder<>();
-        binder.forField(email).
-                withValidator(new EmailValidator("Not a valid email address"))
+        binder.forField(email)
+                .asRequired("Must insert email")
+                .withValidator(new EmailValidator("Not a valid email address"))
                 .bind(s -> sgamo, (s, v) -> sgamo = v);
         binder.addStatusChangeListener(
                 event -> changeEmail.setEnabled(binder.isValid()));

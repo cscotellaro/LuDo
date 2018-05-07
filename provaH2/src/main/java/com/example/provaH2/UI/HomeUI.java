@@ -51,6 +51,7 @@ public class HomeUI extends UI {
         tabSheet.addSelectedTabChangeListener(selectedTabChangeEvent -> {
             window.center();
         });
+
         tabSheet.setSizeUndefined();
         window.setContent(tabSheet);
         //window.setSizeUndefined();

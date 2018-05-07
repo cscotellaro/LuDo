@@ -94,7 +94,8 @@ public class RegistrazioneLayout extends FormLayout {
         binder.addStatusChangeListener(
                 event -> registerButton.setEnabled(binder.isValid()));
 
-        addComponents(fullNameField, emailField,passwordField,confirmPasswordField,validationStatus, registerButton);
+
+        addComponents(fullNameField, emailField,passwordField,confirmPasswordField, registerButton,validationStatus);
         
     }
 
