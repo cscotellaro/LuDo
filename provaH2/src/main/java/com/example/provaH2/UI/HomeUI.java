@@ -11,6 +11,7 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +24,22 @@ public class HomeUI extends UI {
     @Autowired
     private AccountRepository repositoryA;
     private HorizontalLayout mainlayout= new HorizontalLayout();
-
+    private String cod;
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+
         String loginParam = vaadinRequest.getParameter("login");
+        cod=vaadinRequest.getParameter("cod");
         if(loginParam!=null && loginParam.equals("true")){
             addWindow(creaWindow());
         }
 
         Button login= new Button("login");
         login.addClickListener(clickEvent -> {
+            Boolean logged= (Boolean) vaadinRequest.getWrappedSession().getAttribute("loggato");
+            if(logged!=null && logged==true){
+                Page.getCurrent().setLocation("private/home");
+            }
             getUI().addWindow(creaWindow());
         });
         mainlayout.addComponent(login);
@@ -43,7 +50,7 @@ public class HomeUI extends UI {
         final Window window = new Window();
         //window.setWidth(300.0f, Unit.PIXELS);
 
-        LoginLayout layoutLogin = new LoginLayout(repositoryA);
+        LoginLayout layoutLogin = new LoginLayout(repositoryA, cod);
         RegistrazioneLayout registrazioneLayout= new RegistrazioneLayout(repositoryA);
         TabSheet tabSheet= new TabSheet();
         tabSheet.addTab(layoutLogin, "Login");

@@ -5,29 +5,20 @@ import java.io.Serializable;
 public class ParolaSuggerita implements Serializable {
     private int voti;
     private String parola;
-    private boolean alreadyVoted;
 
     public ParolaSuggerita(int voti, String parola) {
         this.voti = voti;
         this.parola = parola;
-        alreadyVoted=false;
+
     }
 
     public ParolaSuggerita(String parola) {
         this.parola = parola;
-        voti=1;
-        alreadyVoted=false;
+        voti=0;
+
     }
 
-    public boolean isAlreadyVoted() {
-        return alreadyVoted;
-    }
-
-    public void setAlreadyVoted(boolean alreadyVoted) {
-        this.alreadyVoted = alreadyVoted;
-    }
-
-    public int getVoti() {
+    public  synchronized int getVoti() {
         return voti;
     }
 
@@ -43,8 +34,14 @@ public class ParolaSuggerita implements Serializable {
         this.parola = parola;
     }
 
-    public void incrementaVoto(){
+    public synchronized void incrementaVoto(){
         voti++;
+    }
+
+    public synchronized void decrementaVoto(){
+        if(voti>0){
+            voti--;
+        }
     }
 
     @Override

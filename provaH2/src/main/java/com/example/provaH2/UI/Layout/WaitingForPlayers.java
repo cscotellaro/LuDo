@@ -1,0 +1,120 @@
+package com.example.provaH2.UI.Layout;
+
+import com.example.provaH2.entity.Account;
+import com.example.provaH2.gestioneGioco.Broadcaster;
+import com.example.provaH2.gestioneGioco.BroadcasterList;
+import com.example.provaH2.gestioneGioco.GameController;
+import com.vaadin.server.Page;
+import com.vaadin.server.VaadinService;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.addthis.AddThis;
+
+import java.util.ArrayList;
+
+//@SpringView(name = "waitingForPlayers")
+public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUtenti */{
+
+    private Label waiting;
+    private VerticalLayout layoutNomi;
+    private GameController controller;
+    private Broadcaster broadcaster;
+    private Account account;
+
+    public WaitingForPlayers(){
+        account=(Account) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("account");
+        String cod=VaadinService.getCurrentRequest().getParameter("cod");
+        if(cod== null) {
+            setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            addComponent(new Label("nessuna partita  :("));
+            Button goHome= new Button("go Home");
+            goHome.addClickListener(clickEvent -> {
+                Page.getCurrent().setLocation("/private/home");
+            });
+            addComponent(goHome);
+            return;
+        }
+
+        Long id=(Long) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountId");
+        broadcaster = BroadcasterList.getBroadcaster(cod);
+        if(broadcaster==null){
+            setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            addComponent(new Label("nessuna partita con questo codice :("));
+            Button goHome= new Button("go Home");
+            goHome.addClickListener(clickEvent -> {
+                Page.getCurrent().setLocation("/private/home");
+            });
+            addComponent(goHome);
+            return;
+        }
+
+
+        System.out.println("sto per registrarmi al broadcaster "+ UI.getCurrent());
+        if(broadcaster.isCanJoin()){
+            broadcaster.register(id,(Broadcaster.BroadcastListener) UI.getCurrent());
+        }else if(broadcaster.canIJoin(account.getId())){
+            //TODO:qua ci sta da fare che devo settare il layout di partita, riprendermi i dati e fai attenzione se mi sto rijoinando su un altra pagina
+            System.out.println("mi potrei joinare di nuovo");
+            return;
+        } else{
+            setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            addComponent(new Label("la partita è già iniziata non puoi joinarti"));
+            Button goHome= new Button("go Home");
+            goHome.addClickListener(clickEvent -> {
+                Page.getCurrent().setLocation("/");
+            });
+            addComponent(goHome);
+            return;
+        }
+
+
+        waiting = new Label("I'm "+account.getFullName()+ " Waiting for players...");
+        setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+        addComponent(waiting);
+
+        controller= (GameController) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("controllerGame"+cod);
+       //questo if è solo per la stampa lo puoi pure levare proprio
+        if(controller!=null){
+            Account account2=(Account) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("account");
+            System.out.println("Sono "+account2.getFullName()+ "controllo dello start : "+ controller.getId() + "__"+controller.getBroadcaster().getId() + " " + broadcaster.getId());
+        }
+
+        if(controller!=null && controller.getBroadcaster().getId().equals(broadcaster.getId())){
+            TextField link= new TextField("copy this link");
+            link.setValue("localhost:8080/private/gioco?cod="+cod);
+            link.setReadOnly(true);
+            link.selectAll();
+            addComponent(link);
+            Button start= new Button("START");
+            System.out.println("\tSTART sto per aggiungere il bottone e il controller è " + controller.getId());
+            start.addClickListener(clickEvent -> {
+                //System.out.println(controller.getId() + " b_ " + broadcaster.getId());
+                controller.giocaAncora();
+                controller.startGame();
+            });
+            addComponent(start);
+        }
+
+        Panel panelNomi= new Panel();
+        layoutNomi= new VerticalLayout();
+        layoutNomi.setSizeUndefined();
+        panelNomi.setContent(layoutNomi);
+        panelNomi.setWidth("600px");
+        panelNomi.setHeight("10%");
+        addComponent(panelNomi);
+    }
+
+    public void aggiornaCountUser(int n, ArrayList<String> nomi){
+        waiting.setEnabled(false);
+        waiting.setValue("I'm "+account.getFullName()+"Waiting for users... "+ n+ "connected");
+        waiting.setEnabled(true);
+        layoutNomi.removeAllComponents();
+        for(String str: nomi){
+            layoutNomi.addComponent(new Label(str));
+        }
+    }
+
+    public Broadcaster getBroadcaster() {
+        return broadcaster;
+    }
+}

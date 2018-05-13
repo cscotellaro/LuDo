@@ -17,6 +17,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.util.Objects;
 
 @SpringView(name = "settings")
@@ -31,7 +32,8 @@ public class SettingsView extends VerticalLayout implements View {
 
     private String sgamo;
 
-    public SettingsView() {
+    @PostConstruct
+    public void initialize() {
         account=(Account)  VaadinService.getCurrentRequest().getWrappedSession().getAttribute("account");
         id=(Long)  VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountId");
         setSpacing(false);
@@ -156,7 +158,7 @@ public class SettingsView extends VerticalLayout implements View {
         TextField email= new TextField("new email");
         Button changeEmail= new Button("Change");
         changeEmail.addClickListener(clickEvent -> {
-            //TODO: implementa
+            //TODO: qua si deve mandare la mail e poi mandare il tutto su una pag specifica che nn so qual è
         });
         changeEmail.setEnabled(false);
 

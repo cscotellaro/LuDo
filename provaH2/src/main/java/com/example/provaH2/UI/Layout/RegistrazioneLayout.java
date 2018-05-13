@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
 
+//TODO: qua dovremmo fare il fatto dell'invio della mail per registrarti (anche in settings)
 public class RegistrazioneLayout extends FormLayout {
 
     private AccountRepository repositoryA;

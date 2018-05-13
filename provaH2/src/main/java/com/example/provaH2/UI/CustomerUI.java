@@ -30,7 +30,6 @@ public class CustomerUI extends UI{
 
         VerticalLayout layout=new VerticalLayout();
 
-
         MenuBar menu= new MenuBar();
         menu.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         Panel viewContent= new Panel();
@@ -55,7 +54,7 @@ public class CustomerUI extends UI{
         navigator.navigateTo("home");
 
         if(vaadinRequest.getParameter("cod")!=null){
-
+        //TODO: mettere dove va se ho il codice nell url
 
         }
     }

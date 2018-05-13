@@ -12,9 +12,11 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.vaadin.leif.headertags.Viewport;
 
+import java.util.ArrayList;
+
 @Push
 @Viewport("width=device-width, initial-scale=1")
-@SpringUI(path = "private/gioco")
+@SpringUI(path = "private/giocoOLD")
 public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
 
     //TODO: ci sta il problema di che succede quando ricarichi la pagina
@@ -132,7 +134,12 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
             layout.addComponent(new Label("sorry you can't join this match"));
         }
 
-        layoutParole= new ParoleSuggeriteLayout(broadcaster);
+       //
+        //
+        // layoutParole= new ParoleSuggeriteLayout(broadcaster);
+
+
+
         /*layoutParole= new VerticalLayout();
         TextField parolaField= new TextField();
         Button suggerisci= new Button("Suggerisci");
@@ -153,14 +160,14 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
     }
 
     @Override
-    public void receiveBroadcast(String message) {
+    public void receiveIndizio(String message) {
         access(()-> {
             layout.addComponent(new Label(message));
         });
     }
 
     @Override
-    public void countUser(int i) {
+    public void countUser(int i, ArrayList<String> nomi) {
         //System.out.println("è stato chiamato il metodo count user");
         access(()-> {
             System.out.println("è stato chiamato il run dentro count user");
@@ -201,7 +208,11 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
     @Override
     public void parolaSuggerita(String parola) {
         access(() -> {
-            layoutParole.aggiornaParole(parola);
+           //
+            //
+            //
+            // layoutParole.aggiornaParole(parola);
+
             //layoutParole.addComponent(new Label(parola));
             /*if(parole.containsKey(parola)) {
                 parole.get(parola).aggionaNumero();
@@ -211,6 +222,11 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
                 parole.put(parola, parolaLayout);
             }*/
         });
+    }
+
+    @Override
+    public void reciveChatMessage(String name, String message) {
+
     }
 
     //TODO: abbiamo un problema quando io chiudo il browser lo chiama dopo un sacco di tempo
@@ -265,5 +281,20 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
             layout.removeAllComponents();
             layout.addComponent(new Label("you are registred in another page"));
         });
+    }
+
+    @Override
+    public String getName() {
+        return "nome messo per implementare l interfaccia";
+    }
+
+    @Override
+    public void onVoteParola(String parola) {
+
+    }
+
+    @Override
+    public void onUnvoteParola(String parola) {
+
     }
 }

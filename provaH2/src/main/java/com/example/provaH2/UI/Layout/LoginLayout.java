@@ -8,6 +8,7 @@ import com.vaadin.data.Validator;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.Page;
+import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
@@ -21,7 +22,7 @@ public class LoginLayout extends VerticalLayout {
     private AccountRepository repositoryA;
     private FormLayout loginForm= new FormLayout();
 
-    public LoginLayout(AccountRepository accountRepository){
+    public LoginLayout(AccountRepository accountRepository, String cod){
         repositoryA=accountRepository;
 
         TextField emailField = new TextField("Email");
@@ -59,8 +60,12 @@ public class LoginLayout extends VerticalLayout {
                 VaadinService.getCurrentRequest().getWrappedSession().setAttribute("loggato", true);
                 VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountId", a.getId());
                 VaadinService.getCurrentRequest().getWrappedSession().setAttribute("account", a);
-                //TODO: cambiare questo path
-                Page.getCurrent().setLocation("/private/home");
+
+                if(cod!=null){
+                    Page.getCurrent().setLocation("/private/gioco?cod="+cod);
+                }else{
+                    Page.getCurrent().setLocation("/private/home");
+                }
             } else {
                 passwordField.clear();
                 error.setVisible(true);

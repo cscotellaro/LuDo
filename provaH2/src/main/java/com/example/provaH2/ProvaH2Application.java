@@ -50,6 +50,7 @@ public class ProvaH2Application {
 
 			repositoryA.save(new Account("Catello", "tizio@gmail.com", "catello"));
 			repositoryA.save(new Account("Luigi", "caio@gmail.com", "luigi"));
+			repositoryA.save(new Account("Cinzia", "cinzia@gmail.com", "cinzia"));
 			repositoryA.findAll().forEach(System.out::println);
 
 			Item item= new Item("Sara");

@@ -30,9 +30,11 @@ public class Item {
         }
     }
 
-    //TODO: Controllo sugli ndici
+    //TODO: Vedi che qua sta fatto con gli indici non con il set dell array
     public void addIndizio(int i, String indizio){
-        indizi[i]=indizio;
+        if(i>=0 && i<4){
+            indizi[i]=indizio;
+        }
     }
 
     public String getIndizio(int i){

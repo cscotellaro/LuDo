@@ -38,8 +38,9 @@ public class PrivateHomeView  extends VerticalLayout implements View{
 
         crea= new Button("Start game");
         crea.addClickListener(clickEvent -> {
+            System.out.println("Sono il bottone sater game di " + account.getFullName() + "e sto per settare il gameController");
             String broadcasterId= gameController.creaPartita();
-            VaadinService.getCurrentRequest().getWrappedSession().setAttribute("controller", gameController);
+            VaadinService.getCurrentRequest().getWrappedSession().setAttribute("controllerGame"+broadcasterId, gameController);
             Page.getCurrent().setLocation("/private/gioco?cod="+broadcasterId);
         });
         verticalLayout.addComponent(crea);
