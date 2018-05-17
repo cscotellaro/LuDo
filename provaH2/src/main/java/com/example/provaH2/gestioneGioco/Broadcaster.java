@@ -25,11 +25,12 @@ public class Broadcaster implements Serializable{
         void fineDellaPartita(boolean haiVinto, String parola);
         void registratoDiNuovo();
         void reciveChatMessage(String name, String message);
+        void parolaGiaSuggerita();
         String getName();
     }
 
     public interface Controller{
-        void aggiungiParola(String parola, Long accountId);
+        boolean aggiungiParola(String parola, Long accountId);
         void voteParola(String parola, Long accountId);
         void unVoteParola(String parola, Long accountId);
     }
@@ -54,7 +55,7 @@ public class Broadcaster implements Serializable{
 
     //DONE:devo fare che non mi posso registrare due volte
     public synchronized void register( Long id, BroadcastListener listener) {
-        System.out.println("sono il boradcaster ed è stato chiamato register "+ listeners.size());
+        System.out.println("sono il boradcaster ed è stato chiamato register "+ listeners.size()+ "  ui:"+ listener);
         if(canJoin){
             if(listeners.containsKey(id) && (BroadcastListener)listeners.get(id)!=listener){
                 listeners.get(id).registratoDiNuovo();
@@ -82,7 +83,7 @@ public class Broadcaster implements Serializable{
     }
 
     public  synchronized void unregister( BroadcastListener listener) {
-        System.out.println("sono il boradcaster ed è stato chiamato UNregister "+ listeners.size());
+        System.out.println("sono il boradcaster ed è stato chiamato UNregister "+ listeners.size() + "  ui:"+ listener );
         listeners.remove(listener);
 
         ArrayList<String> nomi= new ArrayList<>();
@@ -123,15 +124,18 @@ public class Broadcaster implements Serializable{
     }
 
     public synchronized void suggerisciParola(String parola, Long accountId){
-        //TODO: Cinzia vedi che qua io nn faccio che tu nn puoi mandare la parola tu la mandi e il broadcaster nn ti caca
-        //secondo te è meglio così o è meglio se facciamo che tu fai il controllo se la puoi mandare o no direttamente in gamUI
        if(canSend) {
-           gameController.aggiungiParola(parola, accountId);
-           listeners.forEach((aLong, broadcastListener) -> {
-               executorService.execute(()-> {
-                   broadcastListener.parolaSuggerita(parola);
+           if(gameController.aggiungiParola(parola, accountId)){
+               listeners.forEach((aLong, broadcastListener) -> {
+                   executorService.execute(()-> {
+                       broadcastListener.parolaSuggerita(parola);
+                   });
                });
-           });
+           }else{
+               executorService.execute(()-> {
+                   listeners.get(accountId).parolaGiaSuggerita();
+               });
+           }
 
            /*for (final BroadcastListener listener : listeners) {
                executorService.execute(() -> {

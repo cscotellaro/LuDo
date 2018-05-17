@@ -9,7 +9,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import java.util.HashMap;
 
-public class ParoleSuggeriteLayout extends VerticalLayout {
+public class ParoleSuggeriteLayout extends VerticalLayout implements PuoSettareLaParolaVotata {
 
     private PuoSuggerire puoSuggerire;
     private TextField parolaField;
@@ -41,6 +41,7 @@ public class ParoleSuggeriteLayout extends VerticalLayout {
         });
     }
 
+    @Override
     public void setParolaCorrentementeVotata(String parolaNuova) {
         if(parolaCorrentementeVotata!=null){
             parole.get(parolaCorrentementeVotata).allowVote();

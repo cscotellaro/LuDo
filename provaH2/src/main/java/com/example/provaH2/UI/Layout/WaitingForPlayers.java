@@ -1,5 +1,6 @@
 package com.example.provaH2.UI.Layout;
 
+import com.example.provaH2.UI.CanRejoinGame;
 import com.example.provaH2.entity.Account;
 import com.example.provaH2.gestioneGioco.Broadcaster;
 import com.example.provaH2.gestioneGioco.BroadcasterList;
@@ -10,6 +11,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.addthis.AddThis;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 
 //@SpringView(name = "waitingForPlayers")
@@ -20,8 +22,10 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
     private GameController controller;
     private Broadcaster broadcaster;
     private Account account;
+//    private CanRejoinGame gameUI;
 
-    public WaitingForPlayers(){
+    public WaitingForPlayers( /*CanRejoinGame gameUI*/) {
+
         account=(Account) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("account");
         String cod=VaadinService.getCurrentRequest().getParameter("cod");
         if(cod== null) {
@@ -52,10 +56,12 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
         System.out.println("sto per registrarmi al broadcaster "+ UI.getCurrent());
         if(broadcaster.isCanJoin()){
             broadcaster.register(id,(Broadcaster.BroadcastListener) UI.getCurrent());
-        }else if(broadcaster.canIJoin(account.getId())){
-            //TODO:qua ci sta da fare che devo settare il layout di partita, riprendermi i dati e fai attenzione se mi sto rijoinando su un altra pagina
+        /*}else if(broadcaster.canIJoin(account.getId())){
             System.out.println("mi potrei joinare di nuovo");
+            broadcaster.register(id,(Broadcaster.BroadcastListener) UI.getCurrent());
+            gameUI.rejoinGame();
             return;
+        */
         } else{
             setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
             addComponent(new Label("la partita è già iniziata non puoi joinarti"));

@@ -116,7 +116,7 @@ public class GameController implements Broadcaster.Controller{
     //TODO: Tesò ma qua si deve gestire la syncro per incremento della parola?
     //in realtà non credo perchè questo viene chiamato solo da un metodo che è già syncronizzato
     @Override
-    public void aggiungiParola(String str, Long accountId) {
+    public boolean aggiungiParola(String str, Long accountId) {
         /*if(parole.containsKey(str)){
             ParolaSuggerita parola=parole.get(str);
             parola.incrementaVoto();
@@ -125,9 +125,10 @@ public class GameController implements Broadcaster.Controller{
             parole.put(str, new ParolaSuggerita(str));
         }*/
         if(parole.containsKey(str)){
-            return;
+            return false;
         }else{
             parole.put(str, new ParolaVotata(str, accountId));
+            return  true;
         }
     }
 

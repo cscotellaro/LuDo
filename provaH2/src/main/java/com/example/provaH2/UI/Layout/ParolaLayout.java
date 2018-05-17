@@ -13,9 +13,9 @@ public class ParolaLayout extends HorizontalLayout {
     private Button plus;
     private Label parolaLabel;
     private Label numeroLabel;
-    private ParoleSuggeriteLayout paroleSuggeriteLayout;
+    private PuoSettareLaParolaVotata paroleSuggeriteLayout;
 
-    public ParolaLayout(String parola, ParoleSuggeriteLayout paroleSuggeriteLayout){
+    public ParolaLayout(String parola, PuoSettareLaParolaVotata paroleSuggeriteLayout){
         super();
         this.parolaSuggerita=new ParolaSuggerita(parola);
         this.paroleSuggeriteLayout= paroleSuggeriteLayout;

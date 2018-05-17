@@ -1,4 +1,4 @@
-package com.example.provaH2.UI;
+package com.example.provaH2.prova;
 
 import com.example.provaH2.UI.Layout.ParoleSuggeriteLayout;
 import com.example.provaH2.gestioneGioco.Broadcaster;
@@ -270,6 +270,11 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
                 layout.addComponent(unjoin);
             }
         });
+    }
+
+    @Override
+    public void parolaGiaSuggerita() {
+
     }
 
     @Override
