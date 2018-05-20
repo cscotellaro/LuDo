@@ -233,7 +233,7 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
     @Override
     public void detach() {
         if(broadcaster!=null){
-            broadcaster.unregister(this);
+         //   broadcaster.unregister(this);
         }
         //TODO: questo non so se ci vuole
         getSession().getSession().setMaxInactiveInterval(1800);
@@ -262,7 +262,7 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
                 unjoin= new Button("UNJOIN");
                 unjoin.addClickListener(clickEvent -> {
                     if(broadcaster!=null){
-                        broadcaster.unregister(this);
+                        //broadcaster.unregister(this);
                         layout.removeComponent(unjoin);
                         Page.getCurrent().setLocation("./");
                     }

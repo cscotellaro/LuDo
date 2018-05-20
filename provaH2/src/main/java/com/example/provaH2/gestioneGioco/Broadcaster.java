@@ -33,6 +33,7 @@ public class Broadcaster implements Serializable{
         boolean aggiungiParola(String parola, Long accountId);
         void voteParola(String parola, Long accountId);
         void unVoteParola(String parola, Long accountId);
+        void countUser(int n);
     }
 
     ExecutorService executorService;
@@ -62,6 +63,7 @@ public class Broadcaster implements Serializable{
                 System.out.println("di nuovo");
             }
             listeners.put(id, listener);
+            gameController.countUser(listeners.size());
 
             ArrayList<String> nomi= new ArrayList<>();
             listeners.forEach((aLong, broadcastListener) -> {
@@ -82,20 +84,23 @@ public class Broadcaster implements Serializable{
         }
     }
 
-    public  synchronized void unregister( BroadcastListener listener) {
+    public  synchronized void unregister(Long accountId, BroadcastListener listener) {
         System.out.println("sono il boradcaster ed è stato chiamato UNregister "+ listeners.size() + "  ui:"+ listener );
-        listeners.remove(listener);
+        if(listeners.containsValue(listener)) {
+            listeners.remove(accountId);
+            gameController.countUser(listeners.size());
 
-        ArrayList<String> nomi= new ArrayList<>();
-        listeners.forEach((aLong, broadcastListener) -> {
-            nomi.add(broadcastListener.getName());
-        });
-
-        listeners.forEach((aLong, broadcastListener) -> {
-            executorService.execute(()-> {
-                broadcastListener.countUser(listeners.size(),nomi);
+            ArrayList<String> nomi = new ArrayList<>();
+            listeners.forEach((aLong, broadcastListener) -> {
+                nomi.add(broadcastListener.getName());
             });
-        });
+
+            listeners.forEach((aLong, broadcastListener) -> {
+                executorService.execute(() -> {
+                    broadcastListener.countUser(listeners.size(), nomi);
+                });
+            });
+        }
         /*for (final BroadcastListener listen: listeners) {
             executorService.execute(()-> {
                 listen.countUser(listeners.size());

@@ -111,6 +111,7 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
     }
 
     public void aggiornaCountUser(int n, ArrayList<String> nomi){
+        System.out.println("aggiotna counter " + n + " "+ getUI());
         waiting.setEnabled(false);
         waiting.setValue("I'm "+account.getFullName()+"Waiting for users... "+ n+ "connected");
         waiting.setEnabled(true);

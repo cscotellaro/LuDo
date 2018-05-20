@@ -18,6 +18,7 @@ import org.atmosphere.cpr.ApplicationConfig;
 import org.vaadin.leif.headertags.Viewport;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 @Push
 @Viewport("width=device-width, initial-scale=1")
@@ -41,13 +42,11 @@ public class GameUI extends UI implements Broadcaster.BroadcastListener, PuoSugg
       //  waitingForPlayers.inizializza();
         broadcaster= waitingForPlayers.getBroadcaster();
         setContent(waitingForPlayers);
-        getUI().setPollInterval(1000);
-        addDetachListener(new DetachListener() {
-            @Override
-            public void detach(DetachEvent event) {
-                System.out.println("Sono nel LISTENER del detach....");
-            }
+        //getUI().setPollInterval(1000);
+        addDetachListener((event)-> {
+            System.out.println("Sono nel LISTENER del detach....");
         });
+
 
 /*        JavaScript.getCurrent().addFunction("aboutToClose", new JavaScriptFunction() {
             @Override
@@ -59,12 +58,21 @@ public class GameUI extends UI implements Broadcaster.BroadcastListener, PuoSugg
   */
         JavaScript.getCurrent().addFunction("aboutToClose",(array)->{
             System.out.println("Window/Tab is Closed.");
+            if(broadcaster!=null){
+                broadcaster.unregister(account.getId(),this);
+            }
         });
 
         //Page.getCurrent().getJavaScript().execute("window.onbeforeunload = function (e[code]) { var e = (e || window.event); aboutToClose(); return; };");
         Page.getCurrent().getJavaScript().execute("window.onbeforeunload = function () { aboutToClose(); return; };");
 
+        String hb=getSession().getConfiguration().getInitParameters().getProperty("heartbeatInterval");
+        System.out.println("heartbeat : " +hb);
+        getSession().getConfiguration().getInitParameters().setProperty("heartbeatInterval", "1");
+        hb=getSession().getConfiguration().getInitParameters().getProperty("heartbeatInterval");
+        System.out.println("heartbeat : " +hb);
     }
+
 
     @Override
     public void receiveIndizio(String message) {
@@ -200,7 +208,7 @@ public class GameUI extends UI implements Broadcaster.BroadcastListener, PuoSugg
     public void detach() {
         System.out.println("sono nel metodo detach....");
         if(broadcaster!=null){
-            broadcaster.unregister(this);
+            broadcaster.unregister(account.getId(),this);
         }
         super.detach();
     }

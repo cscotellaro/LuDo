@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @VaadinSessionScope
@@ -26,11 +27,12 @@ public class GameController implements Broadcaster.Controller{
     private Broadcaster broadcaster;
     private String id;
     private Item item;
-    private HashMap <String, ParolaVotata> parole;
-    private int max;
+    private ConcurrentHashMap <String, ParolaVotata> parole;
+    //private int max;
     private Random random= new Random();
-
+    private PartitaThread partitaThread;
     private Long accountId;
+    private  int numUser;
 
     public String creaPartita(){
         String broadcasterId;
@@ -58,13 +60,16 @@ public class GameController implements Broadcaster.Controller{
         System.out.println("su " + tot + " è stato scelto "+ rand);
         item =repositoryI.findOneById(rand);
 
-        max=0;
-        parole=new HashMap<>();
+    //    max=0;
+        parole=new ConcurrentHashMap<>();
     }
 
     public void startGame(){
         broadcaster.startGame();
-        new Thread(() -> {
+        partitaThread=new PartitaThread();
+        partitaThread.start();
+
+        /*new Thread(() -> {
 
             for(int i=0;i<4;i++){
                 String indizio= item.getIndizio(i);
@@ -74,8 +79,8 @@ public class GameController implements Broadcaster.Controller{
                 }catch (InterruptedException e){
                     //TODO: che ci metto qua??
                 }
-
             }
+
             try {
                 Thread.sleep(5000);
             }catch (InterruptedException e){
@@ -111,47 +116,128 @@ public class GameController implements Broadcaster.Controller{
             //broadcaster.allowJoin();
             broadcaster.comunicaEsito(false, item.getParola());
         }).start();
+        */
     }
 
     //TODO: Tesò ma qua si deve gestire la syncro per incremento della parola?
     //in realtà non credo perchè questo viene chiamato solo da un metodo che è già syncronizzato
     @Override
     public boolean aggiungiParola(String str, Long accountId) {
-        /*if(parole.containsKey(str)){
-            ParolaSuggerita parola=parole.get(str);
-            parola.incrementaVoto();
-            parole.put(str, parola);
-        }else {
-            parole.put(str, new ParolaSuggerita(str));
-        }*/
-        if(parole.containsKey(str)){
-            return false;
-        }else{
-            parole.put(str, new ParolaVotata(str, accountId));
-            return  true;
-        }
+        try{
+            if(parole.containsKey(str)){
+                return false;
+            }else{
+                parole.put(str, new ParolaVotata(str, accountId));
+                return  true;
+            }
+      }catch (NullPointerException e){
+          parole.put(str, new ParolaVotata(str, accountId));
+          return  true;
+      }
+
     }
 
     @Override
     public void voteParola(String parola, Long accountId) {
-        if(!parole.containsKey(parola)){
+        try{
+            if(!parole.containsKey(parola)){
+                return;
+            }else{
+                parole.get(parola).addVoto(accountId);
+                cercaParolaVotataDaTutti(numUser);
+            }
+        }catch (NullPointerException e){
             return;
-        }else{
-            parole.get(parola).addVoto(accountId);
         }
     }
 
     @Override
     public void unVoteParola(String parola, Long accountId) {
-        if(!parole.containsKey(parola)){
+        try{
+            if(!parole.containsKey(parola)){
+                return;
+            }else {
+                parole.get(parola).removeVoto(accountId);
+            }
+        }catch (NullPointerException e){
             return;
-        }else{
-            parole.get(parola).removeVoto(accountId);
         }
     }
 
     public Broadcaster getBroadcaster(){
         System.out.println(" sono nel controller  il mio accountId è "+ accountId+"get broadcaster BROADCASTER= "+ broadcaster.getId());
         return broadcaster;
+    }
+
+    private void cercaParolaVotataDaTutti(int numUtenti){
+        ParolaVotata parolaVincente = parole.search(1, (s, parolaVotata) -> {
+            if(parolaVotata.getNumeroVoti()==numUtenti){
+                return parolaVotata;
+            }else{
+                return null;
+            }
+        });
+        if(parolaVincente!=null){
+            partitaThread.setParolaVincente(parolaVincente);
+            partitaThread.interrupt();
+        }
+    }
+
+    @Override
+    public void countUser(int n) {
+        //TODO: Cinzia ma qua quando qualcuno se ne va facciamo che controllo se gli altri sono tutti d'accordo?
+        if(n<numUser){
+            numUser=n;
+            cercaParolaVotataDaTutti(numUser);
+        }else {
+            numUser=n;
+        }
+    }
+
+    private class PartitaThread extends Thread{
+        private ParolaVotata parolaVincente;
+
+        @Override
+        public void run() {
+            for(int i=0;i<4;i++){
+                String indizio= item.getIndizio(i);
+                broadcaster.broadcast(indizio);
+                try {
+                    Thread.sleep(5000);
+                }catch (InterruptedException e){
+                    //TODO:non è che mi faccia impazzire sta cosa eh
+                    terminaPartita();
+                    return;
+                }
+            }
+
+            try {
+                Thread.sleep(5000);
+            }catch (InterruptedException e){
+                //TODO: che ci metto qua??
+                terminaPartita();
+                return;
+            }
+
+            terminaPartita();
+            return;
+        }
+
+        private void terminaPartita(){
+            broadcaster.stopSend();
+            if(parolaVincente!=null && parolaVincente.getParolaSuggerita().equals(item.getParola())){
+                //broadcaster.allowJoin();
+                broadcaster.comunicaEsito(true, item.getParola());
+                return;
+            }else{
+                //broadcaster.allowJoin();
+                broadcaster.comunicaEsito(false, item.getParola());
+                return;
+            }
+        }
+
+        public void setParolaVincente(ParolaVotata parolaVincente) {
+            this.parolaVincente = parolaVincente;
+        }
     }
 }
