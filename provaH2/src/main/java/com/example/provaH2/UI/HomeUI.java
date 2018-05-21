@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.leif.headertags.Viewport;
 
 @SpringUI(path = "/")
+@Theme("darktheme")
 @Viewport("width=device-width, initial-scale=1")
 public class HomeUI extends UI {
 

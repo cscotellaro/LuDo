@@ -2,11 +2,14 @@ package com.example.provaH2;
 
 import com.example.provaH2.entity.Account;
 import com.example.provaH2.entity.Item;
+import com.example.provaH2.entity.Partita;
+import com.example.provaH2.entity.Voto;
 import com.example.provaH2.filter.LoginFilter;
 import com.example.provaH2.prova.ProvaEntitaRepository;
 import com.example.provaH2.prova.provaEntita;
 import com.example.provaH2.repository.AccountRepository;
 import com.example.provaH2.repository.ItemRepository;
+import com.example.provaH2.repository.PartitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +18,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 import javax.servlet.Filter;
+import java.util.List;
 
 @SpringBootApplication
 public class ProvaH2Application {
@@ -25,6 +29,8 @@ public class ProvaH2Application {
 	private ItemRepository repositoryI;
 	@Autowired
 	private AccountRepository repositoryA;
+	@Autowired
+	private PartitaRepository repositoryP;
 
 /*	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
@@ -48,9 +54,11 @@ public class ProvaH2Application {
 
 			//System.out.println(repository.findOneByFirstName("Sara"));
 
+			Account cinzia=new Account("Cinzia", "cinzia@gmail.com", "cinzia");
+			Account luigi=new Account("Luigi", "caio@gmail.com", "luigi");
 			repositoryA.save(new Account("Catello", "tizio@gmail.com", "catello"));
-			repositoryA.save(new Account("Luigi", "caio@gmail.com", "luigi"));
-			repositoryA.save(new Account("Cinzia", "cinzia@gmail.com", "cinzia"));
+			repositoryA.save(luigi);
+			repositoryA.save(cinzia);
 			repositoryA.findAll().forEach(System.out::println);
 
 			Item item= new Item("Sara");
@@ -75,6 +83,18 @@ public class ProvaH2Application {
 			/*CustomSpringEvent customSpringEvent = new CustomSpringEvent(this, "sono un messaggio",4);
 			applicationEventPublisher.publishEvent(customSpringEvent);
 			*/
+
+			Partita partita= new Partita("prima Partita");
+			partita.add(new Voto(cinzia,10));
+			repositoryP.save(partita);
+			repositoryP.findAll().forEach(System.out::println);
+
+			repositoryA.updatePassword("cinzia@gmail.com", "nuovaPassword");
+			repositoryA.findAll().forEach(System.out::println);
+			repositoryP.findAll().forEach(System.out::println);
+
+			List<Partita> partite=repositoryP.cercaPartite(luigi);
+			System.out.println(partite);
 		};
 
 	}
