@@ -2,6 +2,7 @@ package com.example.provaH2.UI.Layout;
 
 import com.example.provaH2.entity.Account;
 import com.example.provaH2.repository.AccountRepository;
+import com.example.provaH2.utility.SendMail;
 import com.vaadin.data.Binder;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.EmailValidator;
@@ -12,6 +13,7 @@ import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
+import java.util.Random;
 
 //TODO: qua dovremmo fare il fatto dell'invio della mail per registrarti (anche in settings)
 public class RegistrazioneLayout extends FormLayout {
@@ -19,13 +21,25 @@ public class RegistrazioneLayout extends FormLayout {
     private AccountRepository repositoryA;
     private Binder<Account> binder;
 
-    public RegistrazioneLayout(AccountRepository repositoryA){
+    private TextField emailField;
+
+    public RegistrazioneLayout(AccountRepository repositoryA, String confermaReg){
         this.repositoryA= repositoryA;
         setMargin(true);
         setCaption("Registration Form");
 
+        if(confermaReg!=null){
+            completaRegistrazione(confermaReg);
+        }else{
+            setRegistrationForm();
+        }
+
+    }
+
+    private void setRegistrationForm(){
+
         TextField fullNameField = new TextField("Full Name");
-        TextField emailField = new TextField("Email");
+        emailField = new TextField("Email");
         PasswordField passwordField = new PasswordField("Password");
         PasswordField confirmPasswordField = new PasswordField("Confirm Password");
 
@@ -95,14 +109,12 @@ public class RegistrazioneLayout extends FormLayout {
         binder.addStatusChangeListener(
                 event -> registerButton.setEnabled(binder.isValid()));
 
-
         addComponents(fullNameField, emailField,passwordField,confirmPasswordField, registerButton,validationStatus);
-        
+
     }
 
-
     private void registerNewAccount(Account account){
-        try {
+        /*try {
             repositoryA.save(account);
             //DONE: settare un flag in sessione
             VaadinService.getCurrentRequest().getWrappedSession().setAttribute("loggato", true);
@@ -113,6 +125,53 @@ public class RegistrazioneLayout extends FormLayout {
             Page.getCurrent().setLocation("./private/home");
         }catch (Exception e){
             Notification.show("Impossibile effettuare la registrazione");
+        }*/
+
+        Random random= new Random();
+        int n= random.nextInt(9000)+1000;
+        VaadinService.getCurrentRequest().getWrappedSession().setAttribute("codiceRegistrazione", ""+n);
+        VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountDaRegistrare", account);
+        SendMail.sendMailTLS(emailField.getValue(), "conferma registrazione",
+                "segui il link per completare la registrazione " +
+                        "http://localhost:8080/?confermaRegistrazione="+n);
+
+        removeAllComponents();
+        Label label= new Label("Ti abbiamo mandato un'email");
+        Label label1= new Label("Segui il link per completare la registrazione");
+        addComponents(label,label1);
+    }
+
+    private void completaRegistrazione(String conferma){
+        String confermaAttribute=(String) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("codiceRegistrazione");
+        if(confermaAttribute==null || !confermaAttribute.equals(conferma)){
+            Label label= new Label("Impossibile completare la registrazione");
+            addComponent(label);
+            return;
         }
+
+        VaadinService.getCurrentRequest().getWrappedSession().setAttribute("codiceRegistrazione", null);
+        Account account= (Account) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountDaRegistrare");
+        if(account==null){
+            Label label= new Label("Account non valido");
+            addComponent(label);
+            return;
+        }
+        try{
+            repositoryA.save(account);
+        }catch (Exception e){
+            Label label= new Label("Account non valido");
+            addComponent(label);
+            return;
+        }
+        VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountDaRegistrare", null);
+        Label label= new Label("Registrazione effettuata con successo");
+        Button b= new Button("Login");
+        b.addClickListener(clickEvent -> {
+            VaadinService.getCurrentRequest().getWrappedSession().setAttribute("loggato", true);
+            VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountId", account.getId());
+            VaadinService.getCurrentRequest().getWrappedSession().setAttribute("account", account);
+            Page.getCurrent().setLocation("/private/home");
+        });
+        addComponents(label,b);
     }
 }

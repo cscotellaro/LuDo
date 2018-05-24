@@ -2,7 +2,10 @@ package com.example.provaH2.UI.Layout;
 
 import com.example.provaH2.UI.PuoSuggerire;
 import com.example.provaH2.gestioneGioco.Broadcaster;
+import com.vaadin.icons.VaadinIcons;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 public class PartitaLayout extends HorizontalLayout {
 
@@ -11,19 +14,20 @@ public class PartitaLayout extends HorizontalLayout {
     private ParoleSuggeriteLayout layoutParole;
     private VerticalLayout layoutSinistro;
     private VerticalLayout layoutIndizi;
-    private VerticalLayout layoutChat;
+    private ChatLayout layoutChat;
     private Label numerOfUser;
 
     public PartitaLayout(PuoSuggerire puoSuggerire, int numberOfPlayers){
         layoutParole= new ParoleSuggeriteLayout(puoSuggerire);
         layoutSinistro= new VerticalLayout();
         layoutIndizi= new VerticalLayout();
-        layoutChat= new VerticalLayout();
+        layoutChat= new ChatLayout(puoSuggerire);
         numerOfUser= new Label("Number of Players: " + numberOfPlayers);
 
         layoutSinistro.addComponents(numerOfUser, layoutIndizi, layoutChat);
-        TextField chatField= new TextField();
-        Button send= new Button("Send");
+       /* TextField chatField= new TextField();
+        Button send= new Button("Send", VaadinIcons.PAPERPLANE_O);
+        send.addStyleName(ValoTheme.BUTTON_ICON_ALIGN_RIGHT);
         send.addClickListener(clickEvent -> {
             if (!chatField.isEmpty()){
                 puoSuggerire.sendChat(chatField.getValue());
@@ -31,8 +35,31 @@ public class PartitaLayout extends HorizontalLayout {
             }
         });
         layoutChat.addComponents(chatField, send);
-        // /addComponent(new Label("partita layout"));
-        addComponents(layoutSinistro, layoutParole);
+       */
+        //addComponent(new Label("partita layout"));
+     //   addComponents(layoutSinistro, layoutParole);
+
+        HorizontalLayout main= new HorizontalLayout();
+        main.addComponents(layoutSinistro, layoutParole);
+        //main.setSizeUndefined();
+        main.setHeight("100%");
+        this.setSizeFull();
+
+
+        System.out.println("la height :" + this.getHeight());
+        layoutSinistro.setHeight("100%");
+        layoutSinistro.setMargin(true);
+
+        layoutIndizi.setHeight("100%");
+        layoutSinistro.setExpandRatio(layoutIndizi, 1.0f);
+        layoutSinistro.setExpandRatio(layoutChat, 1.8f);
+        //layoutSinistro.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
+        //layoutParole.setHeight("100%");
+        addComponent(main);
+        //layoutSinistro.setSizeFull();
+       //layoutParole.setSizeFull();
+        this.setComponentAlignment(main, Alignment.MIDDLE_CENTER);
+
     }
 
     public void addIndizio(String message){
@@ -59,6 +86,7 @@ public class PartitaLayout extends HorizontalLayout {
     }
 
     public void reciveMessage(String name, String message){
-        layoutChat.addComponent(new Label("[" + name+ "]: " + message));
+        //layoutChat.addComponent(new Label("[" + name+ "]: " + message));
+        layoutChat.riceviMessaggio(name,message);
     }
 }

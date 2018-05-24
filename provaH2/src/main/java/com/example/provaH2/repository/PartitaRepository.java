@@ -14,4 +14,7 @@ public interface PartitaRepository extends JpaRepository<Partita, Long> {
 
     @Query("SELECT p FROM Partita p JOIN p.array pa WHERE pa.account = ?1")
     List<Partita> cercaPartite(Account a);
+
+    @Query("SELECT p FROM Partita p JOIN p.array pa WHERE pa.account = ?1 AND p.timestamp= (SELECT max(p1.timestamp) FROM Partita p1 JOIN p1.array pa1 WHERE pa1.account = ?1)")
+    Partita lastPartita(Account a);
 }

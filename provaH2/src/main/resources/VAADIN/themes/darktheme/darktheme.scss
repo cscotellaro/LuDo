@@ -3,23 +3,23 @@
 // Global variable overrides. Must be declared before importing Valo.
 
 // Defines the plaintext font size, weight and family. Font size affects general component sizing.
-$v-font-size: 16px;
-$v-font-weight: 100;
-$v-font-family: "Courier new", sans-serif;
+//$v-font-size: 16px;
+//$v-font-weight: 100;
+//$v-font-family: "Courier new", sans-serif;
 
 // Defines the border used by all components.
-$v-border: 1px solid (v-shade 0.7);
-$v-border-radius: 4px;
+//$v-border: 1px solid (v-shade 0.7);
+//$v-border-radius: 4px;
 
 // Affects the color of some component elements, e.g Button, Panel title, etc
-$v-background-color: hsl(210, 90%, 90%);
+//$v-background-color: hsl(210, 90%, 90%);
 // Affects the color of content areas, e.g  Panel and Window content, TextField input etc
 //$v-app-background-color: $v-background-color;
 
 // Affects the visual appearance of all components
-$v-gradient: v-linear 50%;
-$v-bevel-depth: 90%;
-$v-shadow-opacity: 50%;
+//$v-gradient: v-linear 50%;
+//$v-bevel-depth: 90%;
+//$v-shadow-opacity: 50%;
 
 // Defines colors for indicating status (focus, success, failure)
 //$v-focus-color: valo-focus-color(); // Calculates a suitable color automatically
@@ -29,7 +29,7 @@ $v-shadow-opacity: 50%;
 // For more information, see: https://vaadin.com/book/-/page/themes.valo.html
 // Example variants can be copy/pasted from https://vaadin.com/wiki/-/wiki/Main/Valo+Examples
 
-$v-focus-style: none;
+//$v-focus-style: none;
 
 @import "../valo/valo.scss";
 
@@ -39,7 +39,7 @@ $v-included-components: remove($v-included-components, button);
   @include valo;
 
   //$v-shadow:  0 10px 10px v-shade;
-  $v-background-color: #f442e5;
+  $v-background-color: #8fe5e8;
   //$v-background-color: grey;
   $v-font-size:2em;
   @include valo-button();
@@ -49,6 +49,12 @@ $v-included-components: remove($v-included-components, button);
     border-radius: 5px;
   }
 
+  .bottoneInvio{
+    border-radius: 20px;
+  }
 
+  .panelChat {
+    height: 30%;
+  }
   // Insert your own theme rules here
 }

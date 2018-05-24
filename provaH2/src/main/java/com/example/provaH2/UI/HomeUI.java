@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.leif.headertags.Viewport;
 
 @SpringUI(path = "/")
-@Theme("darktheme")
+//@Theme("darktheme")
 @Viewport("width=device-width, initial-scale=1")
 public class HomeUI extends UI {
 
@@ -26,13 +26,20 @@ public class HomeUI extends UI {
     private AccountRepository repositoryA;
     private HorizontalLayout mainlayout= new HorizontalLayout();
     private String cod;
+    private String confermaReg=null;
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
 
         String loginParam = vaadinRequest.getParameter("login");
         cod=vaadinRequest.getParameter("cod");
         if(loginParam!=null && loginParam.equals("true")){
-            addWindow(creaWindow());
+            addWindow(creaWindow(0));
+        }
+
+        confermaReg=vaadinRequest.getParameter("confermaRegistrazione");
+        if(confermaReg!=null){
+            addWindow(creaWindow(1));
         }
 
         Button login= new Button("login");
@@ -41,28 +48,35 @@ public class HomeUI extends UI {
             if(logged!=null && logged==true){
                 Page.getCurrent().setLocation("private/home");
             }
-            getUI().addWindow(creaWindow());
+            getUI().addWindow(creaWindow(0));
         });
+
+        mainlayout.setMargin(true);
+        mainlayout.setSizeFull();
         mainlayout.addComponent(login);
+        mainlayout.setComponentAlignment(login, Alignment.TOP_RIGHT);
+
         setContent(mainlayout);
     }
 
-    private Window creaWindow(){
+    private Window creaWindow(int tabIndex){
         final Window window = new Window();
         //window.setWidth(300.0f, Unit.PIXELS);
+        //window.setSizeUndefined();
 
         LoginLayout layoutLogin = new LoginLayout(repositoryA, cod);
-        RegistrazioneLayout registrazioneLayout= new RegistrazioneLayout(repositoryA);
+        RegistrazioneLayout registrazioneLayout= new RegistrazioneLayout(repositoryA,confermaReg);
         TabSheet tabSheet= new TabSheet();
         tabSheet.addTab(layoutLogin, "Login");
         tabSheet.addTab(registrazioneLayout, "Register");
+        tabSheet.setSelectedTab(tabIndex);
         tabSheet.addSelectedTabChangeListener(selectedTabChangeEvent -> {
             window.center();
         });
 
         tabSheet.setSizeUndefined();
         window.setContent(tabSheet);
-        //window.setSizeUndefined();
+
         window.center();
         return window;
     }

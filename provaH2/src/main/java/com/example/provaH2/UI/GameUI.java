@@ -6,6 +6,7 @@ import com.example.provaH2.entity.Account;
 import com.example.provaH2.gestioneGioco.Broadcaster;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
+import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
@@ -15,6 +16,7 @@ import com.vaadin.ui.*;
 import org.apache.tomcat.jni.Time;
 import org.atmosphere.config.service.Heartbeat;
 import org.atmosphere.cpr.ApplicationConfig;
+import org.springframework.web.context.WebApplicationContext;
 import org.vaadin.leif.headertags.Viewport;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ import java.util.Set;
 @Viewport("width=device-width, initial-scale=1")
 @SpringUI(path = "private/gioco")
 @PreserveOnRefresh
-
+@Theme("darktheme")
 //@VaadinServletConfiguration(productionMode = false, ui = GameUI.class,heartbeatInterval = 1)
 public class GameUI extends UI implements Broadcaster.BroadcastListener, PuoSuggerire/*, CanRejoinGame*/ {
 
@@ -46,6 +48,7 @@ public class GameUI extends UI implements Broadcaster.BroadcastListener, PuoSugg
         addDetachListener((event)-> {
             System.out.println("Sono nel LISTENER del detach....");
         });
+
 
 
 /*        JavaScript.getCurrent().addFunction("aboutToClose", new JavaScriptFunction() {

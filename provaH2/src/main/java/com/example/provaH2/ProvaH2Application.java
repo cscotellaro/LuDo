@@ -18,6 +18,8 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 import javax.servlet.Filter;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootApplication
@@ -84,14 +86,26 @@ public class ProvaH2Application {
 			applicationEventPublisher.publishEvent(customSpringEvent);
 			*/
 
-			Partita partita= new Partita("prima Partita");
-			partita.add(new Voto(cinzia,10));
+			Partita partita= new Partita(new Timestamp(new Date().getTime()));
+			partita.addVoto(new Voto(cinzia,10));
 			repositoryP.save(partita);
 			repositoryP.findAll().forEach(System.out::println);
 
 			repositoryA.updatePassword("cinzia@gmail.com", "nuovaPassword");
 			repositoryA.findAll().forEach(System.out::println);
 			repositoryP.findAll().forEach(System.out::println);
+
+			Partita partita1= new Partita(new Timestamp(new Date().getTime()));
+			partita1.addVoto(new Voto(cinzia,120));
+			repositoryP.save(partita1);
+
+			Partita partita2= new Partita(new Timestamp(new Date().getTime()));
+			partita2.addVoto(new Voto(luigi,10));
+			repositoryP.save(partita2);
+			Partita speriamo= repositoryP.lastPartita(cinzia);
+			repositoryP.findAll().forEach(System.out::println);
+			System.out.println("");
+			System.out.println(speriamo);
 
 			List<Partita> partite=repositoryP.cercaPartite(luigi);
 			System.out.println(partite);
