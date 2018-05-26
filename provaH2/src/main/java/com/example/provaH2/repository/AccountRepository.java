@@ -27,5 +27,10 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     void updatePassword(String email, String newPassword);
 
     @Transactional
+    @Modifying
+    @Query("update Account a set a.image = ?2 where a.id = ?1")
+    void updateImage(Long id, byte[] newimg);
+
+    @Transactional
     void deleteById(Long id);
 }

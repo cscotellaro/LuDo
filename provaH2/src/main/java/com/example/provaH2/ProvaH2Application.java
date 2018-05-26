@@ -10,6 +10,10 @@ import com.example.provaH2.prova.provaEntita;
 import com.example.provaH2.repository.AccountRepository;
 import com.example.provaH2.repository.ItemRepository;
 import com.example.provaH2.repository.PartitaRepository;
+import com.vaadin.server.ClassResource;
+import com.vaadin.server.FileResource;
+import com.vaadin.server.VaadinService;
+import com.vaadin.ui.Embedded;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,6 +22,11 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 import javax.servlet.Filter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +55,7 @@ public class ProvaH2Application {
 	public CommandLineRunner initializeData(){
 		return args -> {
 			//repository.deleteAll();
-			repository.save(new provaEntita("SaraM","Zia"));
+		/*	repository.save(new provaEntita("SaraM","Zia"));
 			repository.save(new provaEntita("Sara","Zia"));
 			repository.save(new provaEntita("Cinzia", "Mamma"));
 			repository.findAll().forEach(System.out::println);
@@ -55,7 +64,7 @@ public class ProvaH2Application {
 			System.out.println(repository.findByCognome("Zia"));
 
 			//System.out.println(repository.findOneByFirstName("Sara"));
-
+		*/
 			Account cinzia=new Account("Cinzia", "cinzia@gmail.com", "cinzia");
 			Account luigi=new Account("Luigi", "caio@gmail.com", "luigi");
 			repositoryA.save(new Account("Catello", "tizio@gmail.com", "catello"));
@@ -102,6 +111,7 @@ public class ProvaH2Application {
 			Partita partita2= new Partita(new Timestamp(new Date().getTime()));
 			partita2.addVoto(new Voto(luigi,10));
 			repositoryP.save(partita2);
+
 			Partita speriamo= repositoryP.lastPartita(cinzia);
 			repositoryP.findAll().forEach(System.out::println);
 			System.out.println("");
@@ -109,11 +119,30 @@ public class ProvaH2Application {
 
 			List<Partita> partite=repositoryP.cercaPartite(luigi);
 			System.out.println(partite);
+
+			//cinzia.setImage();
+
+		/*	ClassResource resource= new ClassResource("/profilo.jpg");
+			Embedded embedded= new Embedded("a", resource);
+			ByteArrayOutputStream strem= new ByteArrayOutputStream();
+			luigi.setImage(strem.toByteArray());
+			*/
+
+			//FileResource resourcefile = new FileResource(new File("/profilo.jpg"));
+			/*String currentPath = new File("./src/main/resources/profilo.jpg").getAbsolutePath();
+			System.out.println(currentPath);*/
+
+			/*	String basePath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+			byte[] array = Files.readAllBytes(new File(basePath+"/profilo.jpg").toPath());
+			luigi.setImage(array);
+			*/
+			/*Path path = Paths.get("src/main/resources/profilo.jpg");
+			byte[] data = Files.readAllBytes(path);
+			luigi.setImage(data);
+			System.out.println("_"+ data.length);*/
 		};
 
 	}
-
-
 
 	@Bean
 	public FilterRegistrationBean someFilterRegistration(){

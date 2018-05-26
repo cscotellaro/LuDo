@@ -8,6 +8,7 @@ import com.vaadin.data.Validator;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.Page;
+import com.vaadin.server.StreamResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.ContentMode;
@@ -15,6 +16,12 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
 
 public class LoginLayout extends VerticalLayout {
@@ -61,6 +68,24 @@ public class LoginLayout extends VerticalLayout {
                 VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountId", a.getId());
                 VaadinService.getCurrentRequest().getWrappedSession().setAttribute("account", a);
 
+                ByteArrayOutputStream bas= new ByteArrayOutputStream();
+                byte[] imgArray= a.getImage();
+                if(imgArray!=null){
+                    bas.write(imgArray,0,imgArray.length);
+                }else{
+                    try {
+                        Path path = Paths.get("src/main/resources/profilo.jpg");
+                        byte[] data = Files.readAllBytes(path);
+                        bas.write(data,0, data.length);
+                    }catch (IOException e){
+                        //TODO: qui che ci mettiamo? serve qualcosa tipo oh c'è qualche problema
+                        //e se ci stanno problemi nn posso manco fare il pezzo di dopo di settare l'immagine
+                    }
+                }
+                Embedded img= getProfileImg("nuscenness", bas);
+                img.setHeight("200px");
+                img.setWidth("200px");
+                VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountImg", img);
                 if(cod!=null){
                     Page.getCurrent().setLocation("/private/gioco?cod="+cod);
                 }else{
@@ -167,6 +192,26 @@ public class LoginLayout extends VerticalLayout {
         setComponentAlignment(form, Alignment.MIDDLE_CENTER);
 
     }
+
+    private Embedded getProfileImg(final String name, final ByteArrayOutputStream bas) {
+        // resource for serving the file contents
+        final StreamResource.StreamSource streamSource = () -> {
+            if (bas != null) {
+                final byte[] byteArray = bas.toByteArray();
+                return new ByteArrayInputStream(byteArray);
+            }
+            return null;
+        };
+        final StreamResource resource = new StreamResource(streamSource, name);
+        resource.setMIMEType("image/jpeg");
+        byte[] array = bas.toByteArray();
+
+        // show the file contents - images only for now
+        final Embedded embedded = new Embedded(name, resource);
+        embedded.setMimeType("image/jpeg");
+        return embedded;
+    }
+
 
     String sgamo= "";
 }

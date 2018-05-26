@@ -6,18 +6,21 @@ import com.vaadin.data.Binder;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.data.validator.StringLengthValidator;
-import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Page;
+import com.vaadin.server.StreamResource;
+import com.vaadin.server.StreamVariable;
 import com.vaadin.server.VaadinService;
-import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.shared.util.SharedUtil;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
+import com.vaadin.ui.dnd.FileDropTarget;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.util.Objects;
 
 @SpringView(name = "settings")
@@ -31,6 +34,7 @@ public class SettingsView extends VerticalLayout implements View {
     private FormLayout secondaForm;
 
     private String sgamo;
+    private byte[] nuovaImmagine=null;
 
     @PostConstruct
     public void initialize() {
@@ -69,11 +73,11 @@ public class SettingsView extends VerticalLayout implements View {
         sezioneCambioPassword();
         //addComponent(form);
 
-        Label section3 = new Label("Change Email");
+        Label section3 = new Label("Change Image");
         section3.addStyleName(ValoTheme.LABEL_H3);
         section3.addStyleName(ValoTheme.LABEL_COLORED);
         form.addComponents(section3);
-        sezioneCambiaEmail();
+        sezioneCambiaImg();
         //addComponent(form);
 
         Label section4 = new Label("Elimina accunt");
@@ -99,7 +103,6 @@ public class SettingsView extends VerticalLayout implements View {
         placeholder.addComponent(submit);
         form.addComponents(placeholder);
         //form.addComponent(submit);
-
 
         submit.setEnabled(false);
         submit.addClickListener(clickEvent -> {
@@ -154,24 +157,108 @@ public class SettingsView extends VerticalLayout implements View {
         repeatPassword.addValueChangeListener(valueChangeEvent -> placeholder.removeComponent(error));
     }
 
-    private void sezioneCambiaEmail(){
-        TextField email= new TextField("new email");
-        Button changeEmail= new Button("Change");
-        changeEmail.addClickListener(clickEvent -> {
-            //TODO: qua si deve mandare la mail e poi mandare il tutto su una pag specifica che nn so qual è
+    private void sezioneCambiaImg(){
+        final Label infoLabel = new Label("QUI devi droppare il file");
+        infoLabel.setWidth(240.0f, Unit.PIXELS);
+
+        final VerticalLayout dropPane = new VerticalLayout(infoLabel);
+        dropPane.setComponentAlignment(infoLabel, Alignment.MIDDLE_CENTER);
+        dropPane.addStyleName("drop-area");
+        dropPane.setSizeUndefined();
+        dropPane.setCaption("your image:");
+        final Embedded newImage= (Embedded) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountImg");
+        newImage.setHeight("150px");
+        newImage.setWidth("150px");
+        dropPane.addComponent(newImage);
+
+
+        Button change= new Button("Save");
+        change.addClickListener(clickEvent -> {
+            if(nuovaImmagine!=null){
+                accountRepository.updateImage(account.getId(), nuovaImmagine);
+                VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountImg", newImage);
+                Notification.show("Immagine cambiata");
+            }
         });
-        changeEmail.setEnabled(false);
+        form.addComponents(dropPane,change);
 
-        Binder<String> binder = new Binder<>();
-        binder.forField(email)
-                .asRequired("Must insert email")
-                .withValidator(new EmailValidator("Not a valid email address"))
-                .bind(s -> sgamo, (s, v) -> sgamo = v);
-        binder.addStatusChangeListener(
-                event -> changeEmail.setEnabled(binder.isValid()));
-        form.addComponents(email);
-        form.addComponents(changeEmail);
+        ProgressBar progress = new ProgressBar();
+        progress.setIndeterminate(true);
+        progress.setVisible(false);
+        dropPane.addComponent(progress);
+        new FileDropTarget<>(dropPane, fileDropEvent -> {
+            final int fileSizeLimit = 1 * 1024 * 1024; // 2MB
 
+            fileDropEvent.getFiles().forEach(html5File -> {
+                final String fileName = html5File.getFileName();
+
+
+                System.out.println(html5File.getType());
+
+                if (html5File.getFileSize() > fileSizeLimit) {
+                    Notification.show("File rejected. Max 1MB files are accepted", Notification.Type.WARNING_MESSAGE);
+                } else if(!html5File.getType().equals("image/jpg") && !html5File.getType().equals("image/jpeg")){
+                    Notification.show("File rejected.Just jpg files are accepted",
+                            Notification.Type.WARNING_MESSAGE);
+                } else{
+                    final ByteArrayOutputStream bas = new ByteArrayOutputStream();
+                    final StreamVariable streamVariable = new StreamVariable() {
+
+                        @Override
+                        public OutputStream getOutputStream() {
+                            return bas;
+                        }
+
+                        @Override
+                        public boolean listenProgress() {
+                            return false;
+                        }
+
+                        @Override
+                        public void onProgress(final StreamingProgressEvent event) {
+                        }
+
+                        @Override
+                        public void streamingStarted( final StreamingStartEvent event) {}
+
+                        @Override
+                        public void streamingFinished( final StreamingEndEvent event) {
+                            progress.setVisible(false);
+                            showFile(fileName, bas, newImage);
+                        }
+
+                        @Override
+                        public void streamingFailed( final StreamingErrorEvent event) {
+                            progress.setVisible(false);
+                        }
+
+                        @Override
+                        public boolean isInterrupted() {
+                            return false;
+                        }
+                    };
+                    html5File.setStreamVariable(streamVariable);
+                    progress.setVisible(true);
+                }
+            });
+        });
+
+    }
+
+    private void showFile(final String name, final ByteArrayOutputStream bas, final Embedded embedded) {
+        // resource for serving the file contents
+        final StreamResource.StreamSource streamSource = () -> {
+            if (bas != null) {
+                final byte[] byteArray = bas.toByteArray();
+                return new ByteArrayInputStream(byteArray);
+            }
+            return null;
+        };
+        final StreamResource resource = new StreamResource(streamSource, name);
+
+        embedded.setSource(resource);
+        embedded.setAlternateText(name);
+        nuovaImmagine=bas.toByteArray();
     }
 
     private void sezioneEliminaAccount(){
@@ -198,4 +285,26 @@ public class SettingsView extends VerticalLayout implements View {
         });
         form.addComponent(elimina);
     }
+
+    //TODO: questo metodo non serve più ma l ho lasciata perchè non si sa mai
+    private void sezioneCambiaEmail(){
+        TextField email= new TextField("new email");
+        Button changeEmail= new Button("Change");
+        changeEmail.addClickListener(clickEvent -> {
+            //TODO: qua si deve mandare la mail e poi mandare il tutto su una pag specifica che nn so qual è
+        });
+        changeEmail.setEnabled(false);
+
+        Binder<String> binder = new Binder<>();
+        binder.forField(email)
+                .asRequired("Must insert email")
+                .withValidator(new EmailValidator("Not a valid email address"))
+                .bind(s -> sgamo, (s, v) -> sgamo = v);
+        binder.addStatusChangeListener(
+                event -> changeEmail.setEnabled(binder.isValid()));
+        form.addComponents(email);
+        form.addComponents(changeEmail);
+
+    }
+
 }

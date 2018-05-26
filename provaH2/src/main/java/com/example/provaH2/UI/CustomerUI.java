@@ -2,6 +2,7 @@ package com.example.provaH2.UI;
 
 import com.example.provaH2.UI.view.CustomerView;
 import com.example.provaH2.gestioneGioco.Broadcaster;
+import com.example.provaH2.repository.PartitaRepository;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
@@ -25,7 +26,7 @@ public class CustomerUI extends UI{
     private SpringViewProvider viewProvider;
     private Navigator navigator;
 
-     @Override
+    @Override
     protected void init(VaadinRequest vaadinRequest) {
 
         VerticalLayout layout=new VerticalLayout();
