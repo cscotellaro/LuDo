@@ -1,17 +1,16 @@
 package com.example.provaH2.UI.Layout;
 
-import com.example.provaH2.UI.CanRejoinGame;
 import com.example.provaH2.entity.Account;
+import com.example.provaH2.gestioneGioco.BroadcastListener;
 import com.example.provaH2.gestioneGioco.Broadcaster;
 import com.example.provaH2.gestioneGioco.BroadcasterList;
-import com.example.provaH2.gestioneGioco.GameController;
+import com.example.provaH2.gestioneGioco.Controller;
+import com.example.provaH2.guess.GameController;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
-import org.vaadin.addthis.AddThis;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 
 //@SpringView(name = "waitingForPlayers")
@@ -19,10 +18,10 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
 
     private Label waiting;
     private VerticalLayout layoutNomi;
-    private GameController controller;
+    private Controller controller;
     private Broadcaster broadcaster;
     private Account account;
-//    private CanRejoinGame gameUI;
+//  private CanRejoinGame gameUI;
 
     public WaitingForPlayers( /*CanRejoinGame gameUI*/) {
 
@@ -39,6 +38,7 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
             return;
         }
 
+        //TODO rivedere la politica del can Join
         Long id=(Long) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountId");
         broadcaster = BroadcasterList.getBroadcaster(cod);
         if(broadcaster==null){
@@ -55,7 +55,7 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
 
         System.out.println("sto per registrarmi al broadcaster "+ UI.getCurrent());
         if(broadcaster.isCanJoin()){
-            broadcaster.register(id,(Broadcaster.BroadcastListener) UI.getCurrent());
+            broadcaster.register(id,(BroadcastListener) UI.getCurrent());
         /*}else if(broadcaster.canIJoin(account.getId())){
             System.out.println("mi potrei joinare di nuovo");
             broadcaster.register(id,(Broadcaster.BroadcastListener) UI.getCurrent());
@@ -87,7 +87,10 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
 
         if(controller!=null && controller.getBroadcaster().getId().equals(broadcaster.getId())){
             TextField link= new TextField("copy this link");
-            link.setValue("localhost:8080/private/gioco?cod="+cod);
+            System.out.println("URL: " + Page.getCurrent().getLocation());
+            //System.out.println("URL: " );
+            //link.setValue("localhost:8080/private/gioco?cod="+cod);
+            link.setValue(Page.getCurrent().getLocation().toString());
             link.setReadOnly(true);
             link.selectAll();
             addComponent(link);

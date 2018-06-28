@@ -25,6 +25,7 @@ public class HomeUI extends UI {
     private AccountRepository repositoryA;
     private HorizontalLayout mainlayout= new HorizontalLayout();
     private String cod;
+    private String uri;
     private String confermaReg=null;
 
     @Override
@@ -32,6 +33,7 @@ public class HomeUI extends UI {
 
         String loginParam = vaadinRequest.getParameter("login");
         cod=vaadinRequest.getParameter("cod");
+        uri=vaadinRequest.getParameter("uri");
         if(loginParam!=null && loginParam.equals("true")){
             addWindow(creaWindow(0));
         }
@@ -43,7 +45,8 @@ public class HomeUI extends UI {
 
         Button login= new Button("login");
         login.addClickListener(clickEvent -> {
-            Boolean logged= (Boolean) vaadinRequest.getWrappedSession().getAttribute("loggato");
+            WrappedSession session=vaadinRequest.getWrappedSession();
+            Boolean logged= (Boolean) session.getAttribute("loggato");
             if(logged!=null && logged==true){
                 Page.getCurrent().setLocation("private/home");
             }
@@ -71,7 +74,7 @@ public class HomeUI extends UI {
         //window.setWidth(300.0f, Unit.PIXELS);
         //window.setSizeUndefined();
 
-        LoginLayout layoutLogin = new LoginLayout(repositoryA, cod);
+        LoginLayout layoutLogin = new LoginLayout(repositoryA, cod,uri);
         RegistrazioneLayout registrazioneLayout= new RegistrazioneLayout(repositoryA,confermaReg);
         TabSheet tabSheet= new TabSheet();
         tabSheet.addTab(layoutLogin, "Login");

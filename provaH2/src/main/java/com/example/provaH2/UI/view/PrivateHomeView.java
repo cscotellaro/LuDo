@@ -2,42 +2,53 @@ package com.example.provaH2.UI.view;
 
 import com.example.provaH2.entity.Account;
 import com.example.provaH2.entity.Partita;
-import com.example.provaH2.gestioneGioco.GameController;
-import com.example.provaH2.repository.AccountRepository;
+import com.example.provaH2.gestioneGioco.Controller;
+import com.example.provaH2.gestioneGioco.Game;
+import com.example.provaH2.gestioneGioco.GameList;
+import com.example.provaH2.guess.GameController;
 import com.example.provaH2.repository.PartitaRepository;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Page;
-import com.vaadin.server.StreamResource;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 
 import javax.annotation.PostConstruct;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.List;
 
 @SpringView(name = "home")
 public class PrivateHomeView  extends VerticalLayout implements View{
 
-    @Autowired @Lazy
+   /* @Autowired @Lazy
     private GameController gameController;
+*/
+    @Autowired
+    private GameList gameList;
+
     @Autowired
     private PartitaRepository partitaRepository;
 
     private VerticalLayout verticalLayout;
-    private Button crea;
+   // private Button crea;
     private Account account;
+
+    @Autowired
+    private ApplicationContext ctx;
 
     @PostConstruct
     protected  void  initialize(){
         account=(Account)  VaadinService.getCurrentRequest().getWrappedSession().getAttribute("account");
+    /*    try {
+            GameController gc= ctx.getBean(GameController.class);
+            gc.giocaAncora();
+            System.out.println("FUNGE");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        */
 
         verticalLayout= new VerticalLayout();
         verticalLayout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
@@ -45,15 +56,20 @@ public class PrivateHomeView  extends VerticalLayout implements View{
         Label label= new Label("Welcome "+ account.getFullName());
         verticalLayout.addComponent(label);
 
-        crea= new Button("Start game");
-        crea.addClickListener(clickEvent -> {
-            System.out.println("Sono il bottone sater game di " + account.getFullName() + "e sto per settare il gameController");
-            String broadcasterId= gameController.creaPartita();
-            VaadinService.getCurrentRequest().getWrappedSession().setAttribute("controllerGame"+broadcasterId, gameController);
-            Page.getCurrent().setLocation("/private/gioco?cod="+broadcasterId);
-        });
-        verticalLayout.addComponent(crea);
+        List<Game> list= gameList.getGameList();
+        for(Game g:list) {
 
+            Button crea = new Button("Start game: " + g.getNomeGioco());
+            crea.addClickListener(clickEvent -> {
+                System.out.println("Sono il bottone sater game di " + account.getFullName() + "e sto per settare il gameController");
+                Controller controller= ctx.getBean(g.getControllerClass());
+                String broadcasterId = controller.creaPartita(g);
+                VaadinService.getCurrentRequest().getWrappedSession().setAttribute("controllerGame" + broadcasterId, controller);
+                Page.getCurrent().setLocation("/"+g.getPathName()+"?cod=" + broadcasterId);
+            });
+            verticalLayout.addComponent(crea);
+
+        }
         /**************************esperimenti immagini*************************************/
        /*
         ByteArrayOutputStream bas= new ByteArrayOutputStream();

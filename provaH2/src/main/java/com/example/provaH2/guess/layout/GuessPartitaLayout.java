@@ -1,13 +1,14 @@
-package com.example.provaH2.UI.Layout;
+package com.example.provaH2.guess.layout;
 
-import com.example.provaH2.UI.PuoSuggerire;
-import com.example.provaH2.gestioneGioco.Broadcaster;
-import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.FontAwesome;
+import com.example.provaH2.UI.PlayUI;
+import com.example.provaH2.gestioneGioco.PartitaLayout;
+import com.example.provaH2.guess.PuoSuggerire;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
 
-public class PartitaLayout extends HorizontalLayout {
+import javax.annotation.PostConstruct;
+import java.util.HashMap;
+
+public class GuessPartitaLayout extends HorizontalLayout implements PartitaLayout{
 
     //TODO: qua sarebbe più putito fare a parte layout sinistro?
 
@@ -17,11 +18,12 @@ public class PartitaLayout extends HorizontalLayout {
     private ChatLayout layoutChat;
     private Label numerOfUser;
 
-    public PartitaLayout(PuoSuggerire puoSuggerire, int numberOfPlayers){
-        layoutParole= new ParoleSuggeriteLayout(puoSuggerire);
+    public GuessPartitaLayout(PlayUI puoSuggerire, Integer numberOfPlayers, HashMap<String, Embedded> playersImg){
+        System.out.println("GAMEUI: " +UI.getCurrent() + " puòsuggerire: "+ puoSuggerire );
+        layoutParole= new ParoleSuggeriteLayout((PuoSuggerire) puoSuggerire);
         layoutSinistro= new VerticalLayout();
         layoutIndizi= new VerticalLayout();
-        layoutChat= new ChatLayout(puoSuggerire);
+        layoutChat= new ChatLayout((PuoSuggerire) puoSuggerire, playersImg);
         numerOfUser= new Label("Number of Players: " + numberOfPlayers);
 
         layoutSinistro.addComponents(numerOfUser, layoutIndizi, layoutChat);
@@ -79,6 +81,7 @@ public class PartitaLayout extends HorizontalLayout {
         layoutParole.unvoteParola(parola);
     }
 
+    @Override
     public void aggiornaNumeroUtenti(int n){
         numerOfUser.setEnabled(false);
         numerOfUser.setValue("Number of Players: "+ n);

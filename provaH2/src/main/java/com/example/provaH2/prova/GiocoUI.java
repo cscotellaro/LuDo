@@ -1,9 +1,11 @@
 package com.example.provaH2.prova;
 
-import com.example.provaH2.UI.Layout.ParoleSuggeriteLayout;
+import com.example.provaH2.gestioneGioco.PartitaLayout;
+import com.example.provaH2.guess.layout.ParoleSuggeriteLayout;
+import com.example.provaH2.gestioneGioco.BroadcastListener;
 import com.example.provaH2.gestioneGioco.Broadcaster;
 import com.example.provaH2.gestioneGioco.BroadcasterList;
-import com.example.provaH2.gestioneGioco.GameController;
+import com.example.provaH2.guess.GameController;
 import com.vaadin.annotations.Push;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
@@ -13,11 +15,12 @@ import com.vaadin.ui.*;
 import org.vaadin.leif.headertags.Viewport;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Push
 @Viewport("width=device-width, initial-scale=1")
 @SpringUI(path = "private/giocoOLD")
-public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
+public class GiocoUI extends UI  implements BroadcastListener {
 
     //TODO: ci sta il problema di che succede quando ricarichi la pagina
     private Broadcaster broadcaster;
@@ -124,7 +127,7 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
             } else {
                 Button join = new Button("JOIN");
                 join.addClickListener(clickEvent -> {
-                    broadcaster.register(id,this);
+                    //broadcaster.register(id,this);
                     //registra(indice);
                     layout.removeComponent(join);
                 });
@@ -159,14 +162,14 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         //setPollInterval(3000);
     }
 
-    @Override
+    //@Override
     public void receiveIndizio(String message) {
         access(()-> {
             layout.addComponent(new Label(message));
         });
     }
 
-    @Override
+    //@Override
     public void countUser(int i, ArrayList<String> nomi) {
         //System.out.println("è stato chiamato il metodo count user");
         access(()-> {
@@ -177,8 +180,8 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         });
     }
 
-    @Override
-    public void gameStarted(){
+   // @Override
+    public void gameStarted(Class<? extends PartitaLayout> classe, int n,HashMap<String , Embedded> acc){
         try{
             getSession().getSession().setMaxInactiveInterval(10);
             //VaadinService.getCurrentRequest().getWrappedSession().setMaxInactiveInterval(10);
@@ -205,7 +208,7 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         });
     }
 
-    @Override
+   // @Override
     public void parolaSuggerita(String parola) {
         access(() -> {
            //
@@ -224,7 +227,10 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         });
     }
 
-    @Override
+    public Embedded getProfileImage(){
+        return null;
+    }
+   // @Override
     public void reciveChatMessage(String name, String message) {
 
     }
@@ -240,8 +246,8 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         super.detach();
     }
 
-    @Override
-    public void fineDellaPartita(boolean haiVinto, String parola){
+   // @Override
+    public void fineDellaPartita(boolean haiVinto, Object parola){
         //TODO: e se tengo più partite?
         getSession().getSession().setMaxInactiveInterval(1800);
         access(() -> {
@@ -272,12 +278,12 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         });
     }
 
-    @Override
+   // @Override
     public void parolaGiaSuggerita() {
 
     }
 
-    @Override
+    //@Override
     public void registratoDiNuovo() {
         access(() -> {
             if(layoutParole!=null){
@@ -288,17 +294,17 @@ public class GiocoUI extends UI  implements Broadcaster.BroadcastListener{
         });
     }
 
-    @Override
+    //@Override
     public String getName() {
         return "nome messo per implementare l interfaccia";
     }
 
-    @Override
+   // @Override
     public void onVoteParola(String parola) {
 
     }
 
-    @Override
+    //@Override
     public void onUnvoteParola(String parola) {
 
     }

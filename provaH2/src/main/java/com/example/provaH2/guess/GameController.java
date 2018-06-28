@@ -1,70 +1,63 @@
-package com.example.provaH2.gestioneGioco;
+package com.example.provaH2.guess;
 
-import com.example.provaH2.entity.Item;
-import com.example.provaH2.repository.ItemRepository;
-import com.vaadin.server.VaadinService;
+
+import com.example.provaH2.gestioneGioco.Controller;
+import com.example.provaH2.guess.db.Item;
+import com.example.provaH2.guess.db.ItemRepository;
 import com.vaadin.spring.annotation.VaadinSessionScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**deve tenere per forza
+ *  get id
+ *  getBRoad
+ *  gioca ancora
+ *  start game
+ *
+ *  count user
+ * */
+
 @Component
 @VaadinSessionScope
+//@Scope("prototype")
 @Lazy
-public class GameController implements Broadcaster.Controller{
+public class GameController extends Controller {
 
     @Autowired
     private ItemRepository repositoryI;
-    private Broadcaster broadcaster;
-    private String id;
+    private BroadcasterGuess broadcaster;
     private Item item;
     private ConcurrentHashMap <String, ParolaVotata> parole;
-    //private int max;
     private Random random= new Random();
     private PartitaThread partitaThread;
-    private Long accountId;
     private  int numUser;
-
-    public String creaPartita(){
-        String broadcasterId;
-        accountId= (Long)VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountId");
-        String timeStamp = new SimpleDateFormat("dd.HH.mm.ss").format(new Date());
-        broadcasterId= accountId+"_"+ timeStamp;
-        id=broadcasterId;
-        System.out.println("un controller viene chiamato crea partitia "+ broadcasterId + "__" + id);
-
-        broadcaster= new Broadcaster(this, broadcasterId);
-        BroadcasterList.creaBroadcaster(broadcaster);
-        return broadcasterId;
-    }
-
-    public String getId(){
-        return id;
-    }
+    // private Long accountId;
+    //private String id;
+    //private int max;
 
     //questo metodo era solo fatto per dire che potrei fare il restart game
     //in tal caso la scelta casuale posso farla in un metodo e usarlo pure in creaPartita
+    //questo metodo deve fare le operazioni che servono per iniziare una partita
+    @Override
     public void giocaAncora(){
         int tot= repositoryI.numeroRighe();
         //Random random= new Random();
         int rand=random.nextInt(tot)+1;
         System.out.println("su " + tot + " è stato scelto "+ rand);
         item =repositoryI.findOneById(rand);
-
     //    max=0;
         parole=new ConcurrentHashMap<>();
     }
 
+    @Override
     public void startGame(){
+        broadcaster=(BroadcasterGuess) super.getBroadcaster();
         broadcaster.startGame();
         partitaThread=new PartitaThread();
         partitaThread.start();
@@ -121,7 +114,6 @@ public class GameController implements Broadcaster.Controller{
 
     //TODO: Tesò ma qua si deve gestire la syncro per incremento della parola?
     //in realtà non credo perchè questo viene chiamato solo da un metodo che è già syncronizzato
-    @Override
     public boolean aggiungiParola(String str, Long accountId) {
         try{
             if(parole.containsKey(str)){
@@ -137,7 +129,6 @@ public class GameController implements Broadcaster.Controller{
 
     }
 
-    @Override
     public void voteParola(String parola, Long accountId) {
         try{
             if(!parole.containsKey(parola)){
@@ -151,7 +142,6 @@ public class GameController implements Broadcaster.Controller{
         }
     }
 
-    @Override
     public void unVoteParola(String parola, Long accountId) {
         try{
             if(!parole.containsKey(parola)){
@@ -164,10 +154,6 @@ public class GameController implements Broadcaster.Controller{
         }
     }
 
-    public Broadcaster getBroadcaster(){
-        System.out.println(" sono nel controller  il mio accountId è "+ accountId+"get broadcaster BROADCASTER= "+ broadcaster.getId());
-        return broadcaster;
-    }
 
     private void cercaParolaVotataDaTutti(int numUtenti){
         ParolaVotata parolaVincente = parole.search(1, (s, parolaVotata) -> {
@@ -240,4 +226,6 @@ public class GameController implements Broadcaster.Controller{
             this.parolaVincente = parolaVincente;
         }
     }
+
+
 }

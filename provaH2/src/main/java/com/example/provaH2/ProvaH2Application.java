@@ -1,19 +1,14 @@
 package com.example.provaH2;
 
 import com.example.provaH2.entity.Account;
-import com.example.provaH2.entity.Item;
+import com.example.provaH2.guess.db.Item;
 import com.example.provaH2.entity.Partita;
 import com.example.provaH2.entity.Voto;
 import com.example.provaH2.filter.LoginFilter;
 import com.example.provaH2.prova.ProvaEntitaRepository;
-import com.example.provaH2.prova.provaEntita;
 import com.example.provaH2.repository.AccountRepository;
-import com.example.provaH2.repository.ItemRepository;
+import com.example.provaH2.guess.db.ItemRepository;
 import com.example.provaH2.repository.PartitaRepository;
-import com.vaadin.server.ClassResource;
-import com.vaadin.server.FileResource;
-import com.vaadin.server.VaadinService;
-import com.vaadin.ui.Embedded;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,11 +17,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 import javax.servlet.Filter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -37,11 +27,12 @@ public class ProvaH2Application {
 	@Autowired
 	private ProvaEntitaRepository repository;
 	@Autowired
-	private ItemRepository repositoryI;
-	@Autowired
 	private AccountRepository repositoryA;
 	@Autowired
 	private PartitaRepository repositoryP;
+	/*	@Autowired
+	private ItemRepository repositoryI;
+*/
 
 /*	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
@@ -72,7 +63,7 @@ public class ProvaH2Application {
 			repositoryA.save(cinzia);
 			repositoryA.findAll().forEach(System.out::println);
 
-			Item item= new Item("Sara");
+		/*	Item item= new Item("Sara");
 			item.addIndizio(0,"come");
 			item.addIndizio(1,"dove");
 			item.addIndizio(2,"quando");
@@ -90,7 +81,7 @@ public class ProvaH2Application {
 			long i= repositoryI.numeroRighe();
 			//List<Item> i= repositoryI.dammiACaso();
 			System.out.println(i);
-
+*/
 			/*CustomSpringEvent customSpringEvent = new CustomSpringEvent(this, "sono un messaggio",4);
 			applicationEventPublisher.publishEvent(customSpringEvent);
 			*/

@@ -1,16 +1,18 @@
-package com.example.provaH2.UI.Layout;
+package com.example.provaH2.guess.layout;
 
-import com.example.provaH2.UI.PuoSuggerire;
+import com.example.provaH2.guess.PuoSuggerire;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class ChatLayout extends VerticalLayout {
+import java.util.HashMap;
 
+public class ChatLayout extends VerticalLayout {
+    HashMap<String, Embedded> playerImages;
     VerticalLayout layoutMessaggi;
 
-    public ChatLayout(PuoSuggerire puoSuggerire){
-
+    public ChatLayout(PuoSuggerire puoSuggerire, HashMap<String, Embedded> playerImg){
+        playerImages=playerImg;
         TextField chatField= new TextField();
         Button send= new Button( VaadinIcons.PAPERPLANE_O);
         send.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
@@ -38,9 +40,19 @@ public class ChatLayout extends VerticalLayout {
         this.setExpandRatio(panel, 2.0f);
         this.setHeight("100%");
         this.setMargin(false);
+
+     /*   playerImg.forEach((s, embedded) -> {
+            this.addComponent(new Label(s));
+            Image image= new Image(s,embedded.getSource());
+            image.setWidth("100");
+            image.setHeight("100");
+            this.addComponent(image);
+        });
+*/
     }
 
     public void riceviMessaggio(String name, String message){
+       // layoutMessaggi.addComponent((Embedded)playerImages.get(name));
         layoutMessaggi.addComponent(new Label("[" + name+ "]: " + message));
     }
 

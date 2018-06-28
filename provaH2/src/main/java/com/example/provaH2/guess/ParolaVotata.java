@@ -1,4 +1,4 @@
-package com.example.provaH2.gestioneGioco;
+package com.example.provaH2.guess;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,6 @@
-package com.example.provaH2.entity;
+package com.example.provaH2.guess.db;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import java.util.Arrays;

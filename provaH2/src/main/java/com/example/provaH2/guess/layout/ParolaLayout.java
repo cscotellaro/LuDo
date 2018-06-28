@@ -1,8 +1,6 @@
-package com.example.provaH2.UI.Layout;
+package com.example.provaH2.guess.layout;
 
-import com.example.provaH2.UI.PuoSuggerire;
-import com.example.provaH2.gestioneGioco.Broadcaster;
-import com.example.provaH2.gestioneGioco.ParolaSuggerita;
+import com.example.provaH2.guess.ParolaSuggerita;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;

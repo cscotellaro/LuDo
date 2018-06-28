@@ -23,12 +23,13 @@ public class LoginFilter implements Filter {
 
         if(logged== null || logged== false){
             String cod=(String)((HttpServletRequest)request).getParameter("cod");
+            //System.out.println("URI: " +((HttpServletRequest)request).getRequestURI());
             //Page.getCurrent().setLocation("/Login");
             //System.out.println(((HttpServletRequest) request).getPathInfo() + "_-_ " +((HttpServletRequest) request).getRequestURI() + "_-_ "+ ((HttpServletRequest) request).getServletPath());
             //RequestDispatcher dispatcher=filterConfig.getServletContext().getRequestDispatcher("/Login");
             //TODO:questo è da aggiustare
             if(cod!=null){
-                ((HttpServletResponse)response).sendRedirect("http://localhost:8080/?login=true&cod="+cod);
+                ((HttpServletResponse)response).sendRedirect("http://localhost:8080/?login=true&cod="+cod+ "&uri= "+ ((HttpServletRequest)request).getRequestURI());
             }else{
                 ((HttpServletResponse)response).sendRedirect("http://localhost:8080/?login=true");
 

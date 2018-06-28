@@ -1,4 +1,4 @@
-package com.example.provaH2.UI.Layout;
+package com.example.provaH2.guess.layout;
 
 public interface PuoSettareLaParolaVotata {
 

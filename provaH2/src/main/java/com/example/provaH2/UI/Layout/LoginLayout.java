@@ -29,7 +29,7 @@ public class LoginLayout extends VerticalLayout {
     private AccountRepository repositoryA;
     private FormLayout loginForm= new FormLayout();
 
-    public LoginLayout(AccountRepository accountRepository, String cod){
+    public LoginLayout(AccountRepository accountRepository, String cod, String uri){
         repositoryA=accountRepository;
 
         TextField emailField = new TextField("Email");
@@ -86,8 +86,8 @@ public class LoginLayout extends VerticalLayout {
                 img.setHeight("200px");
                 img.setWidth("200px");
                 VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountImg", img);
-                if(cod!=null){
-                    Page.getCurrent().setLocation("/private/gioco?cod="+cod);
+                if(cod!=null && uri!=null){
+                    Page.getCurrent().setLocation(uri+"?cod="+cod);
                 }else{
                     Page.getCurrent().setLocation("/private/home");
                 }

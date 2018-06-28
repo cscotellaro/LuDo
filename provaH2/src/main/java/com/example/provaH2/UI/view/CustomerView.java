@@ -1,20 +1,16 @@
 package com.example.provaH2.UI.view;
 
-import com.example.provaH2.gestioneGioco.GameController;
+import com.example.provaH2.guess.GameController;
 import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewBeforeLeaveEvent;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinService;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
@@ -57,10 +53,10 @@ public class CustomerView extends VerticalLayout implements View {
 */
         crea.addClickListener(clickEvent -> {
             //int i=BroadcasterList.creaBroadcaster();
-            String broadcasterId= gameController.creaPartita();
+       //     String broadcasterId= gameController.creaPartita();
             VaadinService.getCurrentRequest().getWrappedSession().setAttribute("controller", gameController);
             //VaadinService.getCurrentRequest().getWrappedSession().setAttribute("creatore",true);
-            Page.getCurrent().setLocation("/private/gioco?cod="+broadcasterId);
+         //   Page.getCurrent().setLocation("/private/gioco?cod="+broadcasterId);
         });
         addComponent(new Label("Customers"));
         addComponent(crea);

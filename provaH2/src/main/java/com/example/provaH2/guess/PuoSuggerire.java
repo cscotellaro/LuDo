@@ -1,4 +1,4 @@
-package com.example.provaH2.UI;
+package com.example.provaH2.guess;
 
 public interface PuoSuggerire {
 

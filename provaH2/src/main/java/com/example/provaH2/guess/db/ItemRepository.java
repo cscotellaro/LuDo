@@ -1,6 +1,5 @@
-package com.example.provaH2.repository;
+package com.example.provaH2.guess.db;
 
-import com.example.provaH2.entity.Item;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
