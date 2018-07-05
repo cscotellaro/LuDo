@@ -41,8 +41,8 @@ public class SettingsView extends VerticalLayout implements View {
         account=(Account)  VaadinService.getCurrentRequest().getWrappedSession().getAttribute("account");
         id=(Long)  VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountId");
         setSpacing(false);
-        setMargin(false);
-
+        setMargin(true);
+        addStyleName("SettingsMainLayout");
         Label title = new Label("Settings");
         title.addStyleName(ValoTheme.LABEL_H1);
         addComponent(title);

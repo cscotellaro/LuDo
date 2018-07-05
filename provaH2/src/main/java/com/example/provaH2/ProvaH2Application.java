@@ -3,7 +3,7 @@ package com.example.provaH2;
 import com.example.provaH2.entity.Account;
 import com.example.provaH2.guess.db.Item;
 import com.example.provaH2.entity.Partita;
-import com.example.provaH2.entity.Voto;
+import com.example.provaH2.entity.Punteggio;
 import com.example.provaH2.filter.LoginFilter;
 import com.example.provaH2.prova.ProvaEntitaRepository;
 import com.example.provaH2.repository.AccountRepository;
@@ -53,9 +53,9 @@ public class ProvaH2Application {
 			System.out.println("ok");
 			System.out.println(repository.findOneByCognome("Mamma"));
 			System.out.println(repository.findByCognome("Zia"));
-
 			//System.out.println(repository.findOneByFirstName("Sara"));
 		*/
+			//vedi che a cinzia ho fatto il cambio password
 			Account cinzia=new Account("Cinzia", "cinzia@gmail.com", "cinzia");
 			Account luigi=new Account("Luigi", "caio@gmail.com", "luigi");
 			repositoryA.save(new Account("Catello", "tizio@gmail.com", "catello"));
@@ -86,30 +86,37 @@ public class ProvaH2Application {
 			applicationEventPublisher.publishEvent(customSpringEvent);
 			*/
 
-			Partita partita= new Partita(new Timestamp(new Date().getTime()));
-			partita.addVoto(new Voto(cinzia,10));
+			Partita partita= new Partita(new Timestamp(new Date().getTime()), "unGioco");
+			partita.addPunteggio(new Punteggio(cinzia,10));
 			repositoryP.save(partita);
-			repositoryP.findAll().forEach(System.out::println);
+			//repositoryP.findAll().forEach(System.out::println);
 
 			repositoryA.updatePassword("cinzia@gmail.com", "nuovaPassword");
 			repositoryA.findAll().forEach(System.out::println);
-			repositoryP.findAll().forEach(System.out::println);
+			//repositoryP.findAll().forEach(System.out::println);
 
-			Partita partita1= new Partita(new Timestamp(new Date().getTime()));
-			partita1.addVoto(new Voto(cinzia,120));
+			Partita partita1= new Partita(new Timestamp(new Date().getTime()), "unGioco");
+			partita1.addPunteggio(new Punteggio(cinzia,120));
 			repositoryP.save(partita1);
 
-			Partita partita2= new Partita(new Timestamp(new Date().getTime()));
-			partita2.addVoto(new Voto(luigi,10));
+			Partita partita2= new Partita(new Timestamp(new Date().getTime()),"Guess");
+			partita2.addPunteggio(new Punteggio(luigi,10));
+			partita2.addPunteggio(new Punteggio(cinzia,100));
 			repositoryP.save(partita2);
 
-			Partita speriamo= repositoryP.lastPartita(cinzia);
-			repositoryP.findAll().forEach(System.out::println);
-			System.out.println("");
-			System.out.println(speriamo);
+			Partita partita3= new Partita(new Timestamp(new Date().getTime()), "unGioco");
+			partita3.addPunteggio(new Punteggio(cinzia,20));
+			repositoryP.save(partita3);
 
-			List<Partita> partite=repositoryP.cercaPartite(luigi);
-			System.out.println(partite);
+			Partita speriamo= repositoryP.lastPartita(cinzia);
+			//repositoryP.findAll().forEach(System.out::println);
+			System.out.println("");
+//			System.out.println(speriamo);
+
+
+			System.out.println("");
+			List<Partita> partite=repositoryP.cercaPartite(cinzia);
+			//partite.forEach(System.out::println);
 
 			//cinzia.setImage();
 

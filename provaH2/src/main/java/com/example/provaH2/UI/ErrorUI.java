@@ -1,13 +1,9 @@
 package com.example.provaH2.UI;
 
-import com.example.provaH2.UI.view.CustomerView;
-import com.vaadin.annotations.Push;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.*;
-import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +18,7 @@ public class ErrorUI extends UI {
     private SpringViewProvider viewProvider;
 
     /*@Autowired
-    CustomerView errorView;
+    StatisticheView errorView;
 */
     @Override
     protected void init(VaadinRequest vaadinRequest) {

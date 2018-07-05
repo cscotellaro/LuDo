@@ -4,6 +4,7 @@ import com.example.provaH2.UI.Layout.LoginLayout;
 import com.example.provaH2.UI.Layout.RegistrazioneLayout;
 import com.example.provaH2.entity.Account;
 import com.example.provaH2.repository.AccountRepository;
+import com.vaadin.addon.charts.Chart;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
@@ -12,12 +13,8 @@ import com.vaadin.ui.dnd.FileDropTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.leif.headertags.Viewport;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-
 @SpringUI(path = "/")
-//@Theme("darktheme")
+//@Theme("hometheme")
 @Viewport("width=device-width, initial-scale=1")
 public class HomeUI extends UI {
 
@@ -65,6 +62,9 @@ public class HomeUI extends UI {
         mainlayout.addComponent(image);
 */
       //  provaDrop();
+
+        Chart chart = new Chart();
+        mainlayout.addComponent(chart);
 
         setContent(mainlayout);
     }

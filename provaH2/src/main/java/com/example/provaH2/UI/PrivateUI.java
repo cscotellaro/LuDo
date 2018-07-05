@@ -1,12 +1,9 @@
 package com.example.provaH2.UI;
 
-import com.example.provaH2.UI.view.CustomerView;
-import com.example.provaH2.gestioneGioco.Broadcaster;
-import com.example.provaH2.repository.PartitaRepository;
-import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.Page;
+import com.vaadin.server.StreamResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.spring.annotation.SpringUI;
@@ -16,11 +13,18 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.leif.headertags.Viewport;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 //@Push
-//@Theme("darktheme")
+@Theme("hometheme")
 @Viewport("width=device-width, initial-scale=1")
 @SpringUI(path = "/private/home")
-public class CustomerUI extends UI{
+public class PrivateUI extends UI{
 
     @Autowired
     private SpringViewProvider viewProvider;
@@ -32,6 +36,8 @@ public class CustomerUI extends UI{
         VerticalLayout layout=new VerticalLayout();
 
         MenuBar menu= new MenuBar();
+        menu.setHeight(3,Unit.EM);
+        menu.addStyleName("menuBarTitolo");
         menu.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
         Panel viewContent= new Panel();
         viewContent.addStyleName(ValoTheme.PANEL_BORDERLESS);
@@ -39,6 +45,7 @@ public class CustomerUI extends UI{
         layout.addComponents(menu, viewContent);
         layout.setComponentAlignment(menu,Alignment.TOP_RIGHT);
         layout.setSizeFull();
+        layout.setMargin(false);
         viewContent.setSizeFull();
         layout.setExpandRatio(viewContent,1);
 
@@ -47,7 +54,7 @@ public class CustomerUI extends UI{
         navigator.addProvider(viewProvider);
   //      navigator.setErrorView(errorView);
         menu.addItem("Home", e->onHomeClicked());
-        menu.addItem("Statistiche", e->onCustomersClicked());
+        menu.addItem("Statistiche", e->onStatisticheClicked());
         menu.addItem("Settings", e->onSettingsClicked());
         menu.addItem("Logout", e-> onLogoutClicked());
         setContent(layout);
@@ -60,8 +67,8 @@ public class CustomerUI extends UI{
         }
     }
 
-    private void onCustomersClicked(){
-        navigator.navigateTo("customers");
+    private void onStatisticheClicked(){
+        navigator.navigateTo("statistiche");
     }
 
     private void onLogoutClicked(){
@@ -78,23 +85,6 @@ public class CustomerUI extends UI{
     private void onHomeClicked(){
         navigator.navigateTo("home");
     }
-/*
 
 
-    private void onDashboardClicked(){
-        navigator.navigateTo("dashboard");
-    }
-*/
-/*
-    @Override
-    public void receiveBroadcast(String message) {
-        System.out.println("Ho ricevuto n broadcast");
-    }
-
-    @Override
-    public void countUser(int i) {
-        System.out.println("è stato chiamato il metodo count user");
-        ((CustomerView)navigator.getCurrentView()).conta(i);
-
-    }*/
 }

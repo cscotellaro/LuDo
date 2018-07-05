@@ -1,24 +1,27 @@
 package com.example.provaH2.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-//TODO: tesò ma vogliamo mettere anche un riferimeto a chi ha creato la partita?
-
+//TODO: Ma.... questo vinta??
 @Entity
 public class Partita {
     @Id @GeneratedValue
     private Long id;
+    @NotNull
     private Timestamp timestamp;
+    @NotNull
+    private String gioco;
     private boolean vinta;
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<Voto> array;
+    private List<Punteggio> array;
 
     public Partita(){
-        array=new ArrayList<Voto>();
+        array=new ArrayList<Punteggio>();
     }
 
     public Partita(Timestamp timestamp, boolean vinta) {
@@ -32,30 +35,68 @@ public class Partita {
         array= new ArrayList<>();
     }
 
-    public Partita(Timestamp timestamp, boolean vinta, List<Voto> array) {
+    public Partita(Timestamp timestamp, String gioco) {
+        this.timestamp = timestamp;
+        array= new ArrayList<>();
+        this.gioco=gioco;
+    }
+
+    public Partita(Timestamp timestamp, boolean vinta, ArrayList<Punteggio> array) {
         this.timestamp = timestamp;
         this.vinta = vinta;
         this.array = array;
     }
 
-    public void addVoto(Voto voto){
-        array.add(voto);
+    public void removePunteggio(Account account){
+        for(int i=0 ; i<array.size();i++){
+            if(array.get(i).getAccount().equals(account)){
+                array.remove(i);
+            }
+        }
     }
 
-    public List<Voto> getArray() {
+    public void removePunteggio(long accountid){
+        for(int i=0 ; i<array.size();i++){
+            if(array.get(i).getAccount().getId()==accountid){
+                array.remove(i);
+            }
+        }
+    }
+
+    public void removePunteggio(String accountName){
+        for(int i=0 ; i<array.size();i++){
+            if(array.get(i).getAccount().getFullName().equals(accountName)){
+                array.remove(i);
+            }
+        }
+    }
+
+    public void addPunteggio(Punteggio punteggio){
+        array.add(punteggio);
+    }
+
+    public List<Punteggio> getArray() {
         return array;
     }
 
-    public void setArray(List<Voto> array) {
+   /* public void setArray(ArrayList<Punteggio> array) {
         this.array = array;
     }
-
+*/
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getGioco() {
+        return gioco;
+    }
+
+    public void setGioco(String gioco) {
+        this.gioco = gioco;
     }
 
     public Timestamp getTimestamp() {
@@ -79,6 +120,7 @@ public class Partita {
         return "Partita{" +
                 "id=" + id +
                 ", timestamp=" + timestamp +
+                ", gioco='" + gioco + '\'' +
                 ", vinta=" + vinta +
                 ", array=" + array +
                 '}';

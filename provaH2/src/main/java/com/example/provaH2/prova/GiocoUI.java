@@ -1,5 +1,6 @@
 package com.example.provaH2.prova;
 
+import com.example.provaH2.entity.Account;
 import com.example.provaH2.gestioneGioco.PartitaLayout;
 import com.example.provaH2.guess.layout.ParoleSuggeriteLayout;
 import com.example.provaH2.gestioneGioco.BroadcastListener;
@@ -37,6 +38,11 @@ public class GiocoUI extends UI  implements BroadcastListener {
 
     //variabili solo di chi joina
     private Button unjoin;
+
+    @Override
+    public Account getAccount() {
+        return null;
+    }
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
@@ -120,7 +126,7 @@ public class GiocoUI extends UI  implements BroadcastListener {
                 start= new Button("START");
                 start.addClickListener(clickEvent -> {
                     controller.giocaAncora();
-                    controller.startGame();
+                    controller.hostGame();
                     //VaadinService.getCurrentRequest().getWrappedSession().setAttribute("creatore", false);
                 });
                 layout.addComponent(start);
@@ -170,7 +176,7 @@ public class GiocoUI extends UI  implements BroadcastListener {
     }
 
     //@Override
-    public void countUser(int i, ArrayList<String> nomi) {
+    public void countUser(int i, HashMap<String, Embedded> nomi) {
         //System.out.println("è stato chiamato il metodo count user");
         access(()-> {
             System.out.println("è stato chiamato il run dentro count user");

@@ -28,17 +28,20 @@ public class ChatLayout extends VerticalLayout {
         //setComponentAlignment(sendBar, Alignment.BOTTOM_CENTER);
 
         layoutMessaggi= new VerticalLayout();
-        layoutMessaggi.setSizeUndefined();
+        layoutMessaggi.setWidth(200,Unit.PIXELS);
+        //layoutMessaggi.setHeight(100, Unit.PERCENTAGE);
         Panel panel= new Panel();
-        //panel.setHeight("100%");
-        //panel.setSizeFull();
-        panel.setHeight("100%");
-        panel.setWidth("200px");
+
+        panel.setHeight(100, Unit.PERCENTAGE);
+        panel.setWidth(200,Unit.POINTS);
         panel.setContent(layoutMessaggi);
+
         //panel.addStyleName("panelChat");
         this.addComponents(panel,sendBar);
         this.setExpandRatio(panel, 2.0f);
-        this.setHeight("100%");
+
+       // this.addComponents(layoutMessaggi,sendBar);
+        this.setHeight(100,Unit.PERCENTAGE);
         this.setMargin(false);
 
      /*   playerImg.forEach((s, embedded) -> {
@@ -54,6 +57,10 @@ public class ChatLayout extends VerticalLayout {
     public void riceviMessaggio(String name, String message){
        // layoutMessaggi.addComponent((Embedded)playerImages.get(name));
         layoutMessaggi.addComponent(new Label("[" + name+ "]: " + message));
+        HorizontalLayout horizontalLayout= new HorizontalLayout();
+        horizontalLayout.setWidth(100,Unit.PERCENTAGE);
+        horizontalLayout.addComponent(new Label(message));
+        layoutMessaggi.addComponent(horizontalLayout);
     }
 
 }

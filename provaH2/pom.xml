@@ -162,6 +162,23 @@
 			<artifactId>vaadin-icons</artifactId>
 			<version>3.0.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.vaadin.addons</groupId>
+			<artifactId>copytoclipboard</artifactId>
+			<version>0.5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-charts</artifactId>
+			<version>4.0.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-charts-flow</artifactId>
+		</dependency>
     </dependencies>
 
 	<dependencyManagement>

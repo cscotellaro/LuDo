@@ -5,15 +5,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 @Embeddable
-public class Voto {
+public class Punteggio {
 
     @OneToOne
     private Account account;
     private int punti;
 
-    public Voto (){}
+    public Punteggio (){}
 
-    public Voto(Account account, int punti) {
+    public Punteggio(Account account, int punti) {
         this.account = account;
         this.punti = punti;
     }

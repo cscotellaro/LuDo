@@ -100,12 +100,12 @@ public class PlayUI extends UI  implements BroadcastListener{
 
     //da vedere
     @Override
-    public void countUser(int i, ArrayList<String> nomi) {
+    public void countUser(int i,HashMap<String, Embedded> accountImg) {
         access(()-> {
             System.out.println("è stato chiamato il run dentro count user " +this);
             //((ContaUtenti)navigator.getCurrentView()).aggiornaCountUser(i,nomi);
             if(waitingForPlayers!=null){
-                waitingForPlayers.aggiornaCountUser(i,nomi);
+                waitingForPlayers.aggiornaCountUser(i, accountImg);
             }
             if(partitaLayout!=null){
                 partitaLayout.aggiornaNumeroUtenti(i);
@@ -132,6 +132,11 @@ public class PlayUI extends UI  implements BroadcastListener{
         return img;
     }
 
+    @Override
+    public Account getAccount(){
+        return  account;
+    }
+
     //da vedere
     //TODO: qua ci sta da decidere come lo vogliamo gestire
     @Override
@@ -153,9 +158,7 @@ public class PlayUI extends UI  implements BroadcastListener{
         return  broadcaster;
     }
 
-    protected Account getAccount(){
-        return  account;
-    }
+
 
     protected PartitaLayout getPartitaLayout(){
         return  partitaLayout;

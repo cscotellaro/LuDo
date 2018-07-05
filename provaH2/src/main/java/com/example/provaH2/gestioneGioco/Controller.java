@@ -1,14 +1,22 @@
 package com.example.provaH2.gestioneGioco;
 
-import com.example.provaH2.guess.BroadcasterGuess;
+import com.example.provaH2.entity.Account;
+import com.example.provaH2.entity.Partita;
+import com.example.provaH2.entity.Punteggio;
+import com.example.provaH2.repository.PartitaRepository;
+import com.vaadin.server.StreamResource;
 import com.vaadin.server.VaadinService;
-import com.vaadin.spring.annotation.VaadinSessionScope;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
+import com.vaadin.ui.Embedded;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -16,11 +24,18 @@ public abstract  class Controller {
     private Long accountId;
     private Broadcaster broadcaster;
     private Game game;
-    //metodo chiamato da Broadcaster
-    public abstract void countUser(int n);
+    private PartitaRepository partitaRepository;
+    protected Partita partita;
+
+    public Controller(PartitaRepository partitaRepository){
+        this.partitaRepository= partitaRepository;
+    }
+
+    /**metodo chiamato da Broadcaster che aggiorna il numero degli utenti che sono in game*/
+    public abstract void countUser(int n, ArrayList<Account> accounts);
 
     //metodi chiamati da waiting for players
-
+    /**metodo che serve per inizializzare le variabili che servono per il gioco*/
     public  abstract  void giocaAncora();
     public  abstract  void startGame();
 
@@ -46,6 +61,37 @@ public abstract  class Controller {
         return broadcasterId;
     }
 
+    public void hostGame(){
+        partita= new Partita(new Timestamp(new Date().getTime()), game.getNomeGioco());
+        startGame();
+    }
+
+    //TODO: o public?
+    protected void addPunteggio(Punteggio punteggio){
+        partita.addPunteggio(punteggio);
+    }
+
+    protected void removePunteggio(Account account){
+        partita.removePunteggio(account);
+    }
+
+    protected void removePunteggio(long account){
+        partita.removePunteggio(account);
+    }
+
+    protected void removePunteggio(String accountName){
+        partita.removePunteggio(accountName);
+    }
+
+    public void savePartita(){
+        System.out.println(partita);
+        partitaRepository.save(partita);
+    }
+
+    /* protected  void setPunteggi(ArrayList<Punteggio> punteggi){
+        partita.setArray(punteggi);
+    }
+*/
     public Broadcaster getBroadcaster(){
         System.out.println(" sono nel controller  il mio accountId è "+ accountId+"get broadcaster BROADCASTER= "+ broadcaster.getId());
         return  broadcaster;
@@ -58,5 +104,37 @@ public abstract  class Controller {
 
     public Game getGame(){
         return game;
+    }
+
+    public Embedded getGameImage(){
+        Path path= Paths.get("src/main/java/com/example/provaH2/"+game.getImagePath());
+        ByteArrayOutputStream bas= new ByteArrayOutputStream();
+        try {
+
+            byte[] data = Files.readAllBytes(path);
+            bas.write(data,0, data.length);
+        }catch (IOException e){
+            //TODO: qui che ci mettiamo? serve qualcosa tipo oh c'è qualche problema
+            //e se ci stanno problemi nn posso manco fare il pezzo di dopo di settare l'immagine
+        }
+
+        final StreamResource.StreamSource streamSource = () -> {
+            if (bas != null) {
+                final byte[] byteArray = bas.toByteArray();
+                return new ByteArrayInputStream(byteArray);
+            }
+            return null;
+        };
+        final StreamResource resource = new StreamResource(streamSource, game.getNomeGioco());
+        resource.setMIMEType("image/jpeg");
+        byte[] array = bas.toByteArray();
+
+        // show the file contents - images only for now
+        final Embedded embedded = new Embedded(null, resource);
+        embedded.setMimeType("image/jpeg");
+
+        embedded.setHeight("150px");
+        embedded.setWidth("150px");
+        return embedded;
     }
 }

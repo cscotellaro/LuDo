@@ -35,7 +35,7 @@
 
 $v-included-components: remove($v-included-components, button);
 
-@mixin darktheme {
+@mixin hometheme {
   @include valo;
 
   //$v-shadow:  0 10px 10px v-shade;
@@ -44,67 +44,37 @@ $v-included-components: remove($v-included-components, button);
   $v-font-size:2em;
   @include valo-button();
 
-  .provaVertical{
-    background: grey;
-    border-radius: 5px;
+/********************su tutta la privateUI*****************/
+  .menuBarTitolo{
+    margin-top: 20pt;
+    margin-right: 20pt;
   }
 
-  .bottoneInvio{
-    border-radius: 20px;
+/*******************privateHome****************************/
+  .welcomeLabel{
+    font-size: 3em;
   }
 
-  .panelChat {
-    height: 30%;
-  }
-
-/***************************waiting for players**********************/
-/*  .profileImageWFP{
+  .welcomeProfileImg{
     border-radius: 80px;
   }
 
-  .nameLobby{
-    font-size: 1.5em;
-  }
-*/
-  .WFPverticalMainLayout{
-    overflow-y: scroll;
+  .layoutNomeEPartita{
+    padding-top: 12pt;
   }
 
-  .WFPGameName{
-    font-size: 2.3em;
-    max-width: 7cm;
+  //lavyout dei singoli giochi
+  .WelcomeGameName{
+    font-weight: 500;
   }
 
-  .WFPLabel{
-    font-size: 1.7em;
+  .layoutWelcomeGame{
+    background-color: #dbd6d6;
+    margin: 10pt;
   }
-
-  .WFPNumPLayers{
-    font-size: 1.5em;
-  }
-
-  //nella lista
-  .WFPplayerImg{
-    border-radius: 80px;
-    width: 30pt;
-    height: 30pt;
-  }
-
-  .WFPPlayerName{
-    font-size: 1.1em;
-  }
-
-  .WFPLayoutSx{
-    padding-left: 0px;
-  }
-
-  .WFPerror{
-    font-size: 2em;
-  }
-
-  .goHome{
-    width: 90pt;
-    height: 40pt;
+/******************************settings***************************/
+  .SettingsMainLayout{
+    padding-left: 30pt !important;
   }
   // Insert your own theme rules here
 }

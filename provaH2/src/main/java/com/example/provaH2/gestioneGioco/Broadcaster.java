@@ -1,8 +1,14 @@
 package com.example.provaH2.gestioneGioco;
 
+import com.example.provaH2.entity.Account;
+import com.vaadin.server.StreamResource;
 import com.vaadin.ui.Embedded;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -17,7 +23,6 @@ import java.util.concurrent.Executors;
 
 public class Broadcaster implements Serializable{
 
-    //TODO: tesoro ma queste due interfacce le dovremmo levare da qua dentro?
   /*  public interface BroadcastListener {
        // void receiveIndizio(String message);
         void countUser(int i, ArrayList<String> utenti);
@@ -42,7 +47,7 @@ public class Broadcaster implements Serializable{
     protected ExecutorService executorService;
     protected HashMap<Long, BroadcastListener> listeners;
     private boolean canJoin;
-    private Controller gameController;
+    protected Controller gameController;
     private String id;
 
     //private /*static*/ LinkedList<BroadcastListener> listeners;
@@ -64,16 +69,25 @@ public class Broadcaster implements Serializable{
                 System.out.println("di nuovo");
             }
             listeners.put(id, listener);
-            gameController.countUser(listeners.size());
 
             ArrayList<String> nomi= new ArrayList<>();
+            ArrayList<Account> accounts= new ArrayList<>();
             listeners.forEach((aLong, broadcastListener) -> {
-                nomi.add(broadcastListener.getName());
+                Account a= broadcastListener.getAccount();
+                accounts.add(a);
+                nomi.add(a.getFullName());
             });
+            gameController.countUser(listeners.size(), accounts);
 
+            HashMap<String, Embedded> accountImg= new HashMap<>();
             listeners.forEach((aLong, broadcastListener) -> {
                 executorService.execute(()-> {
-                    broadcastListener.countUser(listeners.size(), nomi);
+                    accountImg.put(broadcastListener.getName(), broadcastListener.getProfileImage());
+                });
+            });
+            listeners.forEach((aLong, broadcastListener) -> {
+                executorService.execute(()-> {
+                    broadcastListener.countUser(listeners.size(), accountImg);
                 });
             });
             /*for (final BroadcastListener listen: listeners) {
@@ -89,16 +103,26 @@ public class Broadcaster implements Serializable{
         System.out.println("sono il boradcaster ed è stato chiamato UNregister "+ listeners.size() + "  ui:"+ listener );
         if(listeners.containsValue(listener)) {
             listeners.remove(accountId);
-            gameController.countUser(listeners.size());
 
-            ArrayList<String> nomi = new ArrayList<>();
+            ArrayList<String> nomi= new ArrayList<>();
+            ArrayList<Account> accounts= new ArrayList<>();
             listeners.forEach((aLong, broadcastListener) -> {
-                nomi.add(broadcastListener.getName());
+                Account a= broadcastListener.getAccount();
+                accounts.add(a);
+                nomi.add(a.getFullName());
+            });
+            gameController.countUser(listeners.size(), accounts);
+
+            HashMap<String, Embedded> accountImg= new HashMap<>();
+            listeners.forEach((aLong, broadcastListener) -> {
+                executorService.execute(()-> {
+                    accountImg.put(broadcastListener.getName(), broadcastListener.getProfileImage());
+                });
             });
 
             listeners.forEach((aLong, broadcastListener) -> {
                 executorService.execute(() -> {
-                    broadcastListener.countUser(listeners.size(), nomi);
+                    broadcastListener.countUser(listeners.size(), accountImg);
                 });
             });
         }
@@ -137,7 +161,8 @@ public class Broadcaster implements Serializable{
 
     }
 
-    public void comunicaEsito(boolean haiVinto, Object parola){
+    public void fineDellaPartita(boolean haiVinto, Object parola){
+        gameController.savePartita();
         listeners.forEach((aLong, broadcastListener) -> {
             executorService.execute(()-> {
                 broadcastListener.fineDellaPartita(haiVinto, parola);
@@ -179,5 +204,13 @@ public class Broadcaster implements Serializable{
 
     public Controller getGameController() {
         return gameController;
+    }
+
+    public Embedded getGameImg(){
+       return gameController.getGameImage();
+    }
+
+    public Game getGame(){
+        return gameController.getGame();
     }
 }

@@ -6,17 +6,20 @@ import com.example.provaH2.gestioneGioco.Broadcaster;
 import com.example.provaH2.gestioneGioco.BroadcasterList;
 import com.example.provaH2.gestioneGioco.Controller;
 import com.example.provaH2.guess.GameController;
+import com.romeosa.copytoclipboard.CopyToClipboard;
+import com.romeosa.copytoclipboard.CopyToClipboardButton;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 //@SpringView(name = "waitingForPlayers")
 public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUtenti */{
 
-    private Label waiting;
+    private Label numPlayers;
     private VerticalLayout layoutNomi;
     private Controller controller;
     private Broadcaster broadcaster;
@@ -24,17 +27,25 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
 //  private CanRejoinGame gameUI;
 
     public WaitingForPlayers( /*CanRejoinGame gameUI*/) {
-
+        this.addStyleName("WFPverticalMainLayout");
+        /**************************************controlli che ci sia una partita******************************************/
         account=(Account) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("account");
         String cod=VaadinService.getCurrentRequest().getParameter("cod");
         if(cod== null) {
+            this.setHeight(100, Unit.PERCENTAGE);
+            this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
             setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-            addComponent(new Label("nessuna partita  :("));
+            Label error= new Label("nessuna partita  :(");
+            error.addStyleName("WFPerror");
+            //addComponent(error);
             Button goHome= new Button("go Home");
             goHome.addClickListener(clickEvent -> {
                 Page.getCurrent().setLocation("/private/home");
             });
-            addComponent(goHome);
+            goHome.addStyleName("Home");
+            VerticalLayout middle= new VerticalLayout();
+            middle.addComponents(error,goHome);
+            addComponent(middle);
             return;
         }
 
@@ -42,13 +53,22 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
         Long id=(Long) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountId");
         broadcaster = BroadcasterList.getBroadcaster(cod);
         if(broadcaster==null){
-            setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-            addComponent(new Label("nessuna partita con questo codice :("));
+            this.setHeight(100, Unit.PERCENTAGE);
+            this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+
+            //setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            Label error= new Label("nessuna partita con questo codice :(");
+            //addComponent(error);
             Button goHome= new Button("go Home");
             goHome.addClickListener(clickEvent -> {
                 Page.getCurrent().setLocation("/private/home");
             });
-            addComponent(goHome);
+            goHome.addStyleName("Home");
+            error.addStyleName("WFPerror");
+            VerticalLayout middle= new VerticalLayout();
+            middle.addComponents(error,goHome);
+            //addComponent(goHome);
+            addComponent(middle);
             return;
         }
 
@@ -63,65 +83,164 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
             return;
         */
         } else{
-            setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-            addComponent(new Label("la partita è già iniziata non puoi joinarti"));
+            this.setHeight(100, Unit.PERCENTAGE);
+            this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            Label error=new Label("la partita è già iniziata non puoi joinarti");
+            //setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            //addComponent(error);
             Button goHome= new Button("go Home");
             goHome.addClickListener(clickEvent -> {
                 Page.getCurrent().setLocation("/");
             });
-            addComponent(goHome);
+            goHome.addStyleName("Home");
+            error.addStyleName("WFPerror");
+            VerticalLayout middle= new VerticalLayout();
+            middle.addComponents(error,goHome);
+            addComponent(middle);
             return;
         }
 
+        /*******************************************setting del layout**************************************/
+        this.setHeight("100%");
+        HorizontalLayout mainlayout= new HorizontalLayout();
+        mainlayout.setHeight("100%");
+        mainlayout.setWidth("100%");
 
-        waiting = new Label("I'm "+account.getFullName()+ " Waiting for players...");
-        setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-        addComponent(waiting);
+        //setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+
+        VerticalLayout gameLayout= new VerticalLayout();
+        gameLayout.addStyleName("WFPLayoutSx");
+        //gameLayout.setDefaultComponentAlignment(Alignment.TOP_CENTER);
+        HorizontalLayout logoEImg= new HorizontalLayout();
+        logoEImg.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+
+        Embedded gameImg= broadcaster.getGameImg();
+        Label gameName=new Label(broadcaster.getGame().getNomeGioco());
+        gameName.addStyleName("WFPGameName");
+        gameImg.setHeight(100, Unit.POINTS);
+        gameImg.setWidth(100, Unit.POINTS);
+        logoEImg.addComponents(gameImg, gameName);
+
+        Label descr=new Label(broadcaster.getGame().getDescrizioneLungaGioco());
+        descr.setWidth(100, Unit.PERCENTAGE);
+        gameLayout.addComponents(logoEImg,descr);
+        mainlayout.addComponent(gameLayout);
+        mainlayout.setComponentAlignment(gameLayout, Alignment.TOP_RIGHT);
+
+        VerticalLayout layoutDestro= new VerticalLayout();
+
+        HorizontalLayout WFPLayout=new HorizontalLayout();
+        WFPLayout.setWidth(100, Unit.PERCENTAGE);
+        WFPLayout.setMargin(false);
+        Label waiting = new Label( " Waiting for players...");
+        waiting.addStyleName("WFPLabel");
+        WFPLayout.addComponent(waiting);
+        numPlayers= new Label("0 connected");
+        numPlayers.addStyleName("WFPNumPLayers");
+        WFPLayout.addComponent(numPlayers);
+        WFPLayout.setComponentAlignment(numPlayers, Alignment.MIDDLE_RIGHT);
+        layoutDestro.addComponent(WFPLayout);
+
+        Panel panelNomi= new Panel();
+        layoutNomi= new VerticalLayout();
+        layoutNomi.setSizeUndefined();
+        panelNomi.setContent(layoutNomi);
+       // panelNomi.setWidth(450, Unit.POINTS);
+        panelNomi.setHeight("100%");
+        layoutDestro.addComponent(panelNomi);
+        layoutDestro.setHeight("100%");
+        layoutDestro.setExpandRatio(panelNomi, 2f);
 
         controller= (GameController) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("controllerGame"+cod);
-       //questo if è solo per la stampa lo puoi pure levare proprio
+        //questo if è solo per la stampa lo puoi pure levare proprio
         if(controller!=null){
             Account account2=(Account) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("account");
             System.out.println("Sono "+account2.getFullName()+ "controllo dello start : "+ controller.getId() + "__"+controller.getBroadcaster().getId() + " " + broadcaster.getId());
         }
 
         if(controller!=null && controller.getBroadcaster().getId().equals(broadcaster.getId())){
-            TextField link= new TextField("copy this link");
+            FormLayout formLayout=new FormLayout();
+            formLayout.setWidth(100, Unit.PERCENTAGE);
+            formLayout.setMargin(true);
+            formLayout.setDefaultComponentAlignment(Alignment.BOTTOM_RIGHT);
+            TextField link= new TextField("share with link");
+            link.setWidth(100, Unit.PERCENTAGE);
             System.out.println("URL: " + Page.getCurrent().getLocation());
             //System.out.println("URL: " );
             //link.setValue("localhost:8080/private/gioco?cod="+cod);
             link.setValue(Page.getCurrent().getLocation().toString());
             link.setReadOnly(true);
             link.selectAll();
-            addComponent(link);
+            formLayout.addComponent(link);
+
+/*            Button marco= new Button("copy");
+           // final CopyToClipboardButton cp= new CopyToClipboardButton();
+            //Window w= new Window();
+            //addComponent(cp);
+            String string = "soReadyToHelp = function myFunction(p) {"
+                    +"alert(p);"
+                    +"var copyText= document.getElementById(\"gwt-uid-3\");"
+                    +"copyText.select();"
+                    +"copyText.readOnly=false;"
+                    +"document.execCommand(\"copy\");"
+                    +"}";
+            JavaScript.getCurrent().execute(string);
+
+            marco.addClickListener(clickEvent -> {
+               link.selectAll();
+
+                JavaScript.getCurrent().execute("soReadyToHelp('Hello');");
+                //Page.getCurrent().getJavaScript().execute(string);
+
+
+              //  cp.setClipboardText("Marco");
+            });
+            formLayout.addComponent(marco);
+         */
+            gameLayout.addComponent(formLayout);
+
             Button start= new Button("START");
             System.out.println("\tSTART sto per aggiungere il bottone e il controller è " + controller.getId());
             start.addClickListener(clickEvent -> {
                 //System.out.println(controller.getId() + " b_ " + broadcaster.getId());
                 controller.giocaAncora();
-                controller.startGame();
+                controller.hostGame();
             });
-            addComponent(start);
+            start.setWidth(120, Unit.POINTS);
+            start.setHeight(40, Unit.POINTS);
+            layoutDestro.addComponent(start);
+            layoutDestro.setComponentAlignment(start, Alignment.MIDDLE_CENTER);
         }
-
-        Panel panelNomi= new Panel();
-        layoutNomi= new VerticalLayout();
-        layoutNomi.setSizeUndefined();
-        panelNomi.setContent(layoutNomi);
-        panelNomi.setWidth("600px");
-        panelNomi.setHeight("10%");
-        addComponent(panelNomi);
+        mainlayout.addComponent(layoutDestro);
+        mainlayout.setExpandRatio(gameLayout,2f);
+        mainlayout.setExpandRatio(layoutDestro, 2f);
+        addComponent(mainlayout);
     }
 
-    public void aggiornaCountUser(int n, ArrayList<String> nomi){
+    public void aggiornaCountUser(int n, HashMap<String, Embedded> accountImg){
         System.out.println("aggiotna counter " + n + " "+ getUI());
-        waiting.setEnabled(false);
-        waiting.setValue("I'm "+account.getFullName()+"Waiting for users... "+ n+ "connected");
-        waiting.setEnabled(true);
+        numPlayers.setEnabled(false);
+        numPlayers.setValue( n+ "connected");
+        numPlayers.setEnabled(true);
         layoutNomi.removeAllComponents();
-        for(String str: nomi){
-            layoutNomi.addComponent(new Label(str));
-        }
+
+       // for(int i=0; i<15;i++){
+            accountImg.forEach((s, embedded) -> {
+                HorizontalLayout player= new HorizontalLayout();
+                player.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+                Image profileImg=new Image(null, embedded.getSource());
+                profileImg.addStyleName("WFPplayerImg");
+                //profileImg.setWidth(30, Unit.POINTS);
+                //profileImg.setHeight(30,Unit.POINTS);
+                player.addComponent(profileImg);
+                Label playerName= new Label(s);
+                playerName.addStyleName("WFPPlayerName");
+                player.addComponent(playerName);
+                layoutNomi.addComponent(player);
+            });
+
+
+        //}
     }
 
     public Broadcaster getBroadcaster() {

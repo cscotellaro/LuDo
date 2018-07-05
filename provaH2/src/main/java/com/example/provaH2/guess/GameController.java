@@ -1,15 +1,21 @@
 package com.example.provaH2.guess;
 
 
+import com.example.provaH2.entity.Account;
+import com.example.provaH2.entity.Partita;
+import com.example.provaH2.entity.Punteggio;
 import com.example.provaH2.gestioneGioco.Controller;
 import com.example.provaH2.guess.db.Item;
 import com.example.provaH2.guess.db.ItemRepository;
+import com.example.provaH2.repository.PartitaRepository;
 import com.vaadin.spring.annotation.VaadinSessionScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,9 +43,14 @@ public class GameController extends Controller {
     private Random random= new Random();
     private PartitaThread partitaThread;
     private  int numUser;
+    private  ArrayList<Account> accounts;
     // private Long accountId;
     //private String id;
     //private int max;
+
+    public GameController(PartitaRepository partitaRepository){
+        super(partitaRepository);
+    }
 
     //questo metodo era solo fatto per dire che potrei fare il restart game
     //in tal caso la scelta casuale posso farla in un metodo e usarlo pure in creaPartita
@@ -53,12 +64,14 @@ public class GameController extends Controller {
         item =repositoryI.findOneById(rand);
     //    max=0;
         parole=new ConcurrentHashMap<>();
+
     }
 
     @Override
     public void startGame(){
         broadcaster=(BroadcasterGuess) super.getBroadcaster();
         broadcaster.startGame();
+
         partitaThread=new PartitaThread();
         partitaThread.start();
 
@@ -170,7 +183,8 @@ public class GameController extends Controller {
     }
 
     @Override
-    public void countUser(int n) {
+    public void countUser(int n, ArrayList<Account> accounts) {
+        this.accounts=accounts;
         //TODO: Cinzia ma qua quando qualcuno se ne va facciamo che controllo se gli altri sono tutti d'accordo?
         if(n<numUser){
             numUser=n;
@@ -211,17 +225,24 @@ public class GameController extends Controller {
 
         private void terminaPartita(){
             broadcaster.stopSend();
+            assegnaPunteggi();
             if(parolaVincente!=null && parolaVincente.getParolaSuggerita().equals(item.getParola())){
                 //broadcaster.allowJoin();
-                broadcaster.comunicaEsito(true, item.getParola());
+                broadcaster.fineDellaPartita(true, item.getParola());
                 return;
             }else{
                 //broadcaster.allowJoin();
-                broadcaster.comunicaEsito(false, item.getParola());
+                broadcaster.fineDellaPartita(false, item.getParola());
                 return;
             }
         }
 
+        //TODO: decidere come assegnamo i punteggi
+        private void assegnaPunteggi(){
+            for (Account a: accounts) {
+                addPunteggio(new Punteggio(a,10));
+            }
+        }
         public void setParolaVincente(ParolaVotata parolaVincente) {
             this.parolaVincente = parolaVincente;
         }
