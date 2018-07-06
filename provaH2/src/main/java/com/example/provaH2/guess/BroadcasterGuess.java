@@ -19,8 +19,9 @@ public class BroadcasterGuess extends Broadcaster {
     }
 
     public synchronized void broadcast( final String message) {
+        System.out.println("the mesage: "+ message);
         if(canSend) {
-            //System.out.println("Sono "+ this + " parola: " + message);
+            System.out.println("Sono "+ this + " parola: " + message);
             listeners.forEach((aLong, broadcastListener) -> {
                 executorService.execute(()-> {
                     ((GuessBroadcasterListener)broadcastListener).receiveIndizio(message);
@@ -89,6 +90,14 @@ public class BroadcasterGuess extends Broadcaster {
     public synchronized void startGame(/*Item myItem*/){
         canSend=true;
         super.startGame();
+    }
+
+    public synchronized void countDown(int n){
+        listeners.forEach((aLong, broadcastListener) -> {
+            executorService.execute(()-> {
+                ((GuessBroadcasterListener)broadcastListener).countDown(n);
+            });
+        });
     }
 
     public void stopSend(){

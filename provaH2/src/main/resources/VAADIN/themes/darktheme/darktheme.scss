@@ -56,7 +56,53 @@ $v-included-components: remove($v-included-components, button);
   .panelChat {
     height: 30%;
   }
+/**************************ui di gioco*******************************/
+  .guessName{
+    font-size: 1.7em;
+  }
 
+  .timeLabel{
+    font-size:  1.4em;
+  }
+
+  .numPlayerLabel{
+    font-size: 1.2em;
+  }
+
+  .layoutIndizi{
+    padding-left: 0px;
+    padding-top: 0px;
+  }
+
+  .indizi{
+      font-size: 1.2em;
+  }
+
+  .layoutParole{
+      padding-left: 0px;
+      padding-top:  0px;
+      padding-bottom: 0px;
+  }
+
+  .parolaSuggLayoyt{
+    background-color: #eeeeee;
+    padding: 5pt;
+  }
+
+  .pallinoChat{
+    border-radius: 80px;
+  }
+
+  .nameLabelChat{
+    font-weight: 400;
+  }
+
+  .baloonChat{
+    background-color: #eeeeee;
+    border-radius: 5px;
+    padding: 7pt;
+    font-size: 11pt;
+  }
 /***************************waiting for players**********************/
 /*  .profileImageWFP{
     border-radius: 80px;

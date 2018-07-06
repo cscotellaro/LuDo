@@ -15,9 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**deve tenere per forza
@@ -71,58 +69,13 @@ public class GameController extends Controller {
     public void startGame(){
         broadcaster=(BroadcasterGuess) super.getBroadcaster();
         broadcaster.startGame();
-
+        if(partitaThread!=null){
+            partitaThread.interrupt();
+            partitaThread.stopTimer();
+        }
         partitaThread=new PartitaThread();
         partitaThread.start();
 
-        /*new Thread(() -> {
-
-            for(int i=0;i<4;i++){
-                String indizio= item.getIndizio(i);
-                broadcaster.broadcast(indizio);
-                try {
-                    Thread.sleep(5000);
-                }catch (InterruptedException e){
-                    //TODO: che ci metto qua??
-                }
-            }
-
-            try {
-                Thread.sleep(5000);
-            }catch (InterruptedException e){
-                //TODO: che ci metto qua??
-            }
-            broadcaster.stopSend();
-
-            //TODO: Cinzia tutto questo codice per vedere i massimi va controllato
-            //qui in realtà ho fatto come se ci potessero stare più massimi, ma  non lo so se va bene
-            parole.forEach((s, parolaVotata) -> {
-                if(parolaVotata.getNumeroVoti()>max){
-                    max=parolaVotata.getNumeroVoti();
-                }
-            });
-            ArrayList<ParolaVotata> massimi=new ArrayList();
-            parole.forEach((s, parolaVotata) -> {
-                if(parolaVotata.getNumeroVoti()==max){
-                    massimi.add(parolaVotata);
-                }
-            });
-            for (ParolaVotata parola: massimi){
-                if(parola.getParolaSuggerita().equals(item.getParola())){
-                    System.out.println("win");
-                    //broadcaster.allowJoin();
-                    broadcaster.comunicaEsito(true, item.getParola());
-                    return;
-                }
-            }
-
-            System.out.println("lose");
-            //TODO: in realtà sia qua che sopra l allow jion lo devo mettere a vero quando il tizio decide di fare una nuova partita
-            //alla fine l ho messo dentro al broadcaster dopo aver comunicato gli esiti ti fa fare il join di nuovo
-            //broadcaster.allowJoin();
-            broadcaster.comunicaEsito(false, item.getParola());
-        }).start();
-        */
     }
 
     //TODO: Tesò ma qua si deve gestire la syncro per incremento della parola?
@@ -196,30 +149,49 @@ public class GameController extends Controller {
 
     private class PartitaThread extends Thread{
         private ParolaVotata parolaVincente;
-
+        private Timer timer;
         @Override
         public void run() {
-            for(int i=0;i<4;i++){
-                String indizio= item.getIndizio(i);
-                broadcaster.broadcast(indizio);
+           /* int totTime=30;
+            int i=0;
+            for(;totTime>=0;totTime--){
+                    broadcaster.countDown(totTime);
+                if(totTime%5==0 &&totTime>=15 ){
+                    String indizio= item.getIndizio(i);
+                    broadcaster.broadcast(indizio);
+                    i++;
+                }
+               // totTime--;
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(1000);
                 }catch (InterruptedException e){
-                    //TODO:non è che mi faccia impazzire sta cosa eh
-                    terminaPartita();
+                    //terminaPartita();
                     return;
                 }
             }
-
-            try {
-                Thread.sleep(5000);
-            }catch (InterruptedException e){
-                //TODO: che ci metto qua??
-                terminaPartita();
-                return;
-            }
-
             terminaPartita();
+*/
+            timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                int totTime=30;
+                int i=0;
+                public void run() {
+                    System.out.println("time=" + totTime+ " i="+ i);
+                    broadcaster.countDown(totTime);
+                    if(totTime%5==0 &&totTime>=15 ){
+                        String indizio= item.getIndizio(i);
+                        broadcaster.broadcast(indizio);
+                        i++;
+                    }
+                    totTime--;
+                    if(totTime<0){
+                        timer.cancel();
+                        terminaPartita();
+                    }
+                }
+            }, 0, 1000);
+
+
             return;
         }
 
@@ -245,6 +217,10 @@ public class GameController extends Controller {
         }
         public void setParolaVincente(ParolaVotata parolaVincente) {
             this.parolaVincente = parolaVincente;
+        }
+
+        public void stopTimer(){
+            timer.cancel();
         }
     }
 

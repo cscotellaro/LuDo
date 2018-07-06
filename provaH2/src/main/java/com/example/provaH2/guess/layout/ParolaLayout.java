@@ -1,11 +1,9 @@
 package com.example.provaH2.guess.layout;
 
 import com.example.provaH2.guess.ParolaSuggerita;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.*;
 
-public class ParolaLayout extends HorizontalLayout {
+public class ParolaLayout extends VerticalLayout {
 
     private ParolaSuggerita parolaSuggerita;
     private Button plus;
@@ -17,30 +15,39 @@ public class ParolaLayout extends HorizontalLayout {
         super();
         this.parolaSuggerita=new ParolaSuggerita(parola);
         this.paroleSuggeriteLayout= paroleSuggeriteLayout;
+        this.addStyleName("parolaSuggLayoyt");
+        this.setWidth(100,Unit.PERCENTAGE);
 
+        HorizontalLayout voteLayout=new HorizontalLayout();
         plus= new Button("+1");
         parolaLabel= new Label(parolaSuggerita.getParola());
+        parolaLabel.setWidth(100,Unit.PERCENTAGE);
         numeroLabel= new Label(""+parolaSuggerita.getVoti());
         plus.addClickListener(clickEvent -> {
             paroleSuggeriteLayout.setParolaCorrentementeVotata(parola);
             plus.setEnabled(false);
 
         });
-        addComponents(parolaLabel, numeroLabel, plus);
+
+        voteLayout.addComponents(plus, numeroLabel);
+        voteLayout.setExpandRatio(numeroLabel,2f);
+        voteLayout.setComponentAlignment(numeroLabel, Alignment.MIDDLE_LEFT);
+        addComponents(parolaLabel, voteLayout);
+        this.setMargin(false);
     }
 
     public void incrementaVoto(){
-        removeComponent(numeroLabel);
+        numeroLabel.setEnabled(false);
         parolaSuggerita.incrementaVoto();
         numeroLabel.setValue(""+parolaSuggerita.getVoti());
-        addComponent(numeroLabel);
+        numeroLabel.setEnabled(true);
     }
 
     public void decrementaVoto(){
-        removeComponent(numeroLabel);
+        numeroLabel.setEnabled(false);
         parolaSuggerita.decrementaVoto();
         numeroLabel.setValue(""+parolaSuggerita.getVoti());
-        addComponent(numeroLabel);
+        numeroLabel.setEnabled(true);
     }
 
     public void allowVote(){

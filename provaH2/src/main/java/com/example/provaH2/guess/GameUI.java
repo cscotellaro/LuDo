@@ -137,4 +137,18 @@ public class GameUI extends PlayUI implements PuoSuggerire, GuessBroadcasterList
     }
 
 
+    @Override
+    public void countDown(int n) {
+        access(() -> {
+            if(partitaLayout!=null){
+                ((GuessPartitaLayout)partitaLayout).countDown(n);
+            }
+        });
+    }
+
+    @Override
+    public void fineDellaPartita(boolean haiVinto, Object parola) {
+        super.fineDellaPartita(haiVinto, parola);
+        access(() -> ((GuessPartitaLayout)partitaLayout).finePartita());
+    }
 }

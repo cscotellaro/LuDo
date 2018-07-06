@@ -137,6 +137,11 @@ public class PlayUI extends UI  implements BroadcastListener{
         return  account;
     }
 
+
+    public Embedded getGiocoImg() {
+        return broadcaster.getGameImg();
+    }
+
     //da vedere
     //TODO: qua ci sta da decidere come lo vogliamo gestire
     @Override
@@ -157,8 +162,6 @@ public class PlayUI extends UI  implements BroadcastListener{
     protected Broadcaster getBroadcaster(){
         return  broadcaster;
     }
-
-
 
     protected PartitaLayout getPartitaLayout(){
         return  partitaLayout;

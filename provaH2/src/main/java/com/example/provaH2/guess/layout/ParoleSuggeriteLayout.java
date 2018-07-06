@@ -2,9 +2,8 @@ package com.example.provaH2.guess.layout;
 
 import com.example.provaH2.guess.PuoSuggerire;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.HashMap;
 
@@ -15,11 +14,17 @@ public class ParoleSuggeriteLayout extends VerticalLayout implements PuoSettareL
     private Button suggerisci;
     private HashMap<String, ParolaLayout> parole;
     private String parolaCorrentementeVotata;
+    private VerticalLayout layoutParole;
 
     public ParoleSuggeriteLayout(PuoSuggerire puoSuggerire){
         super();
         this.puoSuggerire=puoSuggerire;
+        this.setHeight(100,Unit.PERCENTAGE);
+        this.setWidth(100,Unit.PERCENTAGE);
         parole= new HashMap<>();
+
+        HorizontalLayout barra= new HorizontalLayout();
+        barra.setWidth(100,Unit.PERCENTAGE);
         parolaField= new TextField();
         suggerisci= new Button("Suggerisci");
         suggerisci.addClickListener(clickEvent -> {
@@ -28,8 +33,22 @@ public class ParoleSuggeriteLayout extends VerticalLayout implements PuoSettareL
                 parolaField.clear();
             }
         });
+        parolaField.setWidth(100,Unit.PERCENTAGE);
+        barra.addComponents(parolaField,suggerisci);
+        barra.setExpandRatio(parolaField,2f);
         suggerisci.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        this.addComponents(parolaField,suggerisci);
+
+        Panel panel= new Panel();
+        panel.setWidth(100,Unit.PERCENTAGE);
+        panel.setHeight(100, Unit.PERCENTAGE);
+        panel.addStyleName(ValoTheme.PANEL_BORDERLESS);
+        layoutParole= new VerticalLayout();
+        layoutParole.setWidth(100, Unit.PERCENTAGE);
+        layoutParole.setMargin(false);
+        panel.setContent(layoutParole);
+
+        this.addComponents(barra, panel);
+        this.setExpandRatio(panel, 2f);
     }
 
     //questo metodo mi sa che serve se vuoi fare che rigiochi di nnuovo
@@ -53,7 +72,7 @@ public class ParoleSuggeriteLayout extends VerticalLayout implements PuoSettareL
 
     public void aggiungiParola(String parola){
         ParolaLayout parolaLayout= new ParolaLayout(parola, this);
-        this.addComponent(parolaLayout);
+        layoutParole.addComponent(parolaLayout);
         parole.put(parola, parolaLayout);
     }
 
@@ -69,5 +88,9 @@ public class ParoleSuggeriteLayout extends VerticalLayout implements PuoSettareL
         if(parolaLayout!=null){
             parolaLayout.decrementaVoto();
         }
+    }
+
+    public void disattivaBottone(){
+        suggerisci.setEnabled(false);
     }
 }

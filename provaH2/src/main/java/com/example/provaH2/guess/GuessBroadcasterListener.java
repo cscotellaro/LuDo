@@ -9,4 +9,5 @@ public interface GuessBroadcasterListener {
     void onUnvoteParola(String parola);
     void reciveChatMessage(String name, String message);
     void parolaGiaSuggerita();
+    void countDown(int n);
 }

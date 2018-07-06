@@ -8,8 +8,9 @@ import com.vaadin.ui.themes.ValoTheme;
 import java.util.HashMap;
 
 public class ChatLayout extends VerticalLayout {
-    HashMap<String, Embedded> playerImages;
-    VerticalLayout layoutMessaggi;
+    private HashMap<String, Embedded> playerImages;
+    private VerticalLayout layoutMessaggi;
+    private Panel panel;
 
     public ChatLayout(PuoSuggerire puoSuggerire, HashMap<String, Embedded> playerImg){
         playerImages=playerImg;
@@ -24,17 +25,21 @@ public class ChatLayout extends VerticalLayout {
             }
         });
         HorizontalLayout sendBar= new HorizontalLayout();
+        sendBar.setWidth(100, Unit.PERCENTAGE);
+        chatField.setWidth(100,Unit.PERCENTAGE);
         sendBar.addComponents(chatField,send);
-        //setComponentAlignment(sendBar, Alignment.BOTTOM_CENTER);
+        sendBar.setExpandRatio(chatField, 2f);
 
         layoutMessaggi= new VerticalLayout();
-        layoutMessaggi.setWidth(200,Unit.PIXELS);
+        layoutMessaggi.setWidth(100,Unit.PERCENTAGE);
+        //layoutMessaggi.addComponent(new Label("label di prova per veder se sta cosa funziona"));
         //layoutMessaggi.setHeight(100, Unit.PERCENTAGE);
-        Panel panel= new Panel();
+        panel= new Panel();
 
         panel.setHeight(100, Unit.PERCENTAGE);
-        panel.setWidth(200,Unit.POINTS);
+        panel.setWidth(100,Unit.PERCENTAGE);
         panel.setContent(layoutMessaggi);
+        panel.setScrollTop(Integer.MAX_VALUE);
 
         //panel.addStyleName("panelChat");
         this.addComponents(panel,sendBar);
@@ -42,6 +47,7 @@ public class ChatLayout extends VerticalLayout {
 
        // this.addComponents(layoutMessaggi,sendBar);
         this.setHeight(100,Unit.PERCENTAGE);
+        this.setWidth(100, Unit.PERCENTAGE);
         this.setMargin(false);
 
      /*   playerImg.forEach((s, embedded) -> {
@@ -56,11 +62,40 @@ public class ChatLayout extends VerticalLayout {
 
     public void riceviMessaggio(String name, String message){
        // layoutMessaggi.addComponent((Embedded)playerImages.get(name));
-        layoutMessaggi.addComponent(new Label("[" + name+ "]: " + message));
-        HorizontalLayout horizontalLayout= new HorizontalLayout();
+
+        HorizontalLayout messageLayout=new HorizontalLayout();
+        messageLayout.setWidth(100, Unit.PERCENTAGE);
+        Image image= new Image(null,playerImages.get(name).getSource());
+        image.setWidth(25, Unit.POINTS);
+        image.setHeight(25,Unit.POINTS);
+        image.addStyleName("pallinoChat");
+
+        VerticalLayout baloon= new VerticalLayout();
+        baloon.addStyleName("baloonChat");
+        baloon.setMargin(false);
+        baloon.setSpacing(false);
+        baloon.setWidth(100, Unit.PERCENTAGE);
+        Label nameLabel= new Label(name);
+        nameLabel.addStyleName("nameLabelChat");
+        Label messageLabel= new Label(message);
+        messageLabel.setWidth(100, Unit.PERCENTAGE);
+        baloon.addComponents(nameLabel, messageLabel);
+        baloon.setExpandRatio(messageLabel,2f);
+
+        messageLayout.addComponents(image, baloon);
+        messageLayout.setComponentAlignment(image, Alignment.BOTTOM_LEFT);
+        messageLayout.setExpandRatio(baloon, 2f);
+
+        layoutMessaggi.addComponent(messageLayout);
+        panel.setScrollTop(Integer.MAX_VALUE);
+       /* Label chat=new Label("[" + name+ "]: " + message);
+        chat.setWidth(100,Unit.PERCENTAGE);
+        layoutMessaggi.addComponent(chat);
+        /*HorizontalLayout horizontalLayout= new HorizontalLayout();
         horizontalLayout.setWidth(100,Unit.PERCENTAGE);
         horizontalLayout.addComponent(new Label(message));
         layoutMessaggi.addComponent(horizontalLayout);
+        */
     }
 
 }
