@@ -70,7 +70,7 @@ public class Account {
     @Override
     public String toString() {
         return "Account{" +
-              //  "id='" + id + '\'' +
+                "id='" + id + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +

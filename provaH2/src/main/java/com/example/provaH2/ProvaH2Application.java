@@ -88,6 +88,7 @@ public class ProvaH2Application {
 
 			Partita partita= new Partita(new Timestamp(new Date().getTime()), "unGioco");
 			partita.addPunteggio(new Punteggio(cinzia,10));
+			partita.addPunteggio(new Punteggio(luigi,18));
 			repositoryP.save(partita);
 			//repositoryP.findAll().forEach(System.out::println);
 
@@ -97,15 +98,38 @@ public class ProvaH2Application {
 
 			Partita partita1= new Partita(new Timestamp(new Date().getTime()), "unGioco");
 			partita1.addPunteggio(new Punteggio(cinzia,120));
+			partita1.addPunteggio(new Punteggio(luigi,40));
 			repositoryP.save(partita1);
 
-			Partita partita2= new Partita(new Timestamp(new Date().getTime()),"Guess");
+			Partita partita2= new Partita(Timestamp.valueOf("2018-05-03 11:20:09"),"Guess");
 			partita2.addPunteggio(new Punteggio(luigi,10));
 			partita2.addPunteggio(new Punteggio(cinzia,100));
 			repositoryP.save(partita2);
+			Partita partita4= new Partita(Timestamp.valueOf("2018-03-21 16:20:09"),"Guess");
+			partita4.addPunteggio(new Punteggio(luigi,40));
+			partita4.addPunteggio(new Punteggio(cinzia,10));
+			repositoryP.save(partita4);
+			Partita partita5= new Partita(Timestamp.valueOf("2018-01-04 22:17:02"),"Guess");
+			partita5.addPunteggio(new Punteggio(luigi,20));
+			partita5.addPunteggio(new Punteggio(cinzia,70));
+			repositoryP.save(partita5);
+			Partita partita6= new Partita(Timestamp.valueOf("2018-05-04 11:20:09"),"Guess");
+			partita6.addPunteggio(new Punteggio(luigi,10));
+			partita6.addPunteggio(new Punteggio(cinzia,100));
+			repositoryP.save(partita6);
+			Partita partita7= new Partita(Timestamp.valueOf("2018-02-21 16:20:09"),"Guess");
+			partita7.addPunteggio(new Punteggio(luigi,40));
+			partita7.addPunteggio(new Punteggio(cinzia,10));
+			repositoryP.save(partita7);
+			Partita partita8= new Partita(Timestamp.valueOf("2018-07-04 12:17:02"),"Guess");
+			partita8.addPunteggio(new Punteggio(luigi,20));
+			partita8.addPunteggio(new Punteggio(cinzia,70));
+			repositoryP.save(partita8);
+
 
 			Partita partita3= new Partita(new Timestamp(new Date().getTime()), "unGioco");
 			partita3.addPunteggio(new Punteggio(cinzia,20));
+			partita3.addPunteggio(new Punteggio(luigi,20));
 			repositoryP.save(partita3);
 
 			Partita speriamo= repositoryP.lastPartita(cinzia);

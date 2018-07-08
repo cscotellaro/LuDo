@@ -1,6 +1,7 @@
 package com.example.provaH2.gestioneGioco;
 
 import com.example.provaH2.entity.Account;
+import com.example.provaH2.entity.Punteggio;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.Embedded;
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 //import org.apache.tomcat.jni.Thread;
@@ -163,9 +165,14 @@ public class Broadcaster implements Serializable{
 
     public void fineDellaPartita(boolean haiVinto, Object parola){
         gameController.savePartita();
+        List<Punteggio> punteggi= gameController.partita.getArray();
+        punteggi.sort((punteggio, t1) -> {
+            return t1.getPunti() - punteggio.getPunti();
+        });
+        System.out.println(listeners.size());
         listeners.forEach((aLong, broadcastListener) -> {
             executorService.execute(()-> {
-                broadcastListener.fineDellaPartita(haiVinto, parola);
+                broadcastListener.fineDellaPartita(haiVinto, gameController.partita.getArray(), parola);
             });
         });
         /*for (final BroadcastListener listener: listeners) {

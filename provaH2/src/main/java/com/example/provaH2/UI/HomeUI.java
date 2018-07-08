@@ -2,20 +2,22 @@ package com.example.provaH2.UI;
 
 import com.example.provaH2.UI.Layout.LoginLayout;
 import com.example.provaH2.UI.Layout.RegistrazioneLayout;
-import com.example.provaH2.entity.Account;
 import com.example.provaH2.repository.AccountRepository;
-import com.vaadin.addon.charts.Chart;
-import com.vaadin.annotations.Theme;
+//import com.vaadin.addon.charts.Chart;
+//import com.googlecode.gwt.charts.client.corechart.PieChart;
+//import com.googlecode.gwt.charts.client.options.Bar;
+//import com.vaadin.annotations.JavaScript;
 import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
-import com.vaadin.ui.dnd.FileDropTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.leif.headertags.Viewport;
 
 @SpringUI(path = "/")
 //@Theme("hometheme")
+
 @Viewport("width=device-width, initial-scale=1")
+@com.vaadin.annotations.JavaScript({ "https://www.gstatic.com/charts/loader.js", "BarChart.js" })
 public class HomeUI extends UI {
 
     @Autowired
@@ -55,17 +57,82 @@ public class HomeUI extends UI {
         mainlayout.addComponent(login);
         mainlayout.setComponentAlignment(login, Alignment.TOP_RIGHT);
 
+     /*   BarChart chart= new BarChart("mio titolo", "mimo sottotitolo");
+        ArrayList<String> headers= new ArrayList<>();
+        headers.add("head1");
+        headers.add("head2");
+        headers.add("head3");
+        chart.addHeaders(headers);
+        ArrayList<String> values= new ArrayList<>();
+        values.add("2000");
+        values.add("2003");values.add("2022");values.add("2002");
+        chart.addValues(values);
+        mainlayout.addComponent(chart);
+        chart.drawChart();
+        */
 
-       /* Image image= new Image();
+        VerticalLayout layoutprova= new VerticalLayout();
+        layoutprova.setId("PROVAID");
+        mainlayout.addComponent(layoutprova);
+
+          /* Image image= new Image();
         image.setIcon(new ClassResource("/profilo.jpg"));
       //  System.out.println(ClassResource.CONNECTOR_PATH);
         mainlayout.addComponent(image);
 */
       //  provaDrop();
 
-        Chart chart = new Chart();
-        mainlayout.addComponent(chart);
 
+      /*  Chart chart = new Chart();
+        mainlayout.addComponent(chart);
+*/
+/*        String hcjs = "var chart = new Highcharts.Chart({" +
+                "chart: { renderTo: 'container' }," +
+                "xAxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] }," +
+                "series: [{" +
+                "type: 'line', data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4], name: 'Temperature' }, {" +
+                "type: 'column', data: [194.1, 95.6, 54.4, 29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4], name: 'Rainfall' }]" +
+                "});";
+
+        HighCharts hc =new HighCharts("container");
+        hc.drawChart(hcjs);
+        mainlayout.addComponent(hc);
+*/
+
+
+/*        DataSeries dataSeries = new DataSeries()
+                .add(2, 6, 7, 10);
+
+        SeriesDefaults seriesDefaults = new SeriesDefaults()
+                .setRenderer(SeriesRenderers.BAR);
+
+        Axes axes = new Axes()
+                .addAxis(
+                        new XYaxis()
+                                .setRenderer(AxisRenderers.CATEGORY)
+                                .setTicks(
+                                        new Ticks()
+                                                .add("a", "b", "c", "d")));
+
+        Highlighter highlighter = new Highlighter()
+                .setShow(false);
+
+        Options options = new Options()
+                .setSeriesDefaults(seriesDefaults)
+                .setAxes(axes)
+                .setHighlighter(highlighter);
+
+        DCharts chart = new DCharts()
+                .setDataSeries(dataSeries)
+                .setOptions(options)
+                .show();
+
+        mainlayout.addComponent(chart);
+*/
+
+
+        mainlayout.setId("myId");
+      //  com.vaadin.terminal.PaintTarget pt;
         setContent(mainlayout);
     }
 
@@ -88,6 +155,7 @@ public class HomeUI extends UI {
         window.setContent(tabSheet);
 
         window.center();
+        window.setModal(true);
         return window;
     }
 /*

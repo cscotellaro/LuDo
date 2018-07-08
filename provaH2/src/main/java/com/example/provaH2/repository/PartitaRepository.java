@@ -2,6 +2,7 @@ package com.example.provaH2.repository;
 
 import com.example.provaH2.entity.Account;
 import com.example.provaH2.entity.Partita;
+import com.example.provaH2.entity.Punteggio;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,4 +22,14 @@ public interface PartitaRepository extends JpaRepository<Partita, Long> {
 
     @Query("SELECT p FROM Partita p JOIN p.array pa WHERE pa.account = ?1 AND p.timestamp= (SELECT max(p1.timestamp) FROM Partita p1 JOIN p1.array pa1 WHERE pa1.account = ?1)")
     Partita lastPartita(Account a);
+
+    @Query("SELECT p FROM Partita p JOIN p.array pa WHERE pa.account = ?1 AND p.gioco=?2 ORDER BY p.timestamp ASC")
+    List<Partita> cercaPerAccountEGioco(Account a, String gioco);
+
+     @Query("SELECT p FROM Partita p JOIN p.array pa WHERE pa.account = ?1 ")
+    List<Partita> cercaByAccount(Account account);
+
+    @Query("SELECT p FROM Partita p JOIN p.array pa WHERE pa.account = ?1 AND p.gioco=?2")
+    List<Partita> cercaByGioco(Account account, String gioco);
+
 }

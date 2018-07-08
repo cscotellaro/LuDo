@@ -2,19 +2,24 @@ package com.example.provaH2.UI;
 
 import com.example.provaH2.UI.Layout.WaitingForPlayers;
 import com.example.provaH2.entity.Account;
+import com.example.provaH2.entity.Punteggio;
 import com.example.provaH2.gestioneGioco.BroadcastListener;
 import com.example.provaH2.gestioneGioco.Broadcaster;
+import com.example.provaH2.gestioneGioco.Controller;
 import com.example.provaH2.gestioneGioco.PartitaLayout;
 import com.example.provaH2.guess.BroadcasterGuess;
+import com.example.provaH2.guess.GameController;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class PlayUI extends UI  implements BroadcastListener{
+public abstract class PlayUI extends UI  implements BroadcastListener{
     public static final String BASE_PATH="private/";
 
     private Embedded img;
@@ -22,7 +27,10 @@ public class PlayUI extends UI  implements BroadcastListener{
     private Broadcaster broadcaster;
     private WaitingForPlayers waitingForPlayers;
     protected PartitaLayout partitaLayout;
+    protected  HashMap<String, Embedded> immaginiPlayer;
     private Class<?extends PartitaLayout> partitaClass;
+    private String cod;
+    private Controller controller;
     //DONE: quando spossti i metodi rimetti qua boradcaster
     /*farei un metodo get Broadcaster perchè la sottoclasse se vuole il broadcaster se lo piglia
      * */
@@ -31,6 +39,9 @@ public class PlayUI extends UI  implements BroadcastListener{
         VerticalLayout mainlayout= new VerticalLayout();
         account=(Account) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("account");
         img=(Embedded) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountImg");
+        cod=VaadinService.getCurrentRequest().getParameter("cod");
+        controller= (Controller) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("controllerGame"+cod);
+
         waitingForPlayers= new WaitingForPlayers(/*this*/);
         //  waitingForPlayers.inizializza();
 
@@ -87,6 +98,7 @@ public class PlayUI extends UI  implements BroadcastListener{
         System.out.println("game started chiamato " + this);
         //partitaLayout=new PartitaLayout(this, broadcaster.getNumerOfPlayer());
        // partitaLayout=instanziatePartitaLayout();
+        immaginiPlayer=playersImg;
         try {
             partitaLayout = partitaClass.getConstructor(PlayUI.class, Integer.class, HashMap.class).newInstance(this, numPlayers, playersImg);
             access(() -> {
@@ -116,16 +128,18 @@ public class PlayUI extends UI  implements BroadcastListener{
 
     //TODO: cambia questo fatto della notifica ti prego
     @Override
-    public void fineDellaPartita(boolean haiVinto, Object parola) {
+    public abstract void fineDellaPartita(boolean haiVinto, List<Punteggio> punteggi, Object parola); /*{
         System.out.println("heartbeat :" + getLastHeartbeatTimestamp());
         access(() -> {
+            //partitaLayout.finePartita(haiVinto,punteggi,parola);
             if(haiVinto){
                 Notification.show("YOU WIN: "+ parola);
             }else{
                 Notification.show("YOU LOOSE: "+ parola);
-            }
+
+
         });
-    }
+    }*/
 
     @Override
     public Embedded getProfileImage(){
@@ -167,6 +181,26 @@ public class PlayUI extends UI  implements BroadcastListener{
         return  partitaLayout;
     }
 
+    protected HashMap<String, Embedded> getImmaginiPlayer(){
+        return immaginiPlayer;
+    }
 
+    protected  boolean areYouHost(){
+       // Controller controller= (Controller) VaadinSession.getCurrent().getAttribute("controllerGame"+cod);
+        System.out.println("controller "  + controller);
+        if(controller!=null && controller.getBroadcaster().getId().equals(broadcaster.getId())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    protected void restartGame(){
+      //  Controller controller= (Controller) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("controllerGame"+cod);
+
+        if(controller!=null && controller.getBroadcaster().getId().equals(broadcaster.getId())){
+           controller.rigioca();
+        }
+    }
     //public abstract PartitaLayout instanziatePartitaLayout();
 }

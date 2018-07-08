@@ -1,56 +1,35 @@
 package com.example.provaH2.UI;
 
-import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.navigator.Navigator;
+import com.vaadin.annotations.Theme;
 import com.vaadin.server.*;
+import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.annotation.WebServlet;
-
-//@Push
-//@SpringUI(path = "/errorrrrrrrrrrrrr")
+@Theme("hometheme")
+@SpringUI(path = "/error404")
 public class ErrorUI extends UI {
 
-    @Autowired
-    private SpringViewProvider viewProvider;
-
-    /*@Autowired
-    StatisticheView errorView;
-*/
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        System.out.println("i m a error page");
-        try {
-            ((VaadinServletResponse) VaadinService.getCurrentResponse()).getHttpServletResponse().sendRedirect("http://www.google.com");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        Page.getCurrent().open("http://www.google.com", "_self", true);
-        VerticalLayout verticalLayout= new VerticalLayout();
-        Navigator nav = new Navigator(UI.getCurrent(),verticalLayout);
-        nav.addProvider(viewProvider);
-       // nav.setErrorView(errorView);
-        nav.navigateTo("customers");
-        setContent(verticalLayout);
-        /*Page.getCurrent().setLocation("/Login");
-  //      access(() -> {
-        //    System.out.println("iiiiiiiiiiiiiiiiiiiiii");
-            VerticalLayout verticalLayout= new VerticalLayout();
-            verticalLayout.addComponent(new Label("error page"));
-            setContent(verticalLayout);
-      //  });
-*/
+        VerticalLayout main=new VerticalLayout();
+        main.setHeight(100, Unit.PERCENTAGE);
+        main.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+        //setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+        Label error= new Label("Ooooooooops");
+        error.addStyleName("Ops");
+        Label notFound= new Label("404 Page not found");
+        notFound.addStyleName("notFound");
+        Button goHome= new Button("Home");
+        goHome.addClickListener(clickEvent -> {
+            Page.getCurrent().setLocation("/private/home");
+        });
+        goHome.addStyleName("Home");
+        VerticalLayout middle= new VerticalLayout();
+        middle.addComponents(error,notFound,goHome);
+        main.addComponent(middle);
+        setContent(main);
     }
-
-
-
-    @WebServlet(urlPatterns = "/errore/*", name = "ErrorUIServlet", asyncSupported = true)
-    @VaadinServletConfiguration(ui = ErrorUI.class, productionMode = true)
-    public static class ErrorUIServlet extends VaadinServlet {
-    }
-
 
 }

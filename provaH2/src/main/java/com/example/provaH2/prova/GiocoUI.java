@@ -1,6 +1,7 @@
 package com.example.provaH2.prova;
 
 import com.example.provaH2.entity.Account;
+import com.example.provaH2.entity.Punteggio;
 import com.example.provaH2.gestioneGioco.PartitaLayout;
 import com.example.provaH2.guess.layout.ParoleSuggeriteLayout;
 import com.example.provaH2.gestioneGioco.BroadcastListener;
@@ -17,6 +18,7 @@ import org.vaadin.leif.headertags.Viewport;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Push
 @Viewport("width=device-width, initial-scale=1")
@@ -186,7 +188,12 @@ public class GiocoUI extends UI  implements BroadcastListener {
         });
     }
 
-   // @Override
+    @Override
+    public void fineDellaPartita(boolean haiVinto, List<Punteggio> punteggi, Object parola) {
+
+    }
+
+    // @Override
     public void gameStarted(Class<? extends PartitaLayout> classe, int n,HashMap<String , Embedded> acc){
         try{
             getSession().getSession().setMaxInactiveInterval(10);

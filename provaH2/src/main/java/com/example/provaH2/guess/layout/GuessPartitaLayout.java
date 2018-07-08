@@ -1,12 +1,14 @@
 package com.example.provaH2.guess.layout;
 
 import com.example.provaH2.UI.PlayUI;
+import com.example.provaH2.entity.Punteggio;
 import com.example.provaH2.gestioneGioco.PartitaLayout;
 import com.example.provaH2.guess.PuoSuggerire;
 import com.vaadin.ui.*;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
+import java.util.List;
 
 public class GuessPartitaLayout extends VerticalLayout implements PartitaLayout{
 
@@ -180,7 +182,11 @@ public class GuessPartitaLayout extends VerticalLayout implements PartitaLayout{
         secondi.setEnabled(true);
     }
 
-    public void finePartita(){
+    public void finePartita(/*boolean haiVinto, List<Punteggio> punteggi, Object parola*/){
         layoutParole.disattivaBottone();
+/*        Window window= new Window();
+        window.center();
+        window.setModal(true);
+  */
     }
 }

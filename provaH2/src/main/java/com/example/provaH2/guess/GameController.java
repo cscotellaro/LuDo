@@ -131,7 +131,8 @@ public class GameController extends Controller {
         });
         if(parolaVincente!=null){
             partitaThread.setParolaVincente(parolaVincente);
-            partitaThread.interrupt();
+            partitaThread.stopTimer();
+            partitaThread.terminaPartita();
         }
     }
 
@@ -176,7 +177,7 @@ public class GameController extends Controller {
                 int totTime=30;
                 int i=0;
                 public void run() {
-                    System.out.println("time=" + totTime+ " i="+ i);
+                   // System.out.println("time=" + totTime+ " i="+ i);
                     broadcaster.countDown(totTime);
                     if(totTime%5==0 &&totTime>=15 ){
                         String indizio= item.getIndizio(i);
@@ -195,7 +196,7 @@ public class GameController extends Controller {
             return;
         }
 
-        private void terminaPartita(){
+        public void terminaPartita(){
             broadcaster.stopSend();
             assegnaPunteggi();
             if(parolaVincente!=null && parolaVincente.getParolaSuggerita().equals(item.getParola())){

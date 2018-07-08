@@ -66,6 +66,11 @@ public abstract  class Controller {
         startGame();
     }
 
+    public void rigioca(){
+        giocaAncora();
+        hostGame();
+    }
+
     //TODO: o public?
     protected void addPunteggio(Punteggio punteggio){
         partita.addPunteggio(punteggio);

@@ -72,9 +72,41 @@ $v-included-components: remove($v-included-components, button);
     background-color: #dbd6d6;
     margin: 10pt;
   }
+
+  .v-csslayout{
+    text-align: center;
+  }
+
+  .v-cssLayout div{
+    text-align: left;
+  }
 /******************************settings***************************/
   .SettingsMainLayout{
     padding-left: 30pt !important;
+  }
+
+
+/*****************************statistiche*************************/
+  .SettingsVL{
+    padding-left: 30pt !important;
+  }
+
+  .statisticheLayout{
+      padding-top: 0px;
+  }
+
+  .buttonGameName{
+    text-align: left;
+    padding: 0px;
+  }
+/***************************error page***************************/
+  .Ops{
+    font-size: 2.5em;
+  }
+
+  .notFound{
+    font-size: 1.4em;
+    margin-top: -13pt;
   }
   // Insert your own theme rules here
 }

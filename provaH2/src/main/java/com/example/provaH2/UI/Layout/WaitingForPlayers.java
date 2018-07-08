@@ -151,7 +151,7 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
         layoutDestro.setHeight("100%");
         layoutDestro.setExpandRatio(panelNomi, 2f);
 
-        controller= (GameController) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("controllerGame"+cod);
+        controller= (Controller) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("controllerGame"+cod);
         //questo if è solo per la stampa lo puoi pure levare proprio
         if(controller!=null){
             Account account2=(Account) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("account");
@@ -172,6 +172,7 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
             link.setReadOnly(true);
             link.selectAll();
             formLayout.addComponent(link);
+
 
 /*            Button marco= new Button("copy");
            // final CopyToClipboardButton cp= new CopyToClipboardButton();

@@ -34,6 +34,7 @@ public class PrivateUI extends UI{
     protected void init(VaadinRequest vaadinRequest) {
 
         VerticalLayout layout=new VerticalLayout();
+        layout.setSpacing(false);
 
         MenuBar menu= new MenuBar();
         menu.setHeight(3,Unit.EM);

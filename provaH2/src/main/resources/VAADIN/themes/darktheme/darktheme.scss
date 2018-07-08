@@ -152,5 +152,25 @@ $v-included-components: remove($v-included-components, button);
     width: 90pt;
     height: 40pt;
   }
+
+  /*************************window vittoria**************/
+  .parolaDaIndovinare{
+    font-size: 1.4em;
+  }
+
+/*  .v-window-translucent{
+    background-color: rgba(255,255,255,0.1) !important;
+  }
+*/
+  div.v-window-translucent .v-window-contents {
+  //  background: rgba(255,255,255,0.5);
+  background-color: #fafafa
+  }
+
+  .HLPalyerPoints{
+    background: rgba(210,210,210,0.7);
+    padding: 5px;
+    border-radius: 10px;
+  }
   // Insert your own theme rules here
 }

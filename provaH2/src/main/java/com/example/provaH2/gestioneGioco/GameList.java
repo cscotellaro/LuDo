@@ -34,4 +34,13 @@ public class GameList {
     public List<Game> getGameList(){
         return list;
     }
+
+    public List<String> getGameNames(){
+        ArrayList<String> gameNames=new ArrayList<>();
+        for (Game g: list) {
+            gameNames.add(g.getNomeGioco());
+        }
+        gameNames.sort(String::compareTo);
+        return  gameNames;
+    }
 }
