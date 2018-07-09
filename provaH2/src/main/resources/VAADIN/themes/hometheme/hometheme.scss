@@ -31,18 +31,30 @@
 
 //$v-focus-style: none;
 
+//@import "../material/material.scss";
 @import "../valo/valo.scss";
 
 $v-included-components: remove($v-included-components, button);
 
 @mixin hometheme {
   @include valo;
+  //@include material;
 
   //$v-shadow:  0 10px 10px v-shade;
   $v-background-color: #8fe5e8;
   //$v-background-color: grey;
   $v-font-size:2em;
   @include valo-button();
+/*********************home pubblica************************/
+  .logo{
+    width: 70pt;
+    height: 70pt;
+    border-radius: 80px;
+  }
+
+  .pcImg{
+    max-width: 100%;
+  }
 
 /********************su tutta la privateUI*****************/
   .menuBarTitolo{

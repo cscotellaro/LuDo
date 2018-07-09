@@ -13,23 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**deve tenere per forza
- *  get id
- *  getBRoad
- *  gioca ancora
- *  start game
- *
- *  count user
- * */
-
 @Component
 @VaadinSessionScope
-//@Scope("prototype")
 @Lazy
 public class GameController extends Controller {
 
@@ -42,9 +30,10 @@ public class GameController extends Controller {
     private PartitaThread partitaThread;
     private  int numUser;
     private  ArrayList<Account> accounts;
-    // private Long accountId;
-    //private String id;
-    //private int max;
+    private int i;
+    private int totTime;
+    //accountId, Punti
+    private HashMap<Long, Integer> hashMapPunti;
 
     public GameController(PartitaRepository partitaRepository){
         super(partitaRepository);
@@ -56,13 +45,11 @@ public class GameController extends Controller {
     @Override
     public void giocaAncora(){
         int tot= repositoryI.numeroRighe();
-        //Random random= new Random();
         int rand=random.nextInt(tot)+1;
         System.out.println("su " + tot + " è stato scelto "+ rand);
         item =repositoryI.findOneById(rand);
-    //    max=0;
         parole=new ConcurrentHashMap<>();
-
+        hashMapPunti=new HashMap<>();
     }
 
     @Override
@@ -100,7 +87,10 @@ public class GameController extends Controller {
             if(!parole.containsKey(parola)){
                 return;
             }else{
-                parole.get(parola).addVoto(accountId);
+                parole.get(parola).addVoto(/*accountId*/);
+                if(parola.equals(item.getParola())){
+                   hashMapPunti.put(accountId, (4-i)*10+totTime);
+                }
                 cercaParolaVotataDaTutti(numUser);
             }
         }catch (NullPointerException e){
@@ -113,7 +103,8 @@ public class GameController extends Controller {
             if(!parole.containsKey(parola)){
                 return;
             }else {
-                parole.get(parola).removeVoto(accountId);
+                parole.get(parola).removeVoto(/*accountId*/);
+                hashMapPunti.put(accountId, 0);
             }
         }catch (NullPointerException e){
             return;
@@ -124,6 +115,7 @@ public class GameController extends Controller {
     private void cercaParolaVotataDaTutti(int numUtenti){
         ParolaVotata parolaVincente = parole.search(1, (s, parolaVotata) -> {
             if(parolaVotata.getNumeroVoti()==numUtenti){
+                //System.out.println("LA PAROLA È VOTATA DA TUTTI");
                 return parolaVotata;
             }else{
                 return null;
@@ -131,6 +123,11 @@ public class GameController extends Controller {
         });
         if(parolaVincente!=null){
             partitaThread.setParolaVincente(parolaVincente);
+            if(parolaVincente.getParolaSuggerita().equals(item.getParola())) {
+                int n = hashMapPunti.get(parolaVincente.getChiHaSuggerito());
+                hashMapPunti.put(parolaVincente.getChiHaSuggerito(), n + 50);
+            }
+            //System.out.println("chiamo stop timer");
             partitaThread.stopTimer();
             partitaThread.terminaPartita();
         }
@@ -151,71 +148,63 @@ public class GameController extends Controller {
     private class PartitaThread extends Thread{
         private ParolaVotata parolaVincente;
         private Timer timer;
+
         @Override
         public void run() {
-           /* int totTime=30;
-            int i=0;
-            for(;totTime>=0;totTime--){
-                    broadcaster.countDown(totTime);
-                if(totTime%5==0 &&totTime>=15 ){
-                    String indizio= item.getIndizio(i);
-                    broadcaster.broadcast(indizio);
-                    i++;
-                }
-               // totTime--;
-                try {
-                    Thread.sleep(1000);
-                }catch (InterruptedException e){
-                    //terminaPartita();
-                    return;
-                }
-            }
-            terminaPartita();
-*/
             timer = new Timer();
+            i=0;
+            String indizio = item.getIndizio(i);
+            broadcaster.broadcast(indizio);
+            i++;
+            totTime = 5;
             timer.scheduleAtFixedRate(new TimerTask() {
-                int totTime=30;
-                int i=0;
                 public void run() {
-                   // System.out.println("time=" + totTime+ " i="+ i);
+                    // System.out.println("time=" + totTime+ " i="+ i);
                     broadcaster.countDown(totTime);
-                    if(totTime%5==0 &&totTime>=15 ){
-                        String indizio= item.getIndizio(i);
+                    if (totTime == 0 &&i<3) {
+                       // System.out.println("nell'if "+ i +"  time: "+ totTime);
+                        String indizio = item.getIndizio(i);
                         broadcaster.broadcast(indizio);
+                        totTime=6;
+                        i++;
+                    }else if(i==3 && totTime==0){
+                        //System.out.println("else "+ totTime);
+                        String indizio = item.getIndizio(i);
+                        broadcaster.broadcast(indizio);
+                        totTime=11;
                         i++;
                     }
                     totTime--;
-                    if(totTime<0){
+                    if (totTime < 0) {
                         timer.cancel();
                         terminaPartita();
                     }
                 }
             }, 0, 1000);
 
-
             return;
         }
 
         public void terminaPartita(){
             broadcaster.stopSend();
-            assegnaPunteggi();
+            //assegnaPunteggi();
             if(parolaVincente!=null && parolaVincente.getParolaSuggerita().equals(item.getParola())){
                 //broadcaster.allowJoin();
+                for (Account a: accounts) {
+                    addPunteggio(new Punteggio(a,hashMapPunti.get(a.getId())));
+                }
                 broadcaster.fineDellaPartita(true, item.getParola());
                 return;
             }else{
                 //broadcaster.allowJoin();
+                for (Account a: accounts) {
+                    addPunteggio(new Punteggio(a,0));
+                }
                 broadcaster.fineDellaPartita(false, item.getParola());
                 return;
             }
         }
 
-        //TODO: decidere come assegnamo i punteggi
-        private void assegnaPunteggi(){
-            for (Account a: accounts) {
-                addPunteggio(new Punteggio(a,10));
-            }
-        }
         public void setParolaVincente(ParolaVotata parolaVincente) {
             this.parolaVincente = parolaVincente;
         }

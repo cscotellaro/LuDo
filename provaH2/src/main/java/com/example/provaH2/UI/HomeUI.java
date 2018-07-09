@@ -3,18 +3,22 @@ package com.example.provaH2.UI;
 import com.example.provaH2.UI.Layout.LoginLayout;
 import com.example.provaH2.UI.Layout.RegistrazioneLayout;
 import com.example.provaH2.repository.AccountRepository;
-//import com.vaadin.addon.charts.Chart;
-//import com.googlecode.gwt.charts.client.corechart.PieChart;
-//import com.googlecode.gwt.charts.client.options.Bar;
-//import com.vaadin.annotations.JavaScript;
+import com.vaadin.annotations.Theme;
 import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.leif.headertags.Viewport;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @SpringUI(path = "/")
-//@Theme("hometheme")
+@Theme("hometheme")
 
 @Viewport("width=device-width, initial-scale=1")
 @com.vaadin.annotations.JavaScript({ "https://www.gstatic.com/charts/loader.js", "BarChart.js" })
@@ -22,13 +26,16 @@ public class HomeUI extends UI {
 
     @Autowired
     private AccountRepository repositoryA;
-    private HorizontalLayout mainlayout= new HorizontalLayout();
+    private VerticalLayout mainlayout;
     private String cod;
     private String uri;
     private String confermaReg=null;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+        mainlayout= new VerticalLayout();
+        mainlayout.setMargin(true);
+        mainlayout.setSizeFull();
 
         String loginParam = vaadinRequest.getParameter("login");
         cod=vaadinRequest.getParameter("cod");
@@ -41,6 +48,15 @@ public class HomeUI extends UI {
         if(confermaReg!=null){
             addWindow(creaWindow(1));
         }
+        Embedded logoEmb= loadImg("src/main/resources/logo.png", "image/png");
+        Image logo= new Image(null, logoEmb.getSource());
+        logo.addStyleName("logo");
+
+        HorizontalLayout header= new HorizontalLayout();
+        header.setWidth(100, Unit.PERCENTAGE);
+        header.setMargin(false);
+        header.addComponent(logo);
+        header.setComponentAlignment(logo, Alignment.TOP_LEFT);
 
         Button login= new Button("login");
         login.addClickListener(clickEvent -> {
@@ -52,88 +68,37 @@ public class HomeUI extends UI {
             getUI().addWindow(creaWindow(0));
         });
 
-        mainlayout.setMargin(true);
-        mainlayout.setSizeFull();
-        mainlayout.addComponent(login);
-        mainlayout.setComponentAlignment(login, Alignment.TOP_RIGHT);
+        Button registrati= new Button("registrati");
+        registrati.addClickListener(clickEvent -> {
+            getUI().addWindow(creaWindow(1));
+        });
 
-     /*   BarChart chart= new BarChart("mio titolo", "mimo sottotitolo");
-        ArrayList<String> headers= new ArrayList<>();
-        headers.add("head1");
-        headers.add("head2");
-        headers.add("head3");
-        chart.addHeaders(headers);
-        ArrayList<String> values= new ArrayList<>();
-        values.add("2000");
-        values.add("2003");values.add("2022");values.add("2002");
-        chart.addValues(values);
-        mainlayout.addComponent(chart);
-        chart.drawChart();
-        */
+        header.addComponents(login,registrati);
+        header.setComponentAlignment(login, Alignment.TOP_RIGHT);
+        header.setExpandRatio(login, 2f);
+        header.setComponentAlignment(registrati, Alignment.TOP_RIGHT);
+        mainlayout.addComponent(header);
 
-        VerticalLayout layoutprova= new VerticalLayout();
-        layoutprova.setId("PROVAID");
-        mainlayout.addComponent(layoutprova);
+        HorizontalLayout body= new HorizontalLayout();
+        body.setWidth(100,Unit.PERCENTAGE);
+        body.setMargin(false);
 
-          /* Image image= new Image();
-        image.setIcon(new ClassResource("/profilo.jpg"));
-      //  System.out.println(ClassResource.CONNECTOR_PATH);
-        mainlayout.addComponent(image);
-*/
-      //  provaDrop();
+        Label descr= new Label("\n" +
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tempor aliquet aliquet. Nunc non semper felis. Nam in lacus mauris."+
+                " Integer id posuere tortor, sit amet ultricies elit. Quisque sodales pretium placerat. Sed sed pharetra lectus. Nulla hendrerit tempus sapien ");
+        descr.setWidth(100, Unit.PERCENTAGE);
+        body.addComponent(descr);
 
+        Embedded pcEmb= loadImg("src/main/resources/pc.png", "image/png");
+        Image pc= new Image(null, pcEmb.getSource());
+        pc.addStyleName("pcImg");
+        pc.setWidth(100, Unit.PERCENTAGE);
+        body.addComponent(pc);
 
-      /*  Chart chart = new Chart();
-        mainlayout.addComponent(chart);
-*/
-/*        String hcjs = "var chart = new Highcharts.Chart({" +
-                "chart: { renderTo: 'container' }," +
-                "xAxis: { categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] }," +
-                "series: [{" +
-                "type: 'line', data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4], name: 'Temperature' }, {" +
-                "type: 'column', data: [194.1, 95.6, 54.4, 29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4], name: 'Rainfall' }]" +
-                "});";
-
-        HighCharts hc =new HighCharts("container");
-        hc.drawChart(hcjs);
-        mainlayout.addComponent(hc);
-*/
-
-
-/*        DataSeries dataSeries = new DataSeries()
-                .add(2, 6, 7, 10);
-
-        SeriesDefaults seriesDefaults = new SeriesDefaults()
-                .setRenderer(SeriesRenderers.BAR);
-
-        Axes axes = new Axes()
-                .addAxis(
-                        new XYaxis()
-                                .setRenderer(AxisRenderers.CATEGORY)
-                                .setTicks(
-                                        new Ticks()
-                                                .add("a", "b", "c", "d")));
-
-        Highlighter highlighter = new Highlighter()
-                .setShow(false);
-
-        Options options = new Options()
-                .setSeriesDefaults(seriesDefaults)
-                .setAxes(axes)
-                .setHighlighter(highlighter);
-
-        DCharts chart = new DCharts()
-                .setDataSeries(dataSeries)
-                .setOptions(options)
-                .show();
-
-        mainlayout.addComponent(chart);
-*/
-
-
-        mainlayout.setId("myId");
-      //  com.vaadin.terminal.PaintTarget pt;
+        mainlayout.addComponent(body);
+        mainlayout.setExpandRatio(body,2f);
         setContent(mainlayout);
+
     }
 
     private Window creaWindow(int tabIndex){
@@ -157,6 +122,34 @@ public class HomeUI extends UI {
         window.center();
         window.setModal(true);
         return window;
+    }
+
+    private Embedded loadImg(String pathImg, String mimeType){
+        ByteArrayOutputStream bas= new ByteArrayOutputStream();
+        try {
+            Path path = Paths.get(pathImg);
+            byte[] data = Files.readAllBytes(path);
+            bas.write(data,0, data.length);
+        }catch (IOException e){
+            //TODO: qui che ci mettiamo? serve qualcosa tipo oh c'è qualche problema
+            //e se ci stanno problemi nn posso manco fare il pezzo di dopo di settare l'immagine
+        }
+        final StreamResource.StreamSource streamSource = () -> {
+            if (bas != null) {
+                final byte[] byteArray = bas.toByteArray();
+                return new ByteArrayInputStream(byteArray);
+            }
+            return null;
+        };
+        final StreamResource resource = new StreamResource(streamSource, "img");
+        resource.setMIMEType(mimeType);
+        byte[] array = bas.toByteArray();
+
+        // show the file contents - images only for now
+        final Embedded logo = new Embedded(null, resource);
+        logo.setMimeType(mimeType);
+        return logo;
+        // Embedded img= getProfileImg("nuscenness", bas);
     }
 /*
     private void provaDrop(){
@@ -233,30 +226,6 @@ public class HomeUI extends UI {
 
     }
 
-    private void showFile(final String name, final ByteArrayOutputStream bas) {
-        // resource for serving the file contents
-        final StreamResource.StreamSource streamSource = () -> {
-            if (bas != null) {
-                final byte[] byteArray = bas.toByteArray();
-                return new ByteArrayInputStream(byteArray);
-            }
-            return null;
-        };
-        final StreamResource resource = new StreamResource(streamSource, name);
-        byte[] array = bas.toByteArray();
-
-        for(int i=0; i<300; i++){
-            System.out.print(array[i]+ " ");
-        }
-        // show the file contents - images only for now
-        final Embedded embedded = new Embedded(name, resource);
-        Account marco = new Account("marco", "marco@gmail.com", "marco");
-        marco.setImage(array);
-        repositoryA.save(marco);
-
-
-        showComponent(embedded, name);
-    }
 
     private void showComponent(final Component c, final String name) {
         final VerticalLayout layout = new VerticalLayout();

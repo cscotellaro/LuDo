@@ -5,13 +5,16 @@ import java.util.ArrayList;
 public class ParolaVotata {
 
     private String parolaSuggerita;
-    private ArrayList<Long> chiHaVotato;
+    private int numVoti;
+
+  //  private ArrayList<Long> chiHaVotato;
     private Long chiHaSuggerito;
 
     public ParolaVotata(String parolaSuggerita, Long chiHaSuggerito) {
         this.parolaSuggerita = parolaSuggerita;
         this.chiHaSuggerito = chiHaSuggerito;
-        chiHaVotato= new ArrayList<>();
+      //  chiHaVotato= new ArrayList<>();
+        numVoti=0;
     }
 
     public String getParolaSuggerita() {
@@ -30,15 +33,25 @@ public class ParolaVotata {
         this.chiHaSuggerito = chiHaSuggerito;
     }
 
-    public void addVoto(Long id){
+   /* public void addVoto(Long id){
         chiHaVotato.add(id);
     }
 
     public  void removeVoto(Long id){
         chiHaVotato.remove(id);
     }
+*/
+
+    public void addVoto(){
+        numVoti++;
+    }
+
+    public void removeVoto(){
+        numVoti--;
+    }
 
     public int getNumeroVoti(){
-        return chiHaVotato.size();
+       // return chiHaVotato.size();
+        return numVoti;
     }
 }
