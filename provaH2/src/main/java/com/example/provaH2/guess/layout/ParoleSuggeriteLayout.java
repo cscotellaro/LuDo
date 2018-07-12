@@ -26,7 +26,7 @@ public class ParoleSuggeriteLayout extends VerticalLayout implements PuoSettareL
         HorizontalLayout barra= new HorizontalLayout();
         barra.setWidth(100,Unit.PERCENTAGE);
         parolaField= new TextField();
-        suggerisci= new Button("Suggerisci");
+        suggerisci= new Button("suggerisci");
         suggerisci.addClickListener(clickEvent -> {
             if (!parolaField.isEmpty()){
                 puoSuggerire.suggerisci(parolaField.getValue());

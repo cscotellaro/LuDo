@@ -25,7 +25,8 @@ import java.util.List;
 @Viewport("width=device-width, initial-scale=1")
 @SpringUI(path = PlayUI.BASE_PATH+"guess")
 @PreserveOnRefresh
-@Theme("darktheme")
+//@Theme("darktheme")
+@Theme("materialProva")
 //@VaadinServletConfiguration(productionMode = false, ui = GameUI.class,heartbeatInterval = 1)
 public class GameUI extends PlayUI implements PuoSuggerire, GuessBroadcasterListener/*, CanRejoinGame*/ {
 
@@ -216,7 +217,7 @@ public class GameUI extends PlayUI implements PuoSuggerire, GuessBroadcasterList
             HorizontalLayout foot=new HorizontalLayout();
             foot.setWidth(100, Unit.PERCENTAGE);
             if(areYouHost()){
-                Button restart= new Button("Restart");
+                Button restart= new Button("restart");
                 foot.addComponent(restart);
                 foot.setComponentAlignment(restart, Alignment.TOP_LEFT);
                 restart.addClickListener(clickEvent -> {

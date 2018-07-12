@@ -31,6 +31,9 @@ public class SettingsView extends VerticalLayout implements View {
     private Account account;
     private Long id;
     private FormLayout form;
+    private FormLayout formCambioPassword;
+    private FormLayout formChangeImage;
+    private FormLayout formelimina;
     private FormLayout secondaForm;
 
     private String sgamo;
@@ -38,70 +41,120 @@ public class SettingsView extends VerticalLayout implements View {
 
     @PostConstruct
     public void initialize() {
+        setWidth(100,Unit.PERCENTAGE);
         account=(Account)  VaadinService.getCurrentRequest().getWrappedSession().getAttribute("account");
         id=(Long)  VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountId");
         setSpacing(false);
-        setMargin(true);
+        setMargin(false);
         addStyleName("SettingsMainLayout");
         Label title = new Label("Settings");
         title.addStyleName(ValoTheme.LABEL_H1);
         addComponent(title);
 
+        VerticalLayout personalInfo= new VerticalLayout();
+        personalInfo.setMargin(false);
+        personalInfo.setWidth(70, Unit.PERCENTAGE);
         form = new FormLayout();
-        form.setMargin(false);
-        form.setWidth("100%");
+        form.setMargin(true);
+        form.setWidth(100, Unit.PERCENTAGE);
         //form.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
-        addComponent(form);
+
 
         Label section = new Label("Personal Info");
         section.addStyleName(ValoTheme.LABEL_H3);
-        section.addStyleName(ValoTheme.LABEL_COLORED);
-        form.addComponent(section);
+        //section.addStyleName(ValoTheme.LABEL_COLORED);
+        section.addStyleName("SettingsSectionLabel");
+        personalInfo.addComponent(section);
+        form.addStyleName("cardsSettings");
 
         Label name= new Label(account.getFullName());
-        name.setCaption("fullname");
+        name.setWidth(100,Unit.PERCENTAGE);
+        name.setCaption("Fullname");
         form.addComponent(name);
 
         Label emailField= new Label(account.getEmail());
+        name.setWidth(100,Unit.PERCENTAGE);
         emailField.setCaption("Email");
         form.addComponent(emailField);
+        personalInfo.addComponent(form);
 
+        addComponent(personalInfo);
+        setComponentAlignment(personalInfo, Alignment.MIDDLE_CENTER);
+
+        /***********cambio password**********************/
+        VerticalLayout layoutCambioPassword=new VerticalLayout();
+        layoutCambioPassword.setWidth(70, Unit.PERCENTAGE);
+        layoutCambioPassword.setMargin(false);
+
+        formCambioPassword= new FormLayout();
+        formCambioPassword.setWidth(100, Unit.PERCENTAGE);
+        formCambioPassword.setMargin(true);
         Label section2 = new Label("Change Password");
         section2.addStyleName(ValoTheme.LABEL_H3);
         section2.addStyleName(ValoTheme.LABEL_COLORED);
-        form.addComponent(section2);
+        section2.addStyleName("SettingsSectionLabel");
+        layoutCambioPassword.addComponent(section2);
         sezioneCambioPassword();
-        //addComponent(form);
+        layoutCambioPassword.addComponent(formCambioPassword);
+        addComponent(layoutCambioPassword);
+        setComponentAlignment(layoutCambioPassword, Alignment.MIDDLE_CENTER);
+        formCambioPassword.addStyleName("cardsSettings");
 
+        /*************************img********************/
+        VerticalLayout layoutCambioImg= new VerticalLayout();
+        layoutCambioImg.setWidth(70, Unit.PERCENTAGE);
+        layoutCambioImg.setMargin(false);
+
+        formChangeImage= new FormLayout();
+        formChangeImage.setWidth(100,Unit.PERCENTAGE);
+        formChangeImage.setMargin(true);
         Label section3 = new Label("Change Image");
         section3.addStyleName(ValoTheme.LABEL_H3);
         section3.addStyleName(ValoTheme.LABEL_COLORED);
-        form.addComponents(section3);
+        section3.addStyleName("SettingsSectionLabel");
+        layoutCambioImg.addComponents(section3);
         sezioneCambiaImg();
-        //addComponent(form);
+        layoutCambioImg.addComponent(formChangeImage);
+        addComponent(layoutCambioImg);
+        setComponentAlignment(layoutCambioImg, Alignment.MIDDLE_CENTER);
+        formChangeImage.addStyleName("cardsSettings");
 
-        Label section4 = new Label("Elimina accunt");
+        /****************elimina************************/
+        VerticalLayout layoutElimina= new VerticalLayout();
+        layoutElimina.setWidth(70, Unit.PERCENTAGE);
+        layoutElimina.setMargin(false);
+
+        formelimina= new FormLayout();
+        formelimina.setWidth(100, Unit.PERCENTAGE);
+        formelimina.setMargin(true);
+        Label section4 = new Label("Delete account");
         section4.addStyleName(ValoTheme.LABEL_H3);
         section4.addStyleName(ValoTheme.LABEL_COLORED);
-        form.addComponents(section4);
+        section4.addStyleName("SettingsSectionLabel");
+        layoutElimina.addComponents(section4);
+        layoutElimina.addComponent(formelimina);
         sezioneEliminaAccount();
+        addComponent(layoutElimina);
+        setComponentAlignment(layoutElimina, Alignment.MIDDLE_CENTER);
+        formelimina.addStyleName("cardsSettings");
 
     }
 
     private void sezioneCambioPassword(){
-        PasswordField originalPassword= new PasswordField("original password");
-        PasswordField newPassword= new PasswordField("new password");
-        PasswordField repeatPassword= new PasswordField("repeat password");
-        Label error= new Label("wrong password");
+
+        PasswordField originalPassword= new PasswordField("Original password");
+        PasswordField newPassword= new PasswordField("New password");
+        PasswordField repeatPassword= new PasswordField("Repeat password");
+        Label error= new Label("Wrong password");
         Label notMatch= new Label("Entered password and confirmation password must match");
-        Button submit= new Button("Change");
-        form.addComponent(originalPassword);
-        form.addComponent(newPassword);
-        form.addComponent(repeatPassword);
+        Button submit= new Button("change");
+        formCambioPassword.addComponent(originalPassword);
+        formCambioPassword.addComponent(newPassword);
+        formCambioPassword.addComponent(repeatPassword);
         VerticalLayout placeholder= new VerticalLayout();
         placeholder.setMargin(false);
         placeholder.addComponent(submit);
-        form.addComponents(placeholder);
+        formCambioPassword.addComponents(placeholder);
         //form.addComponent(submit);
 
         submit.setEnabled(false);
@@ -158,29 +211,34 @@ public class SettingsView extends VerticalLayout implements View {
     }
 
     private void sezioneCambiaImg(){
-        final Label infoLabel = new Label("QUI devi droppare il file");
+        final Label infoLabel = new Label("Drop your image here");
+        infoLabel.setCaption("Your image:");
         infoLabel.setWidth(240.0f, Unit.PIXELS);
 
-        final VerticalLayout dropPane = new VerticalLayout(infoLabel);
-        dropPane.setComponentAlignment(infoLabel, Alignment.MIDDLE_CENTER);
+        final VerticalLayout dropPane = new VerticalLayout(/*infoLabel*/);
+        dropPane.setSpacing(false);
+     //   dropPane.setComponentAlignment(infoLabel, Alignment.MIDDLE_CENTER);
         dropPane.addStyleName("drop-area");
         dropPane.setSizeUndefined();
-        dropPane.setCaption("your image:");
+       /// dropPane.setCaption("Your image:");
+        dropPane.setMargin(false);
         final Embedded newImage= (Embedded) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountImg");
+        newImage.setCaption(null);
         newImage.setHeight("150px");
         newImage.setWidth("150px");
         dropPane.addComponent(newImage);
 
 
-        Button change= new Button("Save");
+        Button change= new Button("save");
         change.addClickListener(clickEvent -> {
             if(nuovaImmagine!=null){
                 accountRepository.updateImage(account.getId(), nuovaImmagine);
                 VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountImg", newImage);
-                Notification.show("Immagine cambiata");
+                Notification.show("Image changed");
             }
         });
-        form.addComponents(dropPane,change);
+        formChangeImage.addComponent(infoLabel);
+        formChangeImage.addComponents(dropPane,change);
 
         ProgressBar progress = new ProgressBar();
         progress.setIndeterminate(true);
@@ -262,12 +320,21 @@ public class SettingsView extends VerticalLayout implements View {
     }
 
     private void sezioneEliminaAccount(){
-        Button elimina= new Button("elimina");
+        Button elimina= new Button("delete");
         elimina.addClickListener(clickEvent -> {
-            Window window= new Window("Elimina");
+            Window window= new Window("Delete");
+            window.setWidth(300, Unit.POINTS);
+            window.setResizable(false);
+            window.setModal(true);
+            //window.setHeight(20, Unit.POINTS);
             VerticalLayout layout= new VerticalLayout();
-            layout.addComponent(new Label("Are you sure?"));
-            Button delete= new Button("Delete");
+            layout.setWidth(300,Unit.POINTS);
+            layout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            Label deleteLabel=new Label("Are you sure you want ot delete this account?");
+            deleteLabel.setWidth(100,Unit.PERCENTAGE);
+            layout.addComponent(deleteLabel);
+            Button delete= new Button("delete");
+            //delete.setCaption("Dete your account");
             delete.addClickListener(clickEvent1 -> {
                 accountRepository.deleteById(id);
                 Notification.show("Your account has been deleted");
@@ -283,12 +350,19 @@ public class SettingsView extends VerticalLayout implements View {
             window.center();
             getUI().addWindow(window);
         });
-        form.addComponent(elimina);
+       // elimina.setCaption("Delete your account");
+        VerticalLayout layoutElimina= new VerticalLayout();
+        layoutElimina.setMargin(false);
+        layoutElimina.addComponent(elimina);
+        layoutElimina.setCaption("Delete your account:");
+        formelimina.addComponent(layoutElimina);
+
+        //formelimina.addComponent(elimina);
     }
 
     //TODO: questo metodo non serve più ma l ho lasciata perchè non si sa mai
     private void sezioneCambiaEmail(){
-        TextField email= new TextField("new email");
+        TextField email= new TextField("New email");
         Button changeEmail= new Button("Change");
         changeEmail.addClickListener(clickEvent -> {
             //TODO: qua si deve mandare la mail e poi mandare il tutto su una pag specifica che nn so qual è

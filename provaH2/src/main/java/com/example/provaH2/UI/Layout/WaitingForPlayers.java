@@ -57,9 +57,9 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
             this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
             //setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-            Label error= new Label("nessuna partita con questo codice :(");
+            Label error= new Label("no match with this code :(");
             //addComponent(error);
-            Button goHome= new Button("go Home");
+            Button goHome= new Button("home");
             goHome.addClickListener(clickEvent -> {
                 Page.getCurrent().setLocation("/private/home");
             });
@@ -85,14 +85,14 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
         } else{
             this.setHeight(100, Unit.PERCENTAGE);
             this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-            Label error=new Label("la partita è già iniziata non puoi joinarti");
+            Label error=new Label("Sorry, you can't join this round");
             //setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
             //addComponent(error);
-            Button goHome= new Button("go Home");
+            Button goHome= new Button("home");
             goHome.addClickListener(clickEvent -> {
                 Page.getCurrent().setLocation("/");
             });
-            goHome.addStyleName("Home");
+            goHome.addStyleName("home");
             error.addStyleName("WFPerror");
             VerticalLayout middle= new VerticalLayout();
             middle.addComponents(error,goHome);
@@ -129,16 +129,16 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
 
         VerticalLayout layoutDestro= new VerticalLayout();
 
-        HorizontalLayout WFPLayout=new HorizontalLayout();
+        CssLayout WFPLayout=new CssLayout();
         WFPLayout.setWidth(100, Unit.PERCENTAGE);
-        WFPLayout.setMargin(false);
+        //WFPLayout.setMargin(false);
         Label waiting = new Label( " Waiting for players...");
         waiting.addStyleName("WFPLabel");
         WFPLayout.addComponent(waiting);
         numPlayers= new Label("0 connected");
         numPlayers.addStyleName("WFPNumPLayers");
         WFPLayout.addComponent(numPlayers);
-        WFPLayout.setComponentAlignment(numPlayers, Alignment.MIDDLE_RIGHT);
+        //WFPLayout.setComponentAlignment(numPlayers, Alignment.MIDDLE_RIGHT);
         layoutDestro.addComponent(WFPLayout);
 
         Panel panelNomi= new Panel();
@@ -201,6 +201,7 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
             gameLayout.addComponent(formLayout);
 
             Button start= new Button("START");
+            start.addStyleName("WFPstart");
             System.out.println("\tSTART sto per aggiungere il bottone e il controller è " + controller.getId());
             start.addClickListener(clickEvent -> {
                 //System.out.println(controller.getId() + " b_ " + broadcaster.getId());

@@ -96,7 +96,7 @@ public class PrivateHomeView  extends VerticalLayout implements View{
             partitaInfo.setSpacing(false);
             String s=new SimpleDateFormat("MM/dd/yyyy HH:mm").format(partita.getTimestamp());
             Label ultimaPartita= new Label(partita.getGioco() + " " + s );
-            ultimaPartita.setCaption("ultima partita: ");
+            ultimaPartita.setCaption("Last game: ");
             List<Punteggio> punteggi= partita.getArray();
             int n=0;
             for( Punteggio p: punteggi){
@@ -106,7 +106,7 @@ public class PrivateHomeView  extends VerticalLayout implements View{
                 }
             }
             Label punti= new Label(""+n);
-            punti.setCaption("Punti: ");
+            punti.setCaption("Points: ");
             partitaInfo.addComponents(ultimaPartita,punti);
             layoutNomeEPartita.addComponent(partitaInfo);
         }
@@ -206,7 +206,7 @@ public class PrivateHomeView  extends VerticalLayout implements View{
         gameDescr.setWidth(6, Unit.CM);
         layoutGioco.addComponent(gameDescr);
 
-        Button crea = new Button("Start game"/* + game.getNomeGioco()*/);
+        Button crea = new Button("start game"/* + game.getNomeGioco()*/);
         crea.addClickListener(clickEvent -> {
             System.out.println("Sono il bottone sater game di " + account.getFullName() + "e sto per settare il gameController");
             Controller controller= ctx.getBean(game.getControllerClass());

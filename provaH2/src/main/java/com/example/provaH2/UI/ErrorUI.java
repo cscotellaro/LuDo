@@ -7,7 +7,8 @@ import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Theme("hometheme")
+//@Theme("hometheme")
+@Theme("materialProva")
 @SpringUI(path = "/error404")
 public class ErrorUI extends UI {
 

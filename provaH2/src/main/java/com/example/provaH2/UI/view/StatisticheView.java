@@ -275,7 +275,8 @@ public class StatisticheView extends VerticalLayout implements View {
                 "          legend: { position: 'bottom' },\n" +
                 "          animation:{duration: 1000, easing: 'out', startup:true },\n"+
                 "          pointSize:3,\n"+
-                "          backgroundColor:'#fafafa'\n"+
+                "          backgroundColor:'#fafafa',\n"+
+                "          colors:['#007d99' ] "+
                 "        };\n" +
                 "\n" +
                 "        var chart = new google.visualization.LineChart(document.getElementById('CHARTID'));\n" +

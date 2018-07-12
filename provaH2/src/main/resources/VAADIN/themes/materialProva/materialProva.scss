@@ -1,0 +1,366 @@
+// If you edit this file you need to compile the theme. See README.md for details.
+
+// Global variable overrides. Must be declared before importing Valo.
+
+// Defines the plaintext font size, weight and family. Font size affects general component sizing.
+//$v-font-size: 16px;
+//$v-font-weight: 100;
+//$v-font-family: "Courier new", sans-serif;
+
+// Defines the border used by all components.
+//$v-border: 1px solid (v-shade 0.7);
+//$v-border-radius: 4px;
+
+// Affects the color of some component elements, e.g Button, Panel title, etc
+//$v-background-color: hsl(210, 90%, 90%);
+//$v-background-color: #dbd6d6;
+// Affects the color of content areas, e.g  Panel and Window content, TextField input etc
+//$v-app-background-color: $v-background-color;
+
+// Affects the visual appearance of all components
+//$v-gradient: v-linear 50%;
+//$v-bevel-depth: 90%;
+//$v-shadow-opacity: 50%;
+
+// Defines colors for indicating status (focus, success, failure)
+//$v-focus-color: valo-focus-color(); // Calculates a suitable color automatically
+//$v-friendly-color: #2c9720;
+//$v-error-indicator-color: #ed473b;
+
+// For more information, see: https://vaadin.com/book/-/page/themes.valo.html
+// Example variants can be copy/pasted from https://vaadin.com/wiki/-/wiki/Main/Valo+Examples
+
+//$v-focus-style: none;
+
+//@import "../material/material.scss";
+@import "../valo/valo.scss";
+
+$v-included-components: remove($v-included-components, button);
+
+@mixin materialProva {
+  @include valo;
+  //@include material;
+
+  //$v-shadow:  0 10px 10px v-shade;
+  $v-background-color: #007d99;
+  $v-gradient: v-linear 0%;
+  $v-border:0px;
+  $v-font-size:2em;
+  @include valo-button();
+
+  .v-button{
+    color: #ffffff;
+    font-variant: small-caps;
+    font-size: 1.25em;
+    font-family: sans-serif;
+  }
+
+  .v-button::before{
+    height: 100% !important;
+  }
+
+  .v-button:focus:after{
+    box-shadow: none;
+  }
+
+.v-button:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: 0;
+  padding-top: 0;
+  border-radius: 100%;
+  background-color: rgba(236, 240, 241, .3);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.v-button:active:before {
+  width: 120%;
+  padding-top: 120%;
+  transition: width .2s ease-out, padding-top .2s ease-out;
+}
+
+.v-menubar-borderless .v-menubar-menuitem{
+  color: #007d99;
+}
+
+.v-menubar-borderless .v-menubar-menuitem:hover, .v-menubar-menuitem:focus{
+  color: #00a7cc;
+  outline: 0px !important;
+}
+
+.v-button-link, .v-button-borderless .v-menubar-menuitem-caption{
+  color: #007d99;
+  font-variant: inherit;
+  font-size: inherit;
+  font-family: inherit;
+}
+.v-tabsheet-tabitem{
+  font-variant: small-caps;
+}
+
+.v-tabsheet-tabitemcell .v-tabsheet-tabitem-selected .v-caption.v-caption{
+  color: #007d99;
+  border-bottom-color: #007d99;
+  font-variant: small-caps;
+}
+.v-button-borderless{
+  color: inherit;
+  font-variant: inherit;
+  font-size: 1em;
+}
+
+.v-menubar-menuitem:focus{
+    box-shadow: none !important;
+}
+  /* Track */
+  .v-panel{}
+  ::-webkit-scrollbar {
+      width: 7px;
+  }
+  ::-webkit-scrollbar-track {
+      background: #ffffff;
+  }
+  ::-webkit-scrollbar-thumb {
+      background: #888888;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+      background: #555555;
+  }
+
+  div.v-window .v-window-contents {
+      background-color: #fafafa
+    }
+
+/*********************home pubblica************************/
+  .logo{
+    width: 70pt;
+    height: 70pt;
+    border-radius: 80px;
+  }
+
+  .pcImg{
+    max-width: 100%;
+  }
+
+  .publicHomeMainLayout{
+    background-color: #b8dbe0;
+  }
+/********************su tutta la privateUI*****************/
+  .menuBarTitolo{
+    margin-top: 20pt;
+    margin-right: 20pt;
+  }
+
+/*******************privateHome****************************/
+  .welcomeLabel{
+    font-size: 3em;
+  }
+
+  .welcomeProfileImg{
+    border-radius: 80px;
+  }
+
+  .layoutNomeEPartita{
+    padding-top: 12pt;
+  }
+
+  //lavyout dei singoli giochi
+  .WelcomeGameName{
+    font-weight: 400;
+    font-size: 1.1em;
+    margin-bottom: -15pt;
+  }
+
+  .layoutWelcomeGame{
+    text-align: center;
+    background-color: #b8dbe0;
+    margin: 10pt;
+    transition: all .25s linear;
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.4);
+  }
+
+  .layoutWelcomeGame:hover{
+    box-shadow: -1px 10px 29px 0px rgba(0,0,0,0.8);
+  }
+  .v-csslayout{
+    text-align: center;
+  }
+
+  .v-cssLayout div{
+    text-align: left;
+  }
+/******************************settings***************************/
+  .SettingsMainLayout{
+    padding-left: 30pt !important;
+    padding-right: 30pt !important;
+  }
+
+  .SettingsSectionLabel{
+    color: #007d99;
+    border-bottom: 0px;
+    font-size: 1.5em;
+    margin-top: 20pt;
+  }
+  .cardsSettings{
+      min-width: 350pt;
+      margin-bottom: 20pt;
+      background-color: #b8dbe0;
+      transition: all .25s linear;
+      box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.4);
+  }
+/*****************************statistiche*************************/
+  .SettingsVL{
+    padding-left: 30pt !important;
+  }
+
+  .statisticheLayout{
+      padding-top: 0px;
+  }
+
+  .buttonGameName{
+    text-align: left;
+    padding: 2px;
+  }
+  .buttonGameName:hover{
+    background-color:rgba(210,210,210,0.7);
+  }
+/***************************error page***************************/
+  .Ops{
+    font-size: 2.5em;
+  }
+
+  .notFound{
+    font-size: 1.4em;
+    margin-top: -13pt;
+  }
+  ////////////////////////GUESS/////////////////////////////////////
+
+    .provaVertical{
+      background: grey;
+      border-radius: 5px;
+    }
+
+    .bottoneInvio{
+      border-radius: 30pt;
+      line-height: 27pt;
+    }
+
+    .panelChat {
+      height: 30%;
+    }
+  /**************************ui di gioco*******************************/
+    .guessName{
+      font-size: 1.7em;
+    }
+
+    .timeLabel{
+      font-size:  1.4em;
+    }
+
+    .numPlayerLabel{
+      font-size: 1.2em;
+    }
+
+    .layoutIndizi{
+      padding-left: 0px;
+      padding-top: 0px;
+    }
+
+    .indizi{
+        font-size: 1.2em;
+    }
+
+    .layoutParole{
+        padding-left: 0px;
+        padding-top:  0px;
+        padding-bottom: 0px;
+    }
+
+    .parolaSuggLayoyt{
+      background-color:  rgba(210,210,210,0.7);
+      padding: 5pt;
+    }
+
+    .pallinoChat{
+      border-radius: 80px;
+    }
+
+    .nameLabelChat{
+      font-weight: 400;
+    }
+
+    .baloonChat{
+      background-color: rgba(210,210,210,0.7);
+      border-radius: 5px;
+      padding: 7pt;
+      font-size: 11pt;
+    }
+    .PlusButtonGuess{
+      border-radius: 80px;
+      line-height: 27pt;
+    }
+  /***************************waiting for players**********************/
+    .WFPverticalMainLayout{
+      overflow-y: scroll;
+    }
+
+    .WFPGameName{
+      font-size: 2.3em;
+      max-width: 7cm;
+    }
+
+    .WFPLabel{
+      font-size: 1.7em;
+      float: left;
+    }
+
+    .WFPNumPLayers{
+      font-size: 1.5em;
+      float: right;
+      line-height: 1.7em;
+    }
+
+    //nella lista
+    .WFPplayerImg{
+      border-radius: 80px;
+      width: 30pt;
+      height: 30pt;
+    }
+
+    .WFPPlayerName{
+      font-size: 1.1em;
+    }
+
+    .WFPLayoutSx{
+      padding-left: 0px;
+    }
+
+    .WFPstart{
+      line-height: 40pt;
+    }
+    .WFPerror{
+      font-size: 2em;
+    }
+
+    .goHome{
+      width: 90pt;
+      height: 40pt;
+    }
+
+    /*************************window vittoria**************/
+    .parolaDaIndovinare{
+      font-size: 1.4em;
+    }
+    .HLPalyerPoints{
+      background: rgba(210,210,210,0.7);
+      padding: 5px;
+      border-radius: 10px;
+    }
+}

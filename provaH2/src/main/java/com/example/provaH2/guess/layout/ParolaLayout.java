@@ -1,7 +1,9 @@
 package com.example.provaH2.guess.layout;
 
 import com.example.provaH2.guess.ParolaSuggerita;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 public class ParolaLayout extends VerticalLayout {
 
@@ -20,6 +22,9 @@ public class ParolaLayout extends VerticalLayout {
 
         HorizontalLayout voteLayout=new HorizontalLayout();
         plus= new Button("+1");
+        plus.addStyleName("PlusButtonGuess");
+        plus.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        plus.setIcon(VaadinIcons.PLUS);
         parolaLabel= new Label(parolaSuggerita.getParola());
         parolaLabel.setWidth(100,Unit.PERCENTAGE);
         numeroLabel= new Label(""+parolaSuggerita.getVoti());

@@ -3,6 +3,7 @@ package com.example.provaH2.UI.Layout;
 import com.example.provaH2.entity.Account;
 import com.example.provaH2.repository.AccountRepository;
 import com.example.provaH2.utility.SendMail;
+import com.github.appreciated.material.MaterialTheme;
 import com.vaadin.data.Binder;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.EmailValidator;
@@ -33,13 +34,16 @@ public class LoginLayout extends VerticalLayout {
         repositoryA=accountRepository;
 
         TextField emailField = new TextField("Email");
+        //emailField.addStyleName(MaterialTheme.TEXTFIELD_FLOATING);
         PasswordField passwordField = new PasswordField("Password");
-        Button submit = new Button("Login");
+        //passwordField.addStyleName(MaterialTheme.TEXTFIELD_FLOATING);
+        //passwordField.addStyleName(MaterialTheme.TEXTFIELD_SMALL);
+        Button submit = new Button("login");
         submit.setEnabled(false);
         submit.setWidth(9, Unit.EM);
         submit.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         //submit.addStyleName(ValoTheme.BUTTON_FRIENDLY);
-        Label error = new Label("email o password non corretta");
+        Label error = new Label("email and/or password is wrong");
 
         loginForm.addComponent(error);
         error.setVisible(false);
@@ -82,7 +86,7 @@ public class LoginLayout extends VerticalLayout {
                         //e se ci stanno problemi nn posso manco fare il pezzo di dopo di settare l'immagine
                     }
                 }
-                Embedded img= getProfileImg("nuscenness", bas);
+                Embedded img= getProfileImg("", bas);
                 img.setHeight("200px");
                 img.setWidth("200px");
                 VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountImg", img);
@@ -129,13 +133,13 @@ public class LoginLayout extends VerticalLayout {
 
         FormLayout form= new FormLayout();
         TextField email= new TextField("Email");
-        Button sendMail= new Button("SendMail");
+        Button sendMail= new Button("send email");
         sendMail.addClickListener(clickEvent -> {
             Random rand= new Random();
             int n= rand.nextInt(9000)+1000;
             repositoryA.updatePassword(email.getValue(), n+"");
-            SendMail.sendMailTLS(email.getValue(), "cambio password", "la tua nuova password è " +n);
-            Notification.show("mail mandata");
+            SendMail.sendMailTLS(email.getValue(), "change password", "Your new password is " +n);
+            Notification.show("email sent");
         });
 
         Binder<String> binder = new Binder<>();
@@ -162,7 +166,7 @@ public class LoginLayout extends VerticalLayout {
                 }
             }
 
-        },"Non esiste un account con quell'email" ));
+        },"There is no sccount with this email" ));
 
         binder.addStatusChangeListener(
                 event -> sendMail.setEnabled(binder.isValid()));

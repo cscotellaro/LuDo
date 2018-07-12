@@ -31,14 +31,14 @@
 
 //$v-focus-style: none;
 
-//@import "../material/material.scss";
+@import "../material/material.scss";
 @import "../valo/valo.scss";
 
 $v-included-components: remove($v-included-components, button);
 
 @mixin hometheme {
   @include valo;
-  //@include material;
+  @include material;
 
   //$v-shadow:  0 10px 10px v-shade;
   $v-background-color: #8fe5e8;

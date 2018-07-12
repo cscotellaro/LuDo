@@ -93,7 +93,7 @@ public class RegistrazioneLayout extends FormLayout {
                 }
             }
 
-        },"Esiste già un account con quell'email" ));
+        },"There is another account with this email" ));
 
         binder.withValidator(Validator.from(account -> {
             if(fullNameField.isEmpty()){
@@ -102,13 +102,13 @@ public class RegistrazioneLayout extends FormLayout {
                 return !repositoryA.existsByFullName(fullNameField.getValue());
             }
 
-        },"Nome non valido"));
+        },"Invalid name"));
         Label validationStatus = new Label();
         binder.setStatusLabel(validationStatus);
 
         binder.setBean(new Account());
 
-        Button registerButton = new Button("Register");
+        Button registerButton = new Button("register");
         registerButton.setEnabled(false);
         registerButton.addClickListener(
                 event -> registerNewAccount(binder.getBean()));
@@ -138,20 +138,20 @@ public class RegistrazioneLayout extends FormLayout {
         int n= random.nextInt(9000)+1000;
         VaadinService.getCurrentRequest().getWrappedSession().setAttribute("codiceRegistrazione", ""+n);
         VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountDaRegistrare", account);
-        SendMail.sendMailTLS(emailField.getValue(), "conferma registrazione",
-                "segui il link per completare la registrazione " +
+        SendMail.sendMailTLS(emailField.getValue(), "Registration confirm",
+                "click on th link to complete registration " +
                         "http://localhost:8080/?confermaRegistrazione="+n);
 
         removeAllComponents();
-        Label label= new Label("Ti abbiamo mandato un'email");
-        Label label1= new Label("Segui il link per completare la registrazione");
+        Label label= new Label("We sent you an email");
+        Label label1= new Label("follow the link to complete registration");
         addComponents(label,label1);
     }
 
     private void completaRegistrazione(String conferma){
         String confermaAttribute=(String) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("codiceRegistrazione");
         if(confermaAttribute==null || !confermaAttribute.equals(conferma)){
-            Label label= new Label("Impossibile completare la registrazione");
+            Label label= new Label("cannot complete registration");
             addComponent(label);
             return;
         }
@@ -159,20 +159,20 @@ public class RegistrazioneLayout extends FormLayout {
         VaadinService.getCurrentRequest().getWrappedSession().setAttribute("codiceRegistrazione", null);
         Account account= (Account) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("accountDaRegistrare");
         if(account==null){
-            Label label= new Label("Account non valido");
+            Label label= new Label("Invalid account");
             addComponent(label);
             return;
         }
         try{
             repositoryA.save(account);
         }catch (Exception e){
-            Label label= new Label("Account non valido");
+            Label label= new Label("Invalid account");
             addComponent(label);
             return;
         }
         VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountDaRegistrare", null);
-        Label label= new Label("Registrazione effettuata con successo");
-        Button b= new Button("Login");
+        Label label= new Label("Registration completed");
+        Button b= new Button("login");
         b.addClickListener(clickEvent -> {
             VaadinService.getCurrentRequest().getWrappedSession().setAttribute("loggato", true);
             VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountId", account.getId());
@@ -188,7 +188,7 @@ public class RegistrazioneLayout extends FormLayout {
                 //TODO: qui che ci mettiamo? serve qualcosa tipo oh c'è qualche problema
                 //e se ci stanno problemi nn posso manco fare il pezzo di dopo di settare l'immagine
             }
-            Embedded img= getProfileImg("nuscenness", bas);
+            Embedded img= getProfileImg("", bas);
             img.setHeight("200px");
             img.setWidth("200px");
             VaadinService.getCurrentRequest().getWrappedSession().setAttribute("accountImg", img);

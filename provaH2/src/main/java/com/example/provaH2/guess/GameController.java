@@ -25,7 +25,7 @@ public class GameController extends Controller {
     private ItemRepository repositoryI;
     private BroadcasterGuess broadcaster;
     private Item item;
-    private ConcurrentHashMap <String, ParolaVotata> parole;
+    private ConcurrentHashMap <String, ParolaVotata> parole=new ConcurrentHashMap<>();;
     private Random random= new Random();
     private PartitaThread partitaThread;
     private  int numUser;

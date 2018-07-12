@@ -21,7 +21,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 //@Push
-@Theme("hometheme")
+//@Theme("hometheme")
+@Theme("materialProva")
 @Viewport("width=device-width, initial-scale=1")
 @SpringUI(path = "/private/home")
 public class PrivateUI extends UI{

@@ -4,6 +4,7 @@ import com.example.provaH2.UI.Layout.LoginLayout;
 import com.example.provaH2.UI.Layout.RegistrazioneLayout;
 import com.example.provaH2.repository.AccountRepository;
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Title;
 import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
@@ -18,8 +19,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @SpringUI(path = "/")
-@Theme("hometheme")
-
+//@Theme("hometheme")
+@Theme("materialProva")
+//@Theme("material")
+@Title("Cinzia")
 @Viewport("width=device-width, initial-scale=1")
 @com.vaadin.annotations.JavaScript({ "https://www.gstatic.com/charts/loader.js", "BarChart.js" })
 public class HomeUI extends UI {
@@ -36,8 +39,9 @@ public class HomeUI extends UI {
         mainlayout= new VerticalLayout();
         mainlayout.setMargin(true);
         mainlayout.setSizeFull();
+        mainlayout.addStyleName("publicHomeMainLayout");
 
-        String loginParam = vaadinRequest.getParameter("login");
+        String loginParam = vaadinRequest.getParameter("Login");
         cod=vaadinRequest.getParameter("cod");
         uri=vaadinRequest.getParameter("uri");
         if(loginParam!=null && loginParam.equals("true")){
@@ -61,22 +65,23 @@ public class HomeUI extends UI {
         Button login= new Button("login");
         login.addClickListener(clickEvent -> {
             WrappedSession session=vaadinRequest.getWrappedSession();
-            Boolean logged= (Boolean) session.getAttribute("loggato");
+            //Boolean logged= (Boolean) session.getAttribute("loggato");
+            Boolean logged= (Boolean)VaadinSession.getCurrent().getAttribute("loggato");
             if(logged!=null && logged==true){
                 Page.getCurrent().setLocation("private/home");
             }
             getUI().addWindow(creaWindow(0));
         });
 
-        Button registrati= new Button("registrati");
+        Button registrati= new Button("register");
         registrati.addClickListener(clickEvent -> {
             getUI().addWindow(creaWindow(1));
         });
 
         header.addComponents(login,registrati);
-        header.setComponentAlignment(login, Alignment.TOP_RIGHT);
+        header.setComponentAlignment(login, Alignment.MIDDLE_RIGHT);
         header.setExpandRatio(login, 2f);
-        header.setComponentAlignment(registrati, Alignment.TOP_RIGHT);
+        header.setComponentAlignment(registrati, Alignment.MIDDLE_RIGHT);
         mainlayout.addComponent(header);
 
         HorizontalLayout body= new HorizontalLayout();
@@ -121,6 +126,7 @@ public class HomeUI extends UI {
 
         window.center();
         window.setModal(true);
+        window.setResizable(false);
         return window;
     }
 
