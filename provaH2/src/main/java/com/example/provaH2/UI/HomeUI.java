@@ -8,6 +8,7 @@ import com.vaadin.annotations.Title;
 import com.vaadin.server.*;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.leif.headertags.Viewport;
 
@@ -61,6 +62,23 @@ public class HomeUI extends UI {
         header.setMargin(false);
         header.addComponent(logo);
         header.setComponentAlignment(logo, Alignment.TOP_LEFT);
+
+        VerticalLayout ludovert= new VerticalLayout();
+        ludovert.setMargin(false);
+        ludovert.setSpacing(false);
+        Label ludo=new Label("LuDo");
+        ludo.addStyleName("LuDo");
+        ludo.addStyleName(ValoTheme.LABEL_H2);
+        ludo.addStyleName(ValoTheme.LABEL_COLORED);
+        ludovert.addComponent(ludo);
+        ludo.setWidth(100, Unit.POINTS);
+
+        Label sottotitolo= new Label("Ludendo Docere");
+        ludovert.addComponent(sottotitolo);
+        header.addComponent(ludovert);
+        header.setExpandRatio(ludovert, 1f);
+        header.setComponentAlignment(ludovert, Alignment.MIDDLE_LEFT);
+
 
         Button login= new Button("login");
         login.addClickListener(clickEvent -> {

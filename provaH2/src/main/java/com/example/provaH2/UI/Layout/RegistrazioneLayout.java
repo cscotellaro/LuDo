@@ -99,7 +99,7 @@ public class RegistrazioneLayout extends FormLayout {
             if(fullNameField.isEmpty()){
                 return true;
             }else{
-                return !repositoryA.existsByFullName(fullNameField.getValue());
+                return !repositoryA.existsByFullname(fullNameField.getValue());
             }
 
         },"Invalid name"));

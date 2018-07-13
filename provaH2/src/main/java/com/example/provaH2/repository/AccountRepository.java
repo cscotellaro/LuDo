@@ -12,7 +12,7 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     public Account findOneByEmail(String email);
 
-    boolean existsByFullName(String fullName);
+    boolean existsByFullname(String fullName);
 
     Account findOneById(Long id);
 

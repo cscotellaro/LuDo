@@ -12,7 +12,7 @@ public class Account {
     @Id @GeneratedValue
     private Long id;
     @Column(unique = true)
-    private String fullName;
+    private String fullname;
     @Column(unique = true)
     private String email;
     private String password;
@@ -22,7 +22,7 @@ public class Account {
     public Account(){}
 
     public Account(String fullName, String email, String password) {
-        this.fullName = fullName;
+        this.fullname = fullName;
         this.email = email;
         this.password = password;
     }
@@ -44,11 +44,11 @@ public class Account {
     }
 
     public String getFullName() {
-        return fullName;
+        return fullname;
     }
 
     public void setFullName(String fullName) {
-        this.fullName = fullName;
+        this.fullname = fullName;
     }
 
     public String getEmail() {
@@ -71,7 +71,7 @@ public class Account {
     public String toString() {
         return "Account{" +
                 "id='" + id + '\'' +
-                ", fullName='" + fullName + '\'' +
+                ", fullName='" + fullname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';

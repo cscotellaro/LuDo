@@ -85,7 +85,7 @@ public class RegistrazioneUI extends UI {
             if(fullNameField.isEmpty()){
                 return true;
             }else{
-                return !repositoryA.existsByFullName(fullNameField.getValue());
+                return !repositoryA.existsByFullname(fullNameField.getValue());
             }
 
         },"Nome non valido"));
