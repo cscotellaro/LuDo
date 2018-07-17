@@ -3,6 +3,7 @@ package com.example.provaH2.UI;
 import com.example.provaH2.UI.Layout.LoginLayout;
 import com.example.provaH2.UI.Layout.RegistrazioneLayout;
 import com.example.provaH2.repository.AccountRepository;
+import com.vaadin.addon.responsive.Responsive;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.*;
@@ -23,7 +24,7 @@ import java.nio.file.Paths;
 //@Theme("hometheme")
 @Theme("materialProva")
 //@Theme("material")
-@Title("Cinzia")
+@Title("Ludo")
 @Viewport("width=device-width, initial-scale=1")
 @com.vaadin.annotations.JavaScript({ "https://www.gstatic.com/charts/loader.js", "BarChart.js" })
 public class HomeUI extends UI {
@@ -120,6 +121,18 @@ public class HomeUI extends UI {
 
         mainlayout.addComponent(body);
         mainlayout.setExpandRatio(body,2f);
+
+        CssLayout grid = new CssLayout();
+        grid.setWidth("100%");
+        grid.addStyleName("grid");
+        mainlayout.addComponent(grid);
+
+        for (int i = 1; i < 10; i++) {
+            Label l = new Label("" + i);
+            l.setSizeUndefined();
+            grid.addComponent(l);
+        }
+        new Responsive(grid);
         setContent(mainlayout);
 
     }

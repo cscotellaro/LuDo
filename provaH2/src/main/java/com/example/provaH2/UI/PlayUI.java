@@ -46,7 +46,13 @@ public abstract class PlayUI extends UI  implements BroadcastListener{
         //  waitingForPlayers.inizializza();
 
         broadcaster= (Broadcaster) waitingForPlayers.getBroadcaster();
-        setContent(waitingForPlayers);
+        Panel panel= new Panel();
+        panel.setWidth(100,Unit.PERCENTAGE);
+        panel.addStyleName("MainPanelWFP");
+      //  panel.setHeight(100, Unit.PERCENTAGE);
+        panel.setContent(waitingForPlayers);
+        //setContent(waitingForPlayers);
+        setContent(panel);
         //getUI().setPollInterval(1000);
         addDetachListener((event)-> {
             System.out.println("Sono nel LISTENER del detach....");

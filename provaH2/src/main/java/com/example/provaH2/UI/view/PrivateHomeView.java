@@ -7,6 +7,7 @@ import com.example.provaH2.gestioneGioco.Controller;
 import com.example.provaH2.gestioneGioco.Game;
 import com.example.provaH2.gestioneGioco.GameList;
 import com.example.provaH2.repository.PartitaRepository;
+import com.vaadin.addon.responsive.Responsive;
 import com.vaadin.navigator.View;
 import com.vaadin.server.Page;
 import com.vaadin.server.PaintTarget;
@@ -120,9 +121,9 @@ public class PrivateHomeView  extends VerticalLayout implements View{
         for(Game g:list) {
 
             //TODO:togli questo for per non far mettere questo gioco 5 volte
-            for(int i=0; i<5;i++){
+           // for(int i=0; i<5;i++){
                 cssLayout.addComponent(creaLayoutGioco(g));
-            }
+           // }
 
           /*  Button crea = new Button("Start game: " + g.getNomeGioco());
             crea.addClickListener(clickEvent -> {
@@ -154,6 +155,7 @@ public class PrivateHomeView  extends VerticalLayout implements View{
         // verticalLayout.addComponent(getGameImage(Paths.get("src/main/java/com/example/provaH2/guess/guess.jpeg"), "gioco"));
 
         verticalLayout.addComponent(cssLayout);
+       // new Responsive(cssLayout);
         addComponent(verticalLayout);
     }
 
@@ -192,10 +194,15 @@ public class PrivateHomeView  extends VerticalLayout implements View{
         VerticalLayout layoutGioco= new VerticalLayout();
         layoutGioco.addStyleName("layoutWelcomeGame");
         layoutGioco.setWidth(7.5f,Unit.CM);
-        //layoutGioco.setWidth(300, Unit.PIXELS);
+        layoutGioco.setHeight(300, Unit.POINTS);
         layoutGioco.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
-        layoutGioco.addComponent(getGameImage(Paths.get("src/main/java/com/example/provaH2/"+game.getImagePath()), "vedi se va"));
+        Embedded embeddedImg= getGameImage(Paths.get("src/main/java/com/example/provaH2/"+game.getImagePath()), "vedi se va");
+        Image img= new Image(null, embeddedImg.getSource());
+        img.setWidth(100,Unit.POINTS);
+        img.setHeight(100,Unit.POINTS);
+        img.addStyleName("imgGame");
+        layoutGioco.addComponent(img);
 
         Label gameName= new Label(game.getNomeGioco());
         gameName.addStyleName("WelcomeGameName");
@@ -204,7 +211,11 @@ public class PrivateHomeView  extends VerticalLayout implements View{
 
         Label gameDescr= new Label(game.getDescrizioneGioco());
         gameDescr.setWidth(6, Unit.CM);
+        gameDescr.setHeight(2.5f,Unit.CM);
+        gameDescr.addStyleName("gameDescrWelcome");
         layoutGioco.addComponent(gameDescr);
+        //layoutGioco.setExpandRatio(gameDescr, 1.1f);
+        //layoutGioco.setExpandRatio(gameName, 1.1f);
 
         Button crea = new Button("start game"/* + game.getNomeGioco()*/);
         crea.addClickListener(clickEvent -> {

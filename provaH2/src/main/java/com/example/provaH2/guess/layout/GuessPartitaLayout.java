@@ -5,6 +5,7 @@ import com.example.provaH2.entity.Punteggio;
 import com.example.provaH2.gestioneGioco.PartitaLayout;
 import com.example.provaH2.guess.PuoSuggerire;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
@@ -24,15 +25,7 @@ public class GuessPartitaLayout extends VerticalLayout implements PartitaLayout{
     public GuessPartitaLayout(PlayUI puoSuggerire, Integer numberOfPlayers, HashMap<String, Embedded> playersImg){
         this.setHeight(100, Unit.PERCENTAGE);
         this.setWidth(100,Unit.PERCENTAGE);
-
-        String loremIpsum="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-                +"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-                +" Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-                +" Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-
-        Label l1=new Label(loremIpsum);
-        l1.setWidth(100, Unit.PERCENTAGE);
-
+        this.addStyleName("GuessMainLayout");
         HorizontalLayout header= new HorizontalLayout();
         header.setWidth(100, Unit.PERCENTAGE);
         header.setHeight(70, Unit.POINTS);
@@ -41,6 +34,7 @@ public class GuessPartitaLayout extends VerticalLayout implements PartitaLayout{
         Image gameImg= new Image(null, img.getSource());
         gameImg.setWidth(70, Unit.POINTS);
         gameImg.setHeight(70, Unit.POINTS);
+        gameImg.addStyleName("imgGame");
         header.addComponent(gameImg);
         Label guess= new Label("Guess");
         header.addComponent(guess);
@@ -53,38 +47,46 @@ public class GuessPartitaLayout extends VerticalLayout implements PartitaLayout{
         //header.setExpandRatio(secondi,2f);
         header.setComponentAlignment(numerOfUser, Alignment.MIDDLE_RIGHT);
 
-
-        HorizontalLayout body= new HorizontalLayout();
+        CssLayout body= new CssLayout();
         body.setHeight(100,Unit.PERCENTAGE);
         body.setWidth(100,Unit.PERCENTAGE);
 
+        VerticalLayout layoutSinistro=new VerticalLayout();
+        layoutSinistro.addStyleName("layoutIndizi");
+        layoutSinistro.setWidth(30, Unit.PERCENTAGE);
+        layoutSinistro.setHeight(100,Unit.PERCENTAGE);
+        layoutSinistro.setMargin(false);
+        layoutSinistro.setSpacing(false);
+        Panel panelIndizi= new Panel();
+        panelIndizi.setWidth(100, Unit.PERCENTAGE);
+        panelIndizi.setHeight(100, Unit.PERCENTAGE);
+        panelIndizi.addStyleName(ValoTheme.PANEL_BORDERLESS);
         layoutIndizi=new VerticalLayout();
-        layoutIndizi.addStyleName("layoutIndizi");
+        layoutIndizi.setMargin(false);
+        // layoutIndizi.addStyleName("layoutIndizi");
         secondi=new Label("time:");
         secondi.addStyleName("timeLabel");
-        layoutIndizi.addComponent(secondi);
+        //layoutIndizi.addComponent(secondi);
         layoutIndizi.setWidth(100, Unit.PERCENTAGE);
+        panelIndizi.setContent(layoutIndizi);
+        layoutSinistro.addComponents(secondi, panelIndizi);
+        layoutSinistro.setExpandRatio(panelIndizi, 2.0f);
 
         layoutParole= new ParoleSuggeriteLayout((PuoSuggerire) puoSuggerire);
         layoutParole.addStyleName("layoutParole");
-        layoutParole.setWidth(100, Unit.PERCENTAGE);
+        layoutParole.setWidth(40, Unit.PERCENTAGE);
 
 
         layoutChat= new ChatLayout((PuoSuggerire) puoSuggerire, playersImg);
-        layoutChat.setWidth(100, Unit.PERCENTAGE);
+        layoutChat.setWidth(30, Unit.PERCENTAGE);
         //layout2.addComponent(l1);
 
-        body.addComponents(layoutIndizi,layoutParole,layoutChat);
+        body.addComponents(layoutSinistro,layoutParole,layoutChat);
         this.addComponents(header,body);
         this.setExpandRatio(body, 2f);
-        body.setExpandRatio(layoutParole, 1.4f);
-        body.setExpandRatio(layoutIndizi, 1.2f);
-        body.setExpandRatio(layoutChat, 1f);
-
-        /*this.setExpandRatio(layout1, 2f);
-        this.setExpandRatio(layout2, 2f);
-        this.setExpandRatio(layout3, 2f);
-*/
+       // body.setExpandRatio(layoutParole, 1.4f);
+       // body.setExpandRatio(layoutIndizi, 1.2f);
+       // body.setExpandRatio(layoutChat, 1f);
 
 
 /*      System.out.println("GAMEUI: " +UI.getCurrent() + " puòsuggerire: "+ puoSuggerire );

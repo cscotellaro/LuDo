@@ -1,0 +1,45 @@
+.welcomeLabel{
+  font-size: 3em;
+}
+
+.welcomeProfileImg{
+  border-radius: 80px;
+}
+
+.layoutNomeEPartita{
+  padding-top: 12pt;
+}
+
+//lavyout dei singoli giochi
+.WelcomeGameName{
+  font-weight: 400;
+  font-size: 1.1em;
+  margin-bottom: -15pt;
+
+}
+
+.gameDescrWelcome{
+  overflow-y: hidden;
+}
+.v-slot-WelcomeGameName{
+  height: 15pt !important;
+}
+
+.layoutWelcomeGame{
+  text-align: center;
+  background-color: #b8dbe0;
+  margin: 10pt;
+  transition: all .25s linear;
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.4);
+}
+
+.layoutWelcomeGame:hover{
+  box-shadow: -1px 10px 29px 0px rgba(0,0,0,0.8);
+}
+.v-csslayout{
+  text-align: center;
+}
+
+.v-cssLayout div{
+  text-align: left;
+}

@@ -9,7 +9,7 @@ public class BroadcasterList {
 
     private static Hashtable<String, Broadcaster> collection= new Hashtable<>();
 
-    //TODO: questa cosa non va bene
+    //TODO: si dovrebbe rinominare il metodo
     //nn so se i metodi devono essree syncronized
     //se uso la table l add è syncro di suo
     public static /*synchronized*/ void creaBroadcaster(Broadcaster b){

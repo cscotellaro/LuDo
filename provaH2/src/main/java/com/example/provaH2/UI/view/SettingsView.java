@@ -52,6 +52,7 @@ public class SettingsView extends VerticalLayout implements View {
         addComponent(title);
 
         VerticalLayout personalInfo= new VerticalLayout();
+        personalInfo.addStyleName("veticalSectionSettings");
         personalInfo.setMargin(false);
         personalInfo.setWidth(70, Unit.PERCENTAGE);
         form = new FormLayout();
@@ -83,6 +84,7 @@ public class SettingsView extends VerticalLayout implements View {
 
         /***********cambio password**********************/
         VerticalLayout layoutCambioPassword=new VerticalLayout();
+        layoutCambioPassword.addStyleName("veticalSectionSettings");
         layoutCambioPassword.setWidth(70, Unit.PERCENTAGE);
         layoutCambioPassword.setMargin(false);
 
@@ -102,6 +104,7 @@ public class SettingsView extends VerticalLayout implements View {
 
         /*************************img********************/
         VerticalLayout layoutCambioImg= new VerticalLayout();
+        layoutCambioImg.addStyleName("veticalSectionSettings");
         layoutCambioImg.setWidth(70, Unit.PERCENTAGE);
         layoutCambioImg.setMargin(false);
 
@@ -121,6 +124,7 @@ public class SettingsView extends VerticalLayout implements View {
 
         /****************elimina************************/
         VerticalLayout layoutElimina= new VerticalLayout();
+        layoutElimina.addStyleName("veticalSectionSettings");
         layoutElimina.setWidth(70, Unit.PERCENTAGE);
         layoutElimina.setMargin(false);
 

@@ -1,0 +1,26 @@
+@media screen and (max-width: 699px) {
+  .veticalSectionSettings{
+    //background-color: red;
+    width: 100% !important;
+  }
+ }
+
+
+.SettingsMainLayout{
+  padding-left: 30pt !important;
+  padding-right: 30pt !important;
+}
+
+.SettingsSectionLabel{
+  color: #007d99 !important;
+  border-bottom: 0px;
+  font-size: 1.5em !important;
+  margin-top: 20pt!important;
+}
+.cardsSettings{
+    min-width: 350pt;
+    margin-bottom: 20pt;
+    background-color: #b8dbe0;
+    transition: all .25s linear;
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.4);
+}

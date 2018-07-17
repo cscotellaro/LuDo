@@ -171,7 +171,7 @@ public class GameController extends Controller {
                         //System.out.println("else "+ totTime);
                         String indizio = item.getIndizio(i);
                         broadcaster.broadcast(indizio);
-                        totTime=11;
+                        totTime=71;
                         i++;
                     }
                     totTime--;

@@ -19,6 +19,7 @@ public class GameList {
     //verifica che non ci siano due giochi con lo stesso nome (case Insentive)
     @EventListener
     public void onApplicationEvent(ContextRefreshedEvent event) throws DuplicateGameNameException{
+        System.out.println("i giochi sono " + list.size());
         HashSet<String> hashSet = new HashSet<>();
         for(Game i : list) {
             if(!hashSet.add(i.getNomeGioco().toLowerCase()))

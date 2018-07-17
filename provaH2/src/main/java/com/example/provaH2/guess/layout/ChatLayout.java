@@ -13,6 +13,7 @@ public class ChatLayout extends VerticalLayout {
     private Panel panel;
 
     public ChatLayout(PuoSuggerire puoSuggerire, HashMap<String, Embedded> playerImg){
+        addStyleName("LayoutChat");
         playerImages=playerImg;
         TextField chatField= new TextField();
         Button send= new Button( VaadinIcons.PAPERPLANE_O);

@@ -1,6 +1,7 @@
 package com.example.provaH2.UI;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.Page;
 import com.vaadin.server.StreamResource;
@@ -22,6 +23,7 @@ import java.nio.file.Paths;
 
 //@Push
 //@Theme("hometheme")
+@Title("Ludo")
 @Theme("materialProva")
 @Viewport("width=device-width, initial-scale=1")
 @SpringUI(path = "/private/home")

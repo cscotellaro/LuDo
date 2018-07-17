@@ -8,10 +8,13 @@ import com.example.provaH2.gestioneGioco.Controller;
 import com.example.provaH2.guess.GameController;
 import com.romeosa.copytoclipboard.CopyToClipboard;
 import com.romeosa.copytoclipboard.CopyToClipboardButton;
+import com.vaadin.addon.responsive.Responsive;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,9 +47,12 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
             });
             goHome.addStyleName("Home");
             VerticalLayout middle= new VerticalLayout();
+            middle.addStyleName("WFPLayoutError");
             middle.addComponents(error,goHome);
             addComponent(middle);
-            return;
+
+            //addComponents(error,goHome);
+           return;
         }
 
         //TODO rivedere la politica del can Join
@@ -54,7 +60,7 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
         broadcaster = BroadcasterList.getBroadcaster(cod);
         if(broadcaster==null){
             this.setHeight(100, Unit.PERCENTAGE);
-            this.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            this.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
 
             //setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
             Label error= new Label("no match with this code :(");
@@ -67,9 +73,13 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
             error.addStyleName("WFPerror");
             VerticalLayout middle= new VerticalLayout();
             middle.addComponents(error,goHome);
+            middle.addStyleName("WFPLayoutError");
+
             //addComponent(goHome);
             addComponent(middle);
-            return;
+
+            //addComponents(error,goHome);
+         return;
         }
 
 
@@ -96,15 +106,20 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
             error.addStyleName("WFPerror");
             VerticalLayout middle= new VerticalLayout();
             middle.addComponents(error,goHome);
+            middle.addStyleName("WFPLayoutError");
             addComponent(middle);
-            return;
+
+            //addComponents(error,goHome);
+           return;
         }
 
         /*******************************************setting del layout**************************************/
-        this.setHeight("100%");
-        HorizontalLayout mainlayout= new HorizontalLayout();
-        mainlayout.setHeight("100%");
-        mainlayout.setWidth("100%");
+        this.setHeight(100, Unit.PERCENTAGE);
+        CssLayout mainlayout= new CssLayout();
+        mainlayout.setHeight(100, Unit.PERCENTAGE);
+        mainlayout.setWidth(100, Unit.PERCENTAGE);
+        new Responsive(mainlayout);
+      //  Panel mainPanel= new Panel();
 
         //setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
@@ -114,21 +129,25 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
         HorizontalLayout logoEImg= new HorizontalLayout();
         logoEImg.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
 
-        Embedded gameImg= broadcaster.getGameImg();
+        Embedded embeddedImg= broadcaster.getGameImg();
         Label gameName=new Label(broadcaster.getGame().getNomeGioco());
         gameName.addStyleName("WFPGameName");
-        gameImg.setHeight(100, Unit.POINTS);
-        gameImg.setWidth(100, Unit.POINTS);
-        logoEImg.addComponents(gameImg, gameName);
+        Image img= new Image(null, embeddedImg.getSource());
+        img.setWidth(100,Unit.POINTS);
+        img.setHeight(100,Unit.POINTS);
+        img.addStyleName("imgGame");
+        logoEImg.addComponents(img, gameName);
 
         Label descr=new Label(broadcaster.getGame().getDescrizioneLungaGioco());
         descr.setWidth(100, Unit.PERCENTAGE);
+        descr.setContentMode(ContentMode.HTML);
         gameLayout.addComponents(logoEImg,descr);
         mainlayout.addComponent(gameLayout);
-        mainlayout.setComponentAlignment(gameLayout, Alignment.TOP_RIGHT);
+       // mainlayout.setComponentAlignment(gameLayout, Alignment.TOP_RIGHT);
 
         VerticalLayout layoutDestro= new VerticalLayout();
-
+        layoutDestro.addStyleName("WFPLayoutDx");
+        //layoutDestro.setHeight(100, Unit.PERCENTAGE);
         CssLayout WFPLayout=new CssLayout();
         WFPLayout.setWidth(100, Unit.PERCENTAGE);
         //WFPLayout.setMargin(false);
@@ -146,9 +165,11 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
         layoutNomi.setSizeUndefined();
         panelNomi.setContent(layoutNomi);
        // panelNomi.setWidth(450, Unit.POINTS);
-        panelNomi.setHeight("100%");
+        panelNomi.setHeight(350, Unit.POINTS);
+        panelNomi.addStyleName("WFPPanelNomi");
         layoutDestro.addComponent(panelNomi);
-        layoutDestro.setHeight("100%");
+        layoutDestro.addStyleName("WFPDestro");
+
         layoutDestro.setExpandRatio(panelNomi, 2f);
 
         controller= (Controller) VaadinService.getCurrentRequest().getWrappedSession().getAttribute("controllerGame"+cod);
@@ -159,9 +180,10 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
         }
 
         if(controller!=null && controller.getBroadcaster().getId().equals(broadcaster.getId())){
-            FormLayout formLayout=new FormLayout();
+            VerticalLayout formLayout=new VerticalLayout();
+            formLayout.addStyleName("WFPLayoutLink");
             formLayout.setWidth(100, Unit.PERCENTAGE);
-            formLayout.setMargin(true);
+            formLayout.setMargin(false);
             formLayout.setDefaultComponentAlignment(Alignment.BOTTOM_RIGHT);
             TextField link= new TextField("share with link");
             link.setWidth(100, Unit.PERCENTAGE);
@@ -214,8 +236,13 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
             layoutDestro.setComponentAlignment(start, Alignment.MIDDLE_CENTER);
         }
         mainlayout.addComponent(layoutDestro);
-        mainlayout.setExpandRatio(gameLayout,2f);
-        mainlayout.setExpandRatio(layoutDestro, 2f);
+      //  mainlayout.setExpandRatio(gameLayout,2f);
+       // mainlayout.setExpandRatio(layoutDestro, 2f);
+      //  mainPanel.setContent(mainlayout);
+     //   mainPanel.setHeight(100, Unit.PERCENTAGE);
+       // mainPanel.setWidth(100,Unit.PERCENTAGE);
+        //addComponent(mainPanel);
+       new Responsive(mainlayout);
         addComponent(mainlayout);
     }
 
@@ -226,7 +253,7 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
         numPlayers.setEnabled(true);
         layoutNomi.removeAllComponents();
 
-       // for(int i=0; i<15;i++){
+        for(int i=0; i<15;i++){
             accountImg.forEach((s, embedded) -> {
                 HorizontalLayout player= new HorizontalLayout();
                 player.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
@@ -242,7 +269,7 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
             });
 
 
-        //}
+        }
     }
 
     public Broadcaster getBroadcaster() {

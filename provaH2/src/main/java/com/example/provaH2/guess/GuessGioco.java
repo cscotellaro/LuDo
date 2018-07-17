@@ -45,14 +45,22 @@ public class GuessGioco implements Game {
 
     @Override
     public String getDescrizioneGioco() {
-        return "questa è la descizione del gioco Guess: Indovina le parole dagli indizi che compaiono man mano";
+        return "Come, Dove, Quando, Perché... Quattro affermazioni, una parola!";
     }
 
     @Override
     public String getDescrizioneLungaGioco() {
-        return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+       /* return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
                 +"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
                 +" Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
                 +" Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    */
+       return "Obbiettivo del gioco è quello di individuare, date quattro affermazioni, la parola da esse descritta.<br/>" +
+               "La quartina definisce il “come”, il “dove”, il “quando” e il “perché”.<br/>" +
+               "Ogni 10 secondi compare un indizio della quartina. <br/>" +
+               "Quando tutti i suggerimenti sono comparsi, i giocatori hanno 1 minuto di tempo per scoprire la parola.<br/>" +
+               "Tutti possono suggerire una soluzione e tutti devono essere d’accordo sulla soluzione finale! <br/>" +
+               "Meno indizi vengono usati e maggiore sarà il punteggio ottenuto! <br/>" +
+               "Invita i tuoi amici a giocare, copiando il link qua sotto:";
     }
 }

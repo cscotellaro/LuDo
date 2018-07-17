@@ -11,6 +11,7 @@ import com.example.provaH2.guess.PuoSuggerire;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Title;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
@@ -27,10 +28,11 @@ import java.util.List;
 @PreserveOnRefresh
 //@Theme("darktheme")
 @Theme("materialProva")
+@Title("Ludo-Guess")
 //@VaadinServletConfiguration(productionMode = false, ui = GameUI.class,heartbeatInterval = 1)
 public class GameUI extends PlayUI implements PuoSuggerire, GuessBroadcasterListener/*, CanRejoinGame*/ {
 
-    //TODO:da togliere (e perchè?)
+
     //private GuessPartitaLayout partitaLayout;
 
     private Account account;
@@ -187,7 +189,7 @@ public class GameUI extends PlayUI implements PuoSuggerire, GuessBroadcasterList
             layout.setWidth(100,Unit.PERCENTAGE);
             panel.setContent(layout);
             mainlayout.addComponent(panel);
-            for(int i=0; i<10; i++){
+           // for(int i=0; i<10; i++){
                 punteggi.forEach(punteggio -> {
                     HorizontalLayout hl= new HorizontalLayout();
                     hl.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
@@ -206,7 +208,7 @@ public class GameUI extends PlayUI implements PuoSuggerire, GuessBroadcasterList
                     hl.setExpandRatio(nome,1.3f);
                     layout.addComponent(hl);
                 });
-            }
+           // }
 
             System.out.println("Sono "+ account.getFullName()+ " host:"+ areYouHost());
             Button home= new Button("home");

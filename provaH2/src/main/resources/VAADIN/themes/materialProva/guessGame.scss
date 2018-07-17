@@ -1,0 +1,117 @@
+@media screen and (max-width: 699px) {
+  .GuessMainLayout{
+    padding: 10pt !important;
+  }
+   .layoutIndizi{
+     padding-left: 0px !important;
+     padding-top: 0px !important;
+     width: 50% !important;
+     height: 50% !important;
+   }
+   .layoutParole{
+  //   padding-left: 0px !important;
+    // padding-right: 0px !important;
+     padding: 0px !important;
+     width: 50% !important;
+   }
+   .LayoutChat{
+     float: left;
+     height: 38% !important;
+     width: 45% !important;
+     position: fixed;
+     top: 60%;
+     left: 10pt;
+     bottom: 10pt;
+   }
+}
+/*
+@media screen and (min-width: 700px) {
+    .layoutIndizi{
+      height: 100%;
+    }
+}
+*/
+
+  .provaVertical{
+    background: grey;
+    border-radius: 5px !important;
+  }
+
+  .bottoneInvio{
+    border-radius: 30pt !important;
+    line-height: 27pt;
+  }
+
+  .panelChat {
+    height: 30%;
+  }
+
+  .guessName{
+    font-size: 1.7em;
+  }
+
+  .timeLabel{
+    font-size:  1.4em;
+  }
+
+  .numPlayerLabel{
+    font-size: 1.2em;
+  }
+
+  .layoutIndizi{
+    width: 45%;
+    padding-left: 0px;
+    padding-top: 0px;
+    height: 100%;
+    padding-right: 3pt;
+  }
+
+  .indizi{
+      font-size: 1.2em;
+  }
+
+  .layoutParole{
+    width: 60%;
+      padding-left: 0px;
+      padding-top:  0px;
+      padding-bottom: 0px;
+  }
+  .LayoutChat{
+    width: 45%;
+  }
+
+  .parolaSuggLayoyt{
+    background-color:  rgba(210,210,210,0.7);
+    padding: 5pt;
+  }
+
+  .pallinoChat{
+    border-radius: 80px;
+  }
+
+  .nameLabelChat{
+    font-weight: 400;
+  }
+
+  .baloonChat{
+    background-color: rgba(210,210,210,0.7);
+    border-radius: 5px;
+    padding: 7pt;
+    font-size: 11pt;
+  }
+
+  .PlusButtonGuess{
+    border-radius: 80px !important;
+    line-height: 27pt;
+  }
+
+
+  /*************************window vittoria**************/
+  .parolaDaIndovinare{
+    font-size: 1.4em;
+  }
+  .HLPalyerPoints{
+    background: rgba(210,210,210,0.7);
+    padding: 5px;
+    border-radius: 10px;
+  }

@@ -1,0 +1,102 @@
+
+@media screen and (min-width: 800px) {
+    .WFPLayoutSx{
+      width: 50% !important;
+    }
+    .WFPLayoutDx{
+      width: 50% !important;
+    }
+ }
+
+@media screen and (max-width: 799px) {
+   .WFPLayoutSx{
+     padding: 0px !important;
+   }
+   .WFPLayoutDx{
+     padding-right: 0px !important;
+     padding-left: 0px !important;
+   }
+   .WFPPanelNomi{
+     height: 250pt !important;
+   }
+}
+
+/*  .WFPDestro{
+      height: 95vh;
+  }
+*/
+
+  .WFPLayoutLink{
+      .v-caption{
+          display: inline-block;
+      }
+      .v-textfield{
+        display: inline-block;;
+      }
+  }
+    .WFPverticalMainLayout{
+      min-height: 99vh;
+    }
+
+    .WFPGameName{
+      font-size: 2.3em;
+      max-width: 7cm;
+    }
+
+    .WFPLabel{
+      font-size: 1.7em;
+      float: left;
+    }
+
+    .WFPNumPLayers{
+      font-size: 1.5em;
+      float: right;
+      line-height: 1.7em;
+    }
+
+    //nella lista
+    .WFPplayerImg{
+      border-radius: 80px;
+      width: 30pt;
+      height: 30pt;
+    }
+
+    .WFPPlayerName{
+      font-size: 1.1em;
+    }
+
+    .WFPLayoutSx{
+      padding-left: 0px;
+    }
+
+    .WFPLayoutLink .v-slot .v-widget .v-caption{
+      display: inline-block;
+    }
+    .WFPLayoutLink .v-slot .v-widget .v-textfield {
+      display: inline-block;
+      max-width: 350px;
+      margin-left: 5pt;
+    }
+
+    .WFPstart{
+      line-height: 40pt;
+    }
+    .WFPerror{
+      font-size: 2em;
+      top:45vh;
+    }
+
+    .goHome{
+      width: 90pt;
+      height: 40pt;
+    }
+
+    //vedi che sta nella ui
+    .MainPanelWFP{
+      min-height: 100%;
+    }
+
+.WFPLayoutError{
+  position: fixed;
+  top: 38%;
+}

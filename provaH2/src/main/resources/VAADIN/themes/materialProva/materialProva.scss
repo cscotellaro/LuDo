@@ -35,13 +35,34 @@
 //@import "../material/material.scss";
 @import "../valo/valo.scss";
 
-$v-included-components: remove($v-included-components, button);
+@import "homePubblica.scss";
+@import "privateHome.scss";
+@import "settings.scss";
+@import "guessGame.scss";
+@import "wfp.scss";
+/*
+@media screen and (min-width: 700px) {
+    .WFPLayoutSx{
+      width: 50% !important;
+    }
+    .WFPLayoutDx{
+      width: 50% !important;
+    }
+ }
+
+@media screen and (max-width: 699px) {
+   .WFPLayoutSx{
+     padding: 0px !important;
+   }
+   .WFPLayoutDx{
+     padding-right: 0px !important;
+     padding-left: 0px !important;
+   }
+}*/
 
 @mixin materialProva {
   @include valo;
-  //@include material;
 
-  //$v-shadow:  0 10px 10px v-shade;
   $v-background-color: #007d99;
   $v-gradient: v-linear 0%;
   $v-border:0px;
@@ -52,7 +73,7 @@ $v-included-components: remove($v-included-components, button);
     color: #ffffff;
     font-variant: small-caps;
     font-size: 1.25em;
-    font-family: sans-serif;
+  //  font-family: sans-serif;
   }
 
   .v-button::before{
@@ -119,6 +140,7 @@ $v-included-components: remove($v-included-components, button);
 .v-menubar-menuitem:focus{
     box-shadow: none !important;
 }
+
   /* Track */
   .v-panel{}
   ::-webkit-scrollbar {
@@ -138,92 +160,32 @@ $v-included-components: remove($v-included-components, button);
       background-color: #fafafa
     }
 
-/*********************home pubblica************************/
-  .logo{
-    width: 70pt;
-    height: 70pt;
-    border-radius: 80px;
-  }
-
-  .LuDo{
-    color: #007d99;
-    height: 30pt;
-    border-bottom: 1px solid;
-    margin: 0px !important;
-  }
-  .pcImg{
-    max-width: 100%;
-  }
-
-  .publicHomeMainLayout{
-    background-color: #b8dbe0;
-  }
+/*privateHomeView, WFP, guessPartittalayout*/
+.v-slot-imgGame{
+  height: 100pt !important;
+}
+.imgGame{
+  border-radius: 4pt;
+}
 /********************su tutta la privateUI*****************/
   .menuBarTitolo{
     margin-top: 20pt;
     margin-right: 20pt;
   }
 
-/*******************privateHome****************************/
-  .welcomeLabel{
-    font-size: 3em;
+/***************************error page***************************/
+  .Ops{
+    font-size: 2.5em;
   }
 
-  .welcomeProfileImg{
-    border-radius: 80px;
+  .notFound{
+    font-size: 1.4em;
+    margin-top: -13pt;
   }
 
-  .layoutNomeEPartita{
-    padding-top: 12pt;
-  }
-
-  //lavyout dei singoli giochi
-  .WelcomeGameName{
-    font-weight: 400;
-    font-size: 1.1em;
-    margin-bottom: -15pt;
-  }
-
-  .layoutWelcomeGame{
-    text-align: center;
-    background-color: #b8dbe0;
-    margin: 10pt;
-    transition: all .25s linear;
-    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.4);
-  }
-
-  .layoutWelcomeGame:hover{
-    box-shadow: -1px 10px 29px 0px rgba(0,0,0,0.8);
-  }
-  .v-csslayout{
-    text-align: center;
-  }
-
-  .v-cssLayout div{
-    text-align: left;
-  }
-/******************************settings***************************/
-  .SettingsMainLayout{
-    padding-left: 30pt !important;
-    padding-right: 30pt !important;
-  }
-
-  .SettingsSectionLabel{
-    color: #007d99;
-    border-bottom: 0px;
-    font-size: 1.5em;
-    margin-top: 20pt;
-  }
-  .cardsSettings{
-      min-width: 350pt;
-      margin-bottom: 20pt;
-      background-color: #b8dbe0;
-      transition: all .25s linear;
-      box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.4);
-  }
-/*****************************statistiche*************************/
+  /*********************statistiche************************/
   .SettingsVL{
-    padding-left: 30pt !important;
+    padding-left: 30pt!important;
   }
 
   .statisticheLayout{
@@ -237,136 +199,5 @@ $v-included-components: remove($v-included-components, button);
   .buttonGameName:hover{
     background-color:rgba(210,210,210,0.7);
   }
-/***************************error page***************************/
-  .Ops{
-    font-size: 2.5em;
-  }
 
-  .notFound{
-    font-size: 1.4em;
-    margin-top: -13pt;
-  }
-  ////////////////////////GUESS/////////////////////////////////////
-
-    .provaVertical{
-      background: grey;
-      border-radius: 5px;
-    }
-
-    .bottoneInvio{
-      border-radius: 30pt;
-      line-height: 27pt;
-    }
-
-    .panelChat {
-      height: 30%;
-    }
-  /**************************ui di gioco*******************************/
-    .guessName{
-      font-size: 1.7em;
-    }
-
-    .timeLabel{
-      font-size:  1.4em;
-    }
-
-    .numPlayerLabel{
-      font-size: 1.2em;
-    }
-
-    .layoutIndizi{
-      padding-left: 0px;
-      padding-top: 0px;
-    }
-
-    .indizi{
-        font-size: 1.2em;
-    }
-
-    .layoutParole{
-        padding-left: 0px;
-        padding-top:  0px;
-        padding-bottom: 0px;
-    }
-
-    .parolaSuggLayoyt{
-      background-color:  rgba(210,210,210,0.7);
-      padding: 5pt;
-    }
-
-    .pallinoChat{
-      border-radius: 80px;
-    }
-
-    .nameLabelChat{
-      font-weight: 400;
-    }
-
-    .baloonChat{
-      background-color: rgba(210,210,210,0.7);
-      border-radius: 5px;
-      padding: 7pt;
-      font-size: 11pt;
-    }
-    .PlusButtonGuess{
-      border-radius: 80px;
-      line-height: 27pt;
-    }
-  /***************************waiting for players**********************/
-    .WFPverticalMainLayout{
-      overflow-y: scroll;
-    }
-
-    .WFPGameName{
-      font-size: 2.3em;
-      max-width: 7cm;
-    }
-
-    .WFPLabel{
-      font-size: 1.7em;
-      float: left;
-    }
-
-    .WFPNumPLayers{
-      font-size: 1.5em;
-      float: right;
-      line-height: 1.7em;
-    }
-
-    //nella lista
-    .WFPplayerImg{
-      border-radius: 80px;
-      width: 30pt;
-      height: 30pt;
-    }
-
-    .WFPPlayerName{
-      font-size: 1.1em;
-    }
-
-    .WFPLayoutSx{
-      padding-left: 0px;
-    }
-
-    .WFPstart{
-      line-height: 40pt;
-    }
-    .WFPerror{
-      font-size: 2em;
-    }
-
-    .goHome{
-      width: 90pt;
-      height: 40pt;
-    }
-
-    /*************************window vittoria**************/
-    .parolaDaIndovinare{
-      font-size: 1.4em;
-    }
-    .HLPalyerPoints{
-      background: rgba(210,210,210,0.7);
-      padding: 5px;
-      border-radius: 10px;
-    }
 }

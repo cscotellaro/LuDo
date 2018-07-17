@@ -71,7 +71,7 @@ public abstract  class Controller {
         hostGame();
     }
 
-    //TODO: o public?
+
     protected void addPunteggio(Punteggio punteggio){
         partita.addPunteggio(punteggio);
     }
