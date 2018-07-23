@@ -14,8 +14,11 @@ import java.util.Properties;
 
 public class SendMail{
 
-    private static final String username = "ufficio.postale.is@gmail.com";
+    /*private static final String username = "ufficio.postale.is@gmail.com";
     private static final String password = "ufficiopostaleis";
+    */
+    private static final String username = "LuDo.LudendoDocere@gmail.com";
+    private static final String password = "ludotesi";
 
     public static void sendMailTLS(String destinatario, String titolo, String testo) {
 

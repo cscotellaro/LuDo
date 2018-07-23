@@ -122,17 +122,6 @@ public class HomeUI extends UI {
         mainlayout.addComponent(body);
         mainlayout.setExpandRatio(body,2f);
 
-        CssLayout grid = new CssLayout();
-        grid.setWidth("100%");
-        grid.addStyleName("grid");
-        mainlayout.addComponent(grid);
-
-        for (int i = 1; i < 10; i++) {
-            Label l = new Label("" + i);
-            l.setSizeUndefined();
-            grid.addComponent(l);
-        }
-        new Responsive(grid);
         setContent(mainlayout);
 
     }
