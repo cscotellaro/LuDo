@@ -19,7 +19,6 @@ import com.vaadin.ui.themes.ValoTheme;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-//
 //@SpringView(name = "waitingForPlayers")
 public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUtenti */{
 
