@@ -1,5 +1,6 @@
 package com.example.provaH2.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -7,7 +8,7 @@ import javax.persistence.OneToOne;
 @Embeddable
 public class Punteggio {
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.REMOVE)
     private Account account;
     private int punti;
 

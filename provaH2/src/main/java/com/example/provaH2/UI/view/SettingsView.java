@@ -1,7 +1,9 @@
 package com.example.provaH2.UI.view;
 
 import com.example.provaH2.entity.Account;
+import com.example.provaH2.entity.Partita;
 import com.example.provaH2.repository.AccountRepository;
+import com.example.provaH2.repository.PartitaRepository;
 import com.vaadin.data.Binder;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.EmailValidator;
@@ -25,6 +27,8 @@ import java.util.Objects;
 
 @SpringView(name = "settings")
 public class SettingsView extends VerticalLayout implements View {
+    @Autowired
+    private PartitaRepository partitaRepository;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -340,7 +344,9 @@ public class SettingsView extends VerticalLayout implements View {
             Button delete= new Button("delete");
             //delete.setCaption("Dete your account");
             delete.addClickListener(clickEvent1 -> {
+                partitaRepository.deleteAccountsPartite(id);
                 accountRepository.deleteById(id);
+
                 Notification.show("Your account has been deleted");
                 window.close();
                 VaadinService.getCurrentRequest().getWrappedSession().setAttribute("loggato", false);

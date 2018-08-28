@@ -63,6 +63,7 @@ public abstract  class Controller {
 
     public void hostGame(){
         partita= new Partita(new Timestamp(new Date().getTime()), game.getNomeGioco());
+        broadcaster.startGame();
         startGame();
     }
 

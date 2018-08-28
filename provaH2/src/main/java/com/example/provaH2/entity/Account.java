@@ -1,6 +1,8 @@
 package com.example.provaH2.entity;
 
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,6 +11,7 @@ import java.nio.file.Paths;
 
 @Entity
 public class Account {
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
     @Id @GeneratedValue
     private Long id;
     @Column(unique = true)

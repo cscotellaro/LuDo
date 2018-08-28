@@ -196,7 +196,7 @@ public class Broadcaster implements Serializable{
         }
     }
 
-    //TODO dove lo uso
+    //TODO dove lo uso?(in fine della partita sopra)
     public void allowJoin(){
         canJoin=true;
     }

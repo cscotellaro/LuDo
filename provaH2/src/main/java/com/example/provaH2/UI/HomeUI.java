@@ -44,6 +44,7 @@ public class HomeUI extends UI {
         mainlayout.addStyleName("publicHomeMainLayout");
 
         String loginParam = vaadinRequest.getParameter("Login");
+
         cod=vaadinRequest.getParameter("cod");
         uri=vaadinRequest.getParameter("uri");
         if(loginParam!=null && loginParam.equals("true")){

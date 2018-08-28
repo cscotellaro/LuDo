@@ -54,8 +54,8 @@ public class GameController extends Controller {
 
     @Override
     public void startGame(){
-        broadcaster=(BroadcasterGuess) super.getBroadcaster();
-        broadcaster.startGame();
+      broadcaster=(BroadcasterGuess) super.getBroadcaster();
+        //broadcaster.startGame();
         if(partitaThread!=null){
             partitaThread.interrupt();
             partitaThread.stopTimer();

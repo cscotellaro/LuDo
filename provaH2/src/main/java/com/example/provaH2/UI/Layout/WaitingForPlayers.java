@@ -253,7 +253,7 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
         numPlayers.setEnabled(true);
         layoutNomi.removeAllComponents();
 
-        for(int i=0; i<15;i++){
+        //for(int i=0; i<15;i++){
             accountImg.forEach((s, embedded) -> {
                 HorizontalLayout player= new HorizontalLayout();
                 player.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
@@ -269,7 +269,7 @@ public class WaitingForPlayers extends VerticalLayout /*implements View, ContaUt
             });
 
 
-        }
+        //}
     }
 
     public Broadcaster getBroadcaster() {

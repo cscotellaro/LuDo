@@ -4,11 +4,11 @@ import com.example.provaH2.entity.Account;
 import com.example.provaH2.entity.Partita;
 import com.example.provaH2.entity.Punteggio;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface PartitaRepository extends JpaRepository<Partita, Long> {
@@ -31,5 +31,10 @@ public interface PartitaRepository extends JpaRepository<Partita, Long> {
 
     @Query("SELECT p FROM Partita p JOIN p.array pa WHERE pa.account = ?1 AND p.gioco=?2")
     List<Partita> cercaByGioco(Account account, String gioco);
+
+    @Transactional
+    @Modifying
+    @Query(value = " DELETE FROM PARTITA_ARRAY PA WHERE PA.ACCOUNT_ID=?1", nativeQuery = true)
+    void deleteAccountsPartite(long id);
 
 }
