@@ -258,14 +258,6 @@ public class StatisticheView extends VerticalLayout implements View {
                 "      function drawChart() {\n" +
                 "        var data = google.visualization.arrayToDataTable([\n" +
                 "          ['Date',  'Points'],\n" +
-          /*      "          ['2004',         400],\n" +
-                "          ['2004',         400],\n" +
-                "          ['2004',         400],\n" +
-                "          ['2005',         404],\n" +
-                "          ['2005',         460],\n" +
-                "          ['2006',        1120],\n" +
-                "          ['2007',         540]\n" +
-            */
                 punti+
                 "        ]);\n" +
                 "\n" +

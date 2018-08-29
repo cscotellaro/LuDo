@@ -43,10 +43,11 @@ public class HomeUI extends UI {
         mainlayout.setSizeFull();
         mainlayout.addStyleName("publicHomeMainLayout");
 
-        String loginParam = vaadinRequest.getParameter("Login");
+        String loginParam = vaadinRequest.getParameter("login");
 
         cod=vaadinRequest.getParameter("cod");
         uri=vaadinRequest.getParameter("uri");
+        System.out.println("\tloginParam" + loginParam);
         if(loginParam!=null && loginParam.equals("true")){
             addWindow(creaWindow(0));
         }

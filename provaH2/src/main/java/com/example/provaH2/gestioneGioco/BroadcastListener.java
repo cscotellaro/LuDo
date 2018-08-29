@@ -17,4 +17,5 @@ public interface BroadcastListener {
     String getName();
     Account getAccount();
     Embedded getProfileImage();
+    void hostLost();
 }

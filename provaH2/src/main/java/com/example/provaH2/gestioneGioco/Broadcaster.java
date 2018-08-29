@@ -139,7 +139,13 @@ public class Broadcaster implements Serializable{
         }
     }
 
+    public synchronized void hostLost(){
+        listeners.forEach((aLong, broadcastListener) -> {
+            broadcastListener.hostLost();
+        });
 
+        listeners.clear();
+    }
     public synchronized void startGame(/*Item myItem*/){
         //itemDellaUi=myItem;
         canJoin= false;

@@ -70,9 +70,14 @@ public abstract class PlayUI extends UI  implements BroadcastListener{
   */
         JavaScript.getCurrent().addFunction("aboutToClose",(array)->{
             System.out.println("Window/Tab is Closed.");
+            if(areYouHost()){
+                broadcaster.hostLost();
+            }
+
             if(broadcaster!=null){
                 broadcaster.unregister(account.getId(),this);
             }
+
         });
 
         //Page.getCurrent().getJavaScript().execute("window.onbeforeunload = function (e[code]) { var e = (e || window.event); aboutToClose(); return; };");
@@ -146,6 +151,31 @@ public abstract class PlayUI extends UI  implements BroadcastListener{
 
         });
     }*/
+
+    @Override
+    public void hostLost() {
+        access(() -> {
+            Window w=new Window();
+            w.setModal(true);
+            w.setClosable(false);
+            w.setResizable(false);
+            w.center();
+            w.setHeight(150,Unit.POINTS);
+            w.setWidth(200, Unit.POINTS);
+            VerticalLayout vl=new VerticalLayout();
+            vl.setSpacing(true);
+            vl.setMargin(true);
+            vl.setSizeFull();
+            vl.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            vl.addComponent(new Label("Host lost"));
+            Button home=new Button("Home");
+            home.addClickListener(clickEvent ->Page.getCurrent().setLocation("/private/home") );
+            vl.addComponent(home);
+            w.setContent(vl);
+
+            addWindow(w);
+        });
+    }
 
     @Override
     public Embedded getProfileImage(){

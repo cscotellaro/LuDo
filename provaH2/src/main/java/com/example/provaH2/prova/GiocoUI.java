@@ -42,6 +42,11 @@ public class GiocoUI extends UI  implements BroadcastListener {
     private Button unjoin;
 
     @Override
+    public void hostLost() {
+
+    }
+
+    @Override
     public Account getAccount() {
         return null;
     }
