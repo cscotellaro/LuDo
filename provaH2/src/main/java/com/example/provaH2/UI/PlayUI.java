@@ -203,6 +203,10 @@ public abstract class PlayUI extends UI  implements BroadcastListener{
     @Override
     public void detach() {
         System.out.println("sono nel metodo detach....");
+
+        if(areYouHost()){
+            broadcaster.hostLost();
+        }
         if(broadcaster!=null){
             broadcaster.unregister(account.getId(),this);
         }
