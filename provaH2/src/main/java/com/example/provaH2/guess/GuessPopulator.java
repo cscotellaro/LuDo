@@ -32,35 +32,35 @@ public class GuessPopulator {
         repositoryI.save(item2);
         */
 
-        Item item= new Item("tombola");
-        item.addIndizio(0,"la notte di Natale");
-        item.addIndizio(1,"attorno a un tavolo");
-        item.addIndizio(2,"con dei fagioli in mano");
-        item.addIndizio(3,"per fare la cinquina!");
+        Item item= new Item("rivoluzione francese");
+        item.addIndizio(0,"Nel 1789");
+        item.addIndizio(1,"in Francia");
+        item.addIndizio(2,"assaltando la Bastiglia");
+        item.addIndizio(3,"per il malcontento sociale");
         repositoryI.save(item);
 
-        Item item1= new Item("tovaglia");
-        item1.addIndizio(0,"mentre sto seduto");
-        item1.addIndizio(1,"stesa danti a me");
-        item1.addIndizio(2,"sbiadita dagli anni");
-        item1.addIndizio(3,"perchè per apparecchiare uso sempre la stessa");
+        Item item1= new Item("Eneide");
+        item1.addIndizio(0,"Tra il 29 A.C e il 19 A.C");
+        item1.addIndizio(1,"fra Napoli e Roma");
+        item1.addIndizio(2,"in latino");
+        item1.addIndizio(3,"per narrare le gesta di Enea");
         repositoryI.save(item1);
 
-        Item item2= new Item("vetro");
-        item2.addIndizio(0,"un pomeriggio di maggio");
-        item2.addIndizio(1,"a casa");
-        item2.addIndizio(2,"trasparente come sempre");
-        item2.addIndizio(3,"perchè un ottuso moscone continua a sbatterci contro");
+        Item item2= new Item("scoperta della gravità");
+        item2.addIndizio(0,"Nel 1966");
+        item2.addIndizio(1,"sotto un melo");
+        item2.addIndizio(2,"mentre stava seduto");
+        item2.addIndizio(3,"perché una mela gli cadde in testa");
         repositoryI.save(item2);
 
-        Item item3= new Item("statua della libertà");
-        item3.addIndizio(0,"dopo un lungo viaggio da Parigi");
-        item3.addIndizio(1,"a New York");
-        item3.addIndizio(2,"con le mani entrambe occupate");
-        item3.addIndizio(3,"per reggere la fiaccola più famosa del mondo");
+        Item item3= new Item("Torre Eiffel");
+        item3.addIndizio(0,"Tra il 1887 e il 1889");
+        item3.addIndizio(1,"a Parigi");
+        item3.addIndizio(2,"in ferro battuto");
+        item3.addIndizio(3,"per la commemorazione del centenario della Rivoluzione Francese");
         repositoryI.save(item3);
 
-        Item item4= new Item("carota");
+    /*    Item item4= new Item("carota");
         item4.addIndizio(0,"dopo una grande nevicata");
         item4.addIndizio(1,"in mezzo a due bottoni");
         item4.addIndizio(2,"arancione");
@@ -81,7 +81,7 @@ public class GuessPopulator {
         item6.addIndizio(3,"per trasportare il cemento da ROma  Milano");
         repositoryI.save(item6);
 
-
+*/
         repositoryI.findAll().forEach(System.out::println);
 
         long i= repositoryI.numeroRighe();

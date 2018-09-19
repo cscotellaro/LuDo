@@ -125,7 +125,7 @@ public class GameController extends Controller {
             partitaThread.setParolaVincente(parolaVincente);
             if(parolaVincente.getParolaSuggerita().equals(item.getParola())) {
                 int n = hashMapPunti.get(parolaVincente.getChiHaSuggerito());
-                hashMapPunti.put(parolaVincente.getChiHaSuggerito(), n + 50);
+                hashMapPunti.put(parolaVincente.getChiHaSuggerito(), n + 100);
             }
             //System.out.println("chiamo stop timer");
             partitaThread.stopTimer();
@@ -156,7 +156,7 @@ public class GameController extends Controller {
             String indizio = item.getIndizio(i);
             broadcaster.broadcast(indizio);
             i++;
-            totTime = 5;
+            totTime = 90;
             timer.scheduleAtFixedRate(new TimerTask() {
                 public void run() {
                     // System.out.println("time=" + totTime+ " i="+ i);
@@ -165,13 +165,13 @@ public class GameController extends Controller {
                        // System.out.println("nell'if "+ i +"  time: "+ totTime);
                         String indizio = item.getIndizio(i);
                         broadcaster.broadcast(indizio);
-                        totTime=6;
+                        totTime=91;
                         i++;
                     }else if(i==3 && totTime==0){
                         //System.out.println("else "+ totTime);
                         String indizio = item.getIndizio(i);
                         broadcaster.broadcast(indizio);
-                        totTime=71;
+                        totTime=121;
                         i++;
                     }
                     totTime--;
