@@ -58,9 +58,17 @@ public class ProvaH2Application {
 			//vedi che a cinzia ho fatto il cambio password
 			Account cinzia=new Account("Cinzia", "cinzia@gmail.com", "cinzia");
 			Account luigi=new Account("Luigi", "caio@gmail.com", "luigi");
+			Account francesca=new Account("Francesca", "francesca@gmail.com", "francesca");
+			Account antonio=new Account("Antonio", "antonio@gmail.com", "antonio");
+			Account gianluca=new Account("Gianluca", "gianluca@gmail.com", "gianluca");
+			Account sara=new Account("Sara", "sara@gmail.com", "sara");
 			repositoryA.save(new Account("Catello", "tizio@gmail.com", "catello"));
 			repositoryA.save(luigi);
 			repositoryA.save(cinzia);
+			repositoryA.save(francesca);
+			repositoryA.save(antonio);
+			repositoryA.save(gianluca);
+			repositoryA.save(sara);
 			repositoryA.findAll().forEach(System.out::println);
 
 		/*	Item item= new Item("Sara");
